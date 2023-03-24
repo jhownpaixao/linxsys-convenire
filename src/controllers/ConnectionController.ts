@@ -1,8 +1,8 @@
 
 import { WASocket } from "@adiwajshing/baileys"
 import { uuid } from "uuidv4";
-import { logger } from "../components/logger";
-import { SendLocalResponse } from "../controllers/responses";
+import { logger } from "../Utils/logger";
+import { SendLocalResponse } from "../Utils/responses"
 
 
 /**
@@ -68,14 +68,14 @@ const ConectionManagerConnStatus: ConectionManagergetConnStatus = (code) => {
 }
 const ConectionManagerConnType: ConectionManagergetConnType = (code) => {
     let status: number;
-    switch (code) {
-        case 'Whatsapp':
+    switch (code.toLowerCase()) {
+        case 'whatsapp':
             status = 1;
             break;
-        case 'Telegram':
+        case 'telegram':
             status = 2;
             break;
-        case 'Facebook':
+        case 'facebook':
             status = 3;
             break;
         default:
@@ -93,20 +93,30 @@ const ConectionManagerConnType: ConectionManagergetConnType = (code) => {
  * @class WhatsappController
  */
 
-class WhatsappManager {
+class ConnectionManager {
     private sock: WASocket
-    public conns: Array<ConectionManagerConn> = [];
+    private conns: Array<ConectionManagerConn> = [];
     private MessageUpsertCallback: (msg: Object) => {}
-
+    private MonitorInterval: NodeJS.Timer
     constructor() {
         this.initialize();
     }
 
     private initialize() {
-        console.log('@Baileys started')
-        logger.info({ bayles: 'Inicializado' }, 'WhatsappManager pronto')
+        /* Carregar variaveis */
+        logger.info({ ConnManager: 'Inicializado' }, 'Conexões prontas')
+        this.StartConnectionMonitor();
     }
-    public async CreateConn(conn_name: string) {
+    private StartConnectionMonitor() {
+        this.MonitorInterval = setInterval(()=>{
+            console.log(`[ConnectionMonitor]:: Atualizando conexões...`)
+        },10_000)
+
+        logger.info({ StartConnectionMonitor: 'Inicializado' }, 'Conexões prontas')
+    }
+    public async CreateConn(conn_name: string, type: string, user_id: number) {
+
+        if (!conn_name || !type || !user_id) return SendLocalResponse(false, 'A requisição está incompleta');
         const conn = this.ExistsConn(conn_name);
 
         if (conn) {
@@ -117,14 +127,14 @@ class WhatsappManager {
             saas: {
                 user: {
                     name: 'teste',
-                    id: 1
+                    id: user_id
                 }
             },
             data: {
                 created_timestamp: new Date()
             },
             name: conn_name,
-            type: ConectionManagerConnType('Whatsapp'),
+            type: ConectionManagerConnType(type),
             id: uuid(),
             status: ConectionManagerConnStatus('Disconected')
         }
@@ -138,8 +148,11 @@ class WhatsappManager {
     public ReturnConns() {
         return this.conns;
     }
+
     private ExistsConn(conn_name: string) {
         const conn = this.conns.find(conn => {
+            console.log("conn", conn);
+
             return conn.name === conn_name;
         });
         if (!conn) return false;
@@ -147,4 +160,4 @@ class WhatsappManager {
     }
 }
 
-export default WhatsappManager
+export default ConnectionManager

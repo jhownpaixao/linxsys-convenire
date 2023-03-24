@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { logger } from "../components/logger";
+import { logger } from "./logger";
 
 
 
