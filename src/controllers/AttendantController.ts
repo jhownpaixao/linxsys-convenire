@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "./BaseController";
-import { Attendant } from "../Models/";
+import { Attendant } from "../Models";
 import { SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse } from "../Utils/Responses";
-
-
 
 export default class AttendantController extends Controller<Attendant> {
     constructor() { super(Attendant); }

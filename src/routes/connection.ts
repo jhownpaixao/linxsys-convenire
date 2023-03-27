@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import * as MainController from '../controllers/MainController'
+import * as MainController from '../Controllers/MainController'
 import { SendHTTPResponse } from "../Utils/Responses";
 const routes = express.Router();
 

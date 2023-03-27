@@ -4,8 +4,8 @@ import bodyParser from "body-parser";
 import { logger } from "./Utils/Logger";
 import PinoHttp from "pino-http";
 import { SendHTTPResponse } from "./Utils/Responses";
-import RoutesConnection from './routes/connection'
-import RoutesUser from './routes/user'
+import RoutesConnection from './Routes/connection'
+import RoutesUser from './Routes/user'
 
 
 

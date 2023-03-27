@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Controller from "./BaseController";
 import { User } from "../Models";
 import { SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse } from "../Utils/Responses";
+
 export default class UserController extends Controller<User> {
     constructor() { super(User); }
 
