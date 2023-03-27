@@ -1,8 +1,8 @@
 
 import { WASocket } from "@adiwajshing/baileys"
 import { uuid } from "uuidv4";
-import { logger } from "../Utils/logger";
-import { SendLocalResponse } from "../Utils/responses"
+import { logger } from "./Logger";
+import { SendLocalResponse } from "./Responses"
 
 
 /**
@@ -94,10 +94,10 @@ const ConectionManagerConnType: ConectionManagergetConnType = (code) => {
  */
 
 class ConnectionManager {
-    private sock: WASocket
+    /* private sock: WASocket */
     private conns: Array<ConectionManagerConn> = [];
-    private MessageUpsertCallback: (msg: Object) => {}
-    private MonitorInterval: NodeJS.Timer
+    private MessageUpsertCallback: ((msg: Object) => {}) | undefined
+    private MonitorInterval: NodeJS.Timer | undefined
     constructor() {
         this.initialize();
     }
@@ -108,9 +108,9 @@ class ConnectionManager {
         this.StartConnectionMonitor();
     }
     private StartConnectionMonitor() {
-        this.MonitorInterval = setInterval(()=>{
+        this.MonitorInterval = setInterval(() => {
             console.log(`[ConnectionMonitor]:: Atualizando conexões...`)
-        },10_000)
+        }, 10_000)
 
         logger.info({ StartConnectionMonitor: 'Inicializado' }, 'Conexões prontas')
     }
@@ -141,7 +141,7 @@ class ConnectionManager {
 
         this.conns.push(addConn);
 
-        return SendLocalResponse(true, 'A conexão adicionada com sucesso')
+        return SendLocalResponse(true, 'A conexão adicionada com sucesso', addConn)
     }
 
 
