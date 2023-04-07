@@ -1,7 +1,14 @@
 import express, { Request, Response, NextFunction } from "express";
 import { logger } from "../Logger/Logger";
 import { HTTPResponse } from '../Types'
-import { HTTPResponseCode } from "../Config";
+import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from "../Config";
+import * as core from 'express-serve-static-core';
+/**
+ * Description placeholder
+ * @date 07/04/2023 - 15:22:19
+ *
+ * @type {*}
+ */
 const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart'
 /**
  * Envia uma Response HTTP padronizada
@@ -76,6 +83,15 @@ export function SendLocalResponse(operation: boolean, info: string = '', data: a
     }
 }
 
+/**
+ * Verifica os parametros informados e retorna os negativos (null,String(''),lenght=0,'Não informado')
+ * @date 07/04/2023 - 15:22:19
+ *
+ * @export
+ * @async
+ * @param {Object} params
+ * @returns {Promise<[boolean, string?]>}
+ */
 export async function CheckRequest(params: Object): Promise<[boolean, string?]> {
     let pass: boolean = true;
     let paramError: string = '';
@@ -95,9 +111,56 @@ export async function CheckRequest(params: Object): Promise<[boolean, string?]> 
     return [pass, paramError];
 }
 
+/**
+ * Expõe o erro gerado em uma requisição para o log e informa no response
+ * @date 07/04/2023 - 15:22:19
+ *
+ * @export
+ * @param {number} code
+ * @param {*} exception
+ * @param {Response} res
+ */
 export function ThrowHTTPErrorResponse(code: number, exception: any, res: Response) {
     logger.error({ exception }, 'Uma requisição retornou um erro')
     SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res)
 };
+
+/**
+ * Expõe um metodo não permitido
+ * @date 07/04/2023 - 15:22:19
+ *
+ * @export
+ * @param {Request} req
+ * @param {Response} res
+ * @param {?NextFunction} [next]
+ */
+export function ThrowHTTPMethodNotAllowed(req: Request, res: Response, next?: NextFunction) {
+    logger.error({ req }, 'Houve uma acesso à rota com o método não permitido')
+    SendHTTPResponse({ message: "Método não permitido", status: false, type: "error", code: HTTPResponseCode.methodNotAllowed }, res)
+};
+/**
+ * Envia as opções definidas e suportadas pela rota
+ * @date 07/04/2023 - 15:22:19
+ *
+ * @export
+ * @param {Response} res
+ * @param {string} options
+ */
+export function SendHTTPMethodOPTIONS(res: Response, options: string) {
+    res.header('Access-Control-Allow-Origin', Array(CORSPolicyOptions.origin).join(','));
+    res.header('Access-Control-Allow-Methods', options);
+    res.header('Access-Control-Allow-Headers', Array(CORSPolicyOptions.allowedHeaders).join(','));
+    res.send(204);
+};
+/**
+ * Denifi os métodos permitidos por rota (forma individual)
+ * @date 07/04/2023 - 15:21:24
+ * @async
+ */
+export const SetAllowedMethods = async (app: core.Express) => {
+    for (const [route, method] of Object.entries(AllowedMethods)) {
+        app.options(route, (req, res, next) => SendHTTPMethodOPTIONS(res, method))
+    }
+}
 
 

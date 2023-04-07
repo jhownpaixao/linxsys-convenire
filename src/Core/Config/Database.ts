@@ -8,6 +8,7 @@ import { logger } from '../Logger';
  * @type {SequelizeOptions}
  */
 let SequelizeConnectionOptions: SequelizeOptions = require('../Database/cli-config')
+
 SequelizeConnectionOptions.logging = msg => logger.info({ Sequelize: msg })
 
 export { SequelizeConnectionOptions }

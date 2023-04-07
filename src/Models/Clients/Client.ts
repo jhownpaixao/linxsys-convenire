@@ -29,7 +29,7 @@ export class Client extends Model<InferAttributes<Client>, InferCreationAttribut
     declare params: CreationOptional<object>;
 
 
-    declare getContact: HasManyGetAssociationsMixin<Contact>; // Note the null assertions!
+    declare getContacts: HasManyGetAssociationsMixin<Contact>; // Note the null assertions!
     declare addContact: HasManyAddAssociationMixin<Contact, number>;
     declare addContacts: HasManyAddAssociationsMixin<Contact, number>;
     declare setContacts: HasManySetAssociationsMixin<Contact, number>;

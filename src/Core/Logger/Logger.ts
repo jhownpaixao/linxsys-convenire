@@ -67,5 +67,4 @@ export const logger = pino({
     translateTime: 'dd-mm-yyyy HH:MM:ss',
     timestamp: () => `,"time":"${new Date().toJSON()}"`,
 
-
 }, multistream(streams));

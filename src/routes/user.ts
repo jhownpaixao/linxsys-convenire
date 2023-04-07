@@ -1,33 +1,73 @@
 import express from "express";
-import { UserController, AttendantController, ClientController } from "../Controllers";
-
+import { UserController, AttendantController, ClientController, ConnectionController } from "../Controllers";
+import { ThrowHTTPMethodNotAllowed } from "../Core";
 const routes = express.Router();
 const User = new UserController;
 const Attendant = new AttendantController
 const Client = new ClientController
+const Connection = new ConnectionController
 
 /* mydomain.com/user */
 
-/* Main Uers */
-routes.post('/', User.insert);
-routes.get('/', User.GetAll);
-routes.get('/:user_id', User.Get);
+/** 
+ * 
+ * Main User
+ * 
+*/
+routes
+    .route('/')
+    .post(User.insert)
+    .get(User.GetAll)
+    .all(ThrowHTTPMethodNotAllowed)
 
-/* Attendants */
-routes.post('/:user_id/attendants', User.addAttendant);
-routes.get('/:user_id/attendants', User.getAttendants);
+routes
+    .route('/:user_id')
+    .get(User.Get)
+    .all(ThrowHTTPMethodNotAllowed)
 
-/* Clients */
-routes.post('/:user_id/clients', User.addClient);
-routes.get('/:user_id/clients', User.getClients);
+/** 
+ * 
+ * Attendants
+ * 
+*/
+routes
+    .route('/:user_id/attendants')
+    .post(Attendant.add)
+    .get(Attendant.getAll)
+    .all(ThrowHTTPMethodNotAllowed)
+
+/** 
+ * 
+ * Clients
+ * 
+*/
+routes
+    .route('/:user_id/clients')
+    .post(Client.add)
+    .get(Client.getAll)
+    .all(ThrowHTTPMethodNotAllowed)
 /* Clients -> Contacts */
-routes.post('/:user_id/clients/:client_id/contacts', Client.addContact);
-routes.get('/:user_id/clients/:client_id/contacts', Client.getContacts);
+routes
+    .route('/:user_id/clients/:client_id/contacts')
+    .post(Client.addContact)
+    .get(Client.getContacts)
+    .all(ThrowHTTPMethodNotAllowed)
 
-/* Connections */
-routes.post('/:user_id/connections', User.addConnection);
-routes.get('/:user_id/connections', User.getConnections);
-
-
+/** 
+ * 
+ * Connections
+ * 
+*/
+routes
+    .route('/:user_id/connections')
+    .post(Connection.add)
+    .get(Connection.getAll)
+    .all(ThrowHTTPMethodNotAllowed)
+/* Connections -> Configs*/
+routes
+    .route('/:user_id/connections/:connection_id/config')
+    .get(Connection.getConfig)
+    .patch(Connection.editConfig)
+    .all(ThrowHTTPMethodNotAllowed)
 
 export default routes

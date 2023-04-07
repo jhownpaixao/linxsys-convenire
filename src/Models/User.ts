@@ -9,6 +9,7 @@ import {
 import { Attendant } from './Attendant';
 import { Client } from './Clients';
 import { Connection } from './Connections';
+import { Contact } from './Clients';
 
 import { uuid } from "uuidv4";
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -24,7 +25,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare params: CreationOptional<object>;
 
 
-    declare getAttendant: HasManyGetAssociationsMixin<Attendant>; // Note the null assertions!
+    declare getAttendants: HasManyGetAssociationsMixin<Attendant>; // Note the null assertions!
     declare addAttendant: HasManyAddAssociationMixin<Attendant, number>;
     declare addAttendants: HasManyAddAssociationsMixin<Attendant, number>;
     declare setAttendants: HasManySetAssociationsMixin<Attendant, number>;
@@ -36,7 +37,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createAttendant: HasManyCreateAssociationMixin<Attendant, 'user_id'>;
     declare attendants?: NonAttribute<Attendant[]>; // Note this is optional since it's only populated when explicitly requested in code
 
-    declare getClient: HasManyGetAssociationsMixin<Client>; // Note the null assertions!
+    declare getClients: HasManyGetAssociationsMixin<Client>; // Note the null assertions!
     declare addClient: HasManyAddAssociationMixin<Client, number>;
     declare addClients: HasManyAddAssociationsMixin<Client, number>;
     declare setClients: HasManySetAssociationsMixin<Client, number>;
@@ -48,7 +49,21 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createClient: HasManyCreateAssociationMixin<Client, 'user_id'>;
     declare clients?: NonAttribute<Client[]>; // Note this is optional since it's only populated when explicitly requested in code
 
-    declare getConnection: HasManyGetAssociationsMixin<Connection>; // Note the null assertions!
+
+    declare getContacts: HasManyGetAssociationsMixin<Contact>; // Note the null assertions!
+    declare addContact: HasManyAddAssociationMixin<Contact, number>;
+    declare addContacts: HasManyAddAssociationsMixin<Contact, number>;
+    declare setContacts: HasManySetAssociationsMixin<Contact, number>;
+    declare removeContact: HasManyRemoveAssociationMixin<Contact, number>;
+    declare removeContacts: HasManyRemoveAssociationsMixin<Contact, number>;
+    declare hasContact: HasManyHasAssociationMixin<Contact, number>;
+    declare hasContacts: HasManyHasAssociationsMixin<Contact, number>;
+    declare countContacts: HasManyCountAssociationsMixin;
+    declare createContact: HasManyCreateAssociationMixin<Contact, 'user_id'>;
+    declare contacts?: NonAttribute<Contact[]>;
+
+
+    declare getConnections: HasManyGetAssociationsMixin<Connection>; // Note the null assertions!
     declare addConnection: HasManyAddAssociationMixin<Connection, number>;
     declare addConnections: HasManyAddAssociationsMixin<Connection, number>;
     declare setConnections: HasManySetAssociationsMixin<Connection, number>;
@@ -65,6 +80,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
         this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
         this.hasMany(Client, { foreignKey: 'user_id', as: 'clients' });
         this.hasMany(Connection, { foreignKey: 'user_id', as: 'connections' });
+        this.hasMany(Contact, { foreignKey: 'user_id', as: 'contacts' });
     }
 }
 

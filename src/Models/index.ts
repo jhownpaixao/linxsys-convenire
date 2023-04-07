@@ -1,34 +1,42 @@
 import { SequelizeConnection } from "../Core";
-import { User as UserModel } from "./User";
-import { Attendant as AttendantModel } from "./Attendant";
+import { User } from "./User";
+import { Attendant } from "./Attendant";
 import {
-    Client as ClientModel,
-    ClientGroup as ClientGroupModel,
-    Contact as ContactModel
+    Client,
+    ClientGroup,
+    Contact
 } from './Clients'
 import {
-    Connection as ConnectionModel,
-    ConnectionsConfigs as ConnectionsConfigsModel,
+    Connection,
+    ConnectionsConfigs,
 } from './Connections'
 
-const Models = SequelizeConnection.models;
-
-AttendantModel.associate(Models)
-UserModel.associate(Models)
-ClientModel.associate(Models)
-ClientGroupModel.associate(Models)
-ContactModel.associate(Models)
-ConnectionModel.associate(Models)
-ConnectionsConfigsModel.associate(Models)
+/* const Models = SequelizeConnection.models; */
+const Models = {
+    Attendant,
+    User,
+    Client,
+    ClientGroup,
+    Contact,
+    Connection,
+    ConnectionsConfigs,
+}
+Attendant.associate(Models)
+User.associate(Models)
+Client.associate(Models)
+ClientGroup.associate(Models)
+Contact.associate(Models)
+Connection.associate(Models)
+ConnectionsConfigs.associate(Models)
 
 
 export {
-    AttendantModel,
-    UserModel,
-    ClientModel,
-    ClientGroupModel,
-    ContactModel,
-    ConnectionModel,
-    ConnectionsConfigsModel,
+    Attendant as AttendantModel,
+    User as UserModel,
+    Client as ClientModel,
+    ClientGroup as ClientGroupModel,
+    Contact as ContactModel,
+    Connection as ConnectionModel,
+    ConnectionsConfigs as ConnectionsConfigsModel,
     Models
 }

@@ -35,7 +35,7 @@ export class Attendant extends Model<InferAttributes<Attendant>, InferCreationAt
 
 
 Attendant.init({
-    user_id: DataTypes.INTEGER,
+    user_id: DataTypes.INTEGER.UNSIGNED,
     name: DataTypes.STRING,
     pass: DataTypes.STRING,
     email: DataTypes.STRING,
