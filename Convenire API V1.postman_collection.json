@@ -1,0 +1,401 @@
+{
+	"info": {
+		"_postman_id": "f73d9422-6a05-4000-b0e2-734f7c855a39",
+		"name": "Convenire API V1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Atendentes",
+					"item": [
+						{
+							"name": "Listar",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/attendants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"attendants"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Adicionar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Atnd Jhonnata\",\r\n    \"email\": \"jhonnata_pay@gmail.com\",\r\n    \"pass\": \"233369\",\r\n    \"block_with_venc\": \"Yes\",\r\n    \"data\": {}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/attendants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"attendants"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clientes",
+					"item": [
+						{
+							"name": "Contatos",
+							"item": [
+								{
+									"name": "Listar",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/user/:user_id/clients/:client_id/contacts",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"user",
+												":user_id",
+												"clients",
+												":client_id",
+												"contacts"
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "1"
+												},
+												{
+													"key": "client_id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Adicionar",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"contato\": \"4199614101\",\r\n    \"params\": \"\",\r\n    \"comments\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/user/:user_id/clients/:client_id/contacts",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"user",
+												":user_id",
+												"clients",
+												":client_id",
+												"contacts"
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "1"
+												},
+												{
+													"key": "client_id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Listar",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/clients",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"clients"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Adicionar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"nome\": \"Jhonnata\",\r\n    \"contato\":\"41987092101\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/clients",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"clients"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Conexões",
+					"item": [
+						{
+							"name": "Configuração",
+							"item": [
+								{
+									"name": "Listar",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/user/:user_id/connections/:connection_id/config",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"user",
+												":user_id",
+												"connections",
+												":connection_id",
+												"config"
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "1"
+												},
+												{
+													"key": "connection_id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Editar",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\t\"name\": \"Configurações 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/user/:user_id/connections/:connection_id/config",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"user",
+												":user_id",
+												"connections",
+												":connection_id",
+												"config"
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "1"
+												},
+												{
+													"key": "connection_id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Listar",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/connections",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"connections"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Adicionar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"name\": \"Conexão 1\",\r\n    \"type\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/:user_id/connections",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":user_id",
+										"connections"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar Usuários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar Usuários",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Jhonnata Paixão\",\r\n    \"email\": \"jhonnata_pay@gmail.com\",\r\n    \"pass\": \"1231321321231321\",\r\n    \"type\": \"Administrator\",\r\n    \"block_with_venc\": \"Yes\",\r\n    \"date_venc\": \"2023-03-31\",\r\n    \"data\": {}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
