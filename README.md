@@ -11,11 +11,20 @@ $ git clone https://github.com/jhownpaixao/linxsys-convenire
 ```
 $ npm install
 ```
+ou 
 
 - Instale com Yarn :
 ```
 $ yarn install
 ```
 - Importe a coleção no Postman
+
+
+
+- Configure o arquivo de Variaveis de Ambiente (.env)
+- Execute as migrations com: 
+```
+$ yarn sequelize db:migrate
+```
 
 Os recursos são limitados enquanto durar a fase BETA
