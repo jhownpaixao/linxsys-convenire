@@ -3,8 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('Connections', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -15,11 +14,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      pass: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      email: {
+      connected_id: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -27,35 +22,35 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      type: {
-        type: Sequelize.ENUM('Administrator', 'Default', 'Attendant', 'Operator', 'Company'),
-        defaultValue: 'Default',
+      user_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: 'users', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
-      block_with_venc: {
-        type: Sequelize.ENUM('Yes', 'No'),
-        defaultValue: 'Yes',
-        allowNull: false,
+      config_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'Connections_Configs', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+      },
+      type: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
       blocked: {
         type: Sequelize.ENUM('Yes', 'No'),
         defaultValue: 'No',
         allowNull: false,
       },
-      group_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      date_venc: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      data: {
+      params: {
         type: Sequelize.JSON,
         allowNull: true,
       },
-      auth_token: {
-        type: Sequelize.STRING,
+      comments: {
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       created_at: {
@@ -71,8 +66,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-
-    return queryInterface.dropTable('users');
-
+    return queryInterface.dropTable('Connections');
   }
+
 };

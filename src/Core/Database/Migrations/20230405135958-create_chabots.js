@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    return queryInterface.createTable('connections_configs', {
+    return queryInterface.createTable('Chatbots', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -19,10 +19,6 @@ module.exports = {
         type: Sequelize.JSON,
         allowNull: true,
       },
-      chatbot: {
-        type: Sequelize.JSON,
-        allowNull: true,
-      },
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -34,8 +30,21 @@ module.exports = {
         type: Sequelize.JSON,
         allowNull: true,
       },
+      blocked: {
+        type: Sequelize.ENUM('Yes', 'No'),
+        defaultValue: 'No',
+        allowNull: false,
+      },
+      workflow: {
+        type: Sequelize.JSON,
+        allowNull: true,
+      },
       comments: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      params: {
+        type: Sequelize.JSON,
         allowNull: true,
       },
       created_at: {
@@ -51,6 +60,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('connections_configs');
+    return queryInterface.dropTable('Chatbots');
   }
 };

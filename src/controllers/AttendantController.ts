@@ -1,20 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import Controller from "./BaseController";
-import { Attendant } from "../Models";
-import { SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse } from "../Utils/Responses";
+import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode } from "../Core";
+import { AttendantModel, UserModel } from "../Models";
 
-export default class AttendantController extends Controller<Attendant> {
-    constructor() { super(Attendant); }
+export class AttendantController extends Controller<AttendantModel> {
+    constructor() { super(AttendantModel); }
 
 
-    public Insert = async (req: Request, res: Response, next: NextFunction) => {
+    public insert = async (req: Request, res: Response, next: NextFunction) => {
         const { user_id } = req.params;
-        const { name, email, pass, block_with_venc, data } = req.body;
+        const { name, email, pass, block_with_venc, params } = req.body;
         const [check] = await CheckRequest([user_id, name, pass]);
-        if (!check) return SendHTTPResponse({ message: 'Requisição incompleta', status: false, type: 'error', code: 400 }, res);
+        if (!check) return SendHTTPResponse({ message: 'Requisição incompleta', status: false, type: 'error', code: HTTPResponseCode.incompleteRequest }, res);
 
-        const user = await this.Model.findByPk(user_id);
-        if (!user) return SendHTTPResponse({ message: 'O usuário não foi localizado', type: 'warning', status: false, code: 204 }, res)
+        const user = await UserModel.findByPk(user_id);
+        if (!user) return SendHTTPResponse({ message: 'O usuário não foi localizado', type: 'warning', status: false, code: HTTPResponseCode.informationNotFound }, res)
 
         try {
             const atnd = await this.Create({
@@ -23,11 +22,11 @@ export default class AttendantController extends Controller<Attendant> {
                 email,
                 pass,
                 block_with_venc,
-                data
+                params
             });
             return SendHTTPResponse({ message: 'Atendente criado com sucesso', type: 'success', status: true, data: atnd }, res)
         } catch (error) {
-            return ThrowHTTPErrorResponse(500, error, res)
+            return ThrowHTTPErrorResponse(HTTPResponseCode.iternalErro, error, res)
         }
 
 
@@ -37,10 +36,10 @@ export default class AttendantController extends Controller<Attendant> {
 
         try {
             const attendants: any = await this.Model.findAll();
-            if (!attendants) return SendHTTPResponse({ message: 'Atendentes não localizados', type: 'error', status: false, code: 204 }, res)
+            if (!attendants) return SendHTTPResponse({ message: 'Atendentes não localizados', type: 'error', status: false, code: HTTPResponseCode.informationNotFound }, res)
             return SendHTTPResponse({ message: 'Solicitação concluída', type: 'success', status: true, data: attendants }, res)
         } catch (error) {
-            return ThrowHTTPErrorResponse(500, error, res)
+            return ThrowHTTPErrorResponse(HTTPResponseCode.iternalErro, error, res)
         }
 
     }

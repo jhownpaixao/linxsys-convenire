@@ -1,14 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Model, InferAttributes, InferCreationAttributes, BuildOptions } from 'sequelize';
-
-/**
- * Referência de tipo usado para definir o Model
- * @date 26/03/2023 - 18:22:05
- */
-export type ModelStatic = typeof Model & { new(values?: object, options?: BuildOptions): Model }
-
-// Isto é certo?
-/* export type ModelStatic = typeof Model & (new (values?: object, options?: BuildOptions) => Model); */
+import { InferCreationAttributes, InferAttributes, Model, CreationOptional } from 'sequelize';
+import { ModelType } from "../Types";
+import { MakeNullishOptional } from "sequelize/types/utils";
 
 /**
  * Inferface de garantia das propriedades
@@ -23,36 +16,33 @@ export interface IControllerBase<T extends Model> {
      * Model padrão usado para criar o Controller
      * @date 26/03/2023 - 18:22:05
      *
-     * @type {ModelStatic}
+     * @type {ModelType}
      */
-    Model: ModelStatic;
+    Model: ModelType<T>;
+    /**
+     * Função de retorno do istancimento de Model
+     * @date 26/03/2023 - 18:22:05
+     *
+     */
+    ResolveModel(id: string): Promise<false | T>;
     /**
      * Função básica de criação do model atual
      * @date 26/03/2023 - 18:22:05
-     *
-     * @param {InferCreationAttributes<T>} data
-     * @returns {Promise<Model>}
      */
-    Create(data: InferCreationAttributes<T>): Promise<Model>;
+    Create(data: MakeNullishOptional<InferCreationAttributes<T>>): Promise<T>;
+
     /**
      * Função básica de listagem do model atual
      * @date 26/03/2023 - 18:22:05
      *
-     * @returns {Promise<Model[]>}
      */
-    List(): Promise<Model[]>;
+    List(): Promise<T[]>;
     /**
      * Função básica de exclusão do model atual
      * @date 26/03/2023 - 18:22:05
-     *
-     * @param {Request} req
-     * @param {Response} res
-     * @param {NextFunction} next
-     * @returns {Promise<void>}
      */
     Delete(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
-
 /**
  * Classe base Abstrata para criação dos controllers
  * @date 26/03/2023 - 18:22:05
@@ -63,7 +53,8 @@ export interface IControllerBase<T extends Model> {
  * @template T
  * @implements {IControllerBase<T>}
  */
-export default abstract class Controller<T extends Model> implements IControllerBase<T> {
+export default abstract class Controller<T extends Model<InferAttributes<T>, InferCreationAttributes<T>>> implements IControllerBase<T> {
+    declare id: CreationOptional<number>;
     /**
      * Model padrão usado para criar o Controller
      * @date 26/03/2023 - 18:22:05
@@ -71,7 +62,7 @@ export default abstract class Controller<T extends Model> implements IController
      * @public
      * @type {ModelStatic}
      */
-    public Model: ModelStatic;
+    public Model: ModelType<T>;
     /**
      * Creates an instance of Controller.
      * @date 26/03/2023 - 18:22:05
@@ -83,6 +74,20 @@ export default abstract class Controller<T extends Model> implements IController
         this.Model = model;
     }
 
+
+    /**
+    * Função de retorno do istancimento de Model
+    * @date 26/03/2023 - 18:22:05
+    *
+    * @public
+    * @async
+    */
+    public async ResolveModel(id: string): Promise<false | T> {
+        const thisModel = await this.Model.findByPk(id)
+        if (!thisModel) return false
+        return thisModel;
+    }
+
     /**
      * Função básica de criação do model atual
      * @date 26/03/2023 - 18:22:05
@@ -91,10 +96,11 @@ export default abstract class Controller<T extends Model> implements IController
      * @async
      * @param {InferCreationAttributes<T>} data
      */
-    public async Create(data: InferCreationAttributes<T>): Promise<Model> {
+    public async Create(data: MakeNullishOptional<InferCreationAttributes<T>>): Promise<T> {
         const operation = await this.Model.create(data);
         return operation;
     }
+
 
     /**
      * Função básica de exclusão do model atual
@@ -102,9 +108,6 @@ export default abstract class Controller<T extends Model> implements IController
      *
      * @public
      * @async
-     * @param {Request} req
-     * @param {Response} res
-     * @param {NextFunction} next
      */
     public async Delete(req: Request, res: Response, next: NextFunction): Promise<void> {
         const result = this.Model.destroy({})
@@ -117,9 +120,11 @@ export default abstract class Controller<T extends Model> implements IController
      * @async
      * @returns {Promise<Model[]>}
      */
-    public async List(): Promise<Model[]> {
+    public async List(): Promise<T[]> {
         const operation = await this.Model.findAll();
         return operation;
     }
 
 }
+
+

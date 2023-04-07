@@ -8,6 +8,6 @@ module.exports = {
     define: {
         timestamps: true,
         underscored: true
-    }
-
+    },
+    models: ['../../Models'], // or [Player, Team],
 }

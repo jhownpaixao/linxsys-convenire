@@ -1,11 +1,12 @@
 import * as fs from 'fs'
 import { multistream, Streams } from 'pino-multi-stream'
 import * as path from 'path'
+import * as dotenv from 'dotenv'
 import moment from 'moment'
 import pino from 'pino'
 import PinoPretty from 'pino-pretty'
-
-
+/* import PinoPretty from 'pino-pretty' */
+dotenv.config();
 /**
  * Define a data atual pelo moment
  * @date 24/03/2023 - 20:19:19
@@ -23,7 +24,7 @@ const hour: string = moment().format("HH_mm");
  * @date 24/03/2023 - 20:19:18
  *
  */
-const dir_log: string = '../../logs/';
+const dir_log: string = '../../../logs/';
 
 fs.mkdirSync(path.resolve(__dirname, dir_log, today, hour), { recursive: true })
 /**
@@ -39,16 +40,20 @@ const path_log: string = path.resolve(__dirname, dir_log, today, hour)
  *
  */
 const streams: Streams = [
-    { stream: fs.createWriteStream(path_log + '/all-' + hour + '.log') },
-    { level: 'debug', stream: fs.createWriteStream(path_log + '/debug-' + hour + '.log') },
-    { level: 'error', stream: fs.createWriteStream(path_log + '/error-' + hour + '.log') },
-    { level: 'info', stream: fs.createWriteStream(path_log + '/info-' + hour + '.log') },
-    { level: 'fatal', stream: fs.createWriteStream(path_log + '/fatal-' + hour + '.log') },
-    { level: 'warn', stream: fs.createWriteStream(path_log + '/warn-' + hour + '.log') },
-    { level: 'silent', stream: fs.createWriteStream(path_log + '/silent-' + hour + '.log') },
-    { level: 'trace', stream: fs.createWriteStream(path_log + '/trace-' + hour + '.log') },
+    { stream: fs.createWriteStream(path_log + '/all.log') },
+    { level: 'debug', stream: fs.createWriteStream(path_log + '/debug.log') },
+    { level: 'error', stream: fs.createWriteStream(path_log + '/error.log') },
+    { level: 'info', stream: fs.createWriteStream(path_log + '/info.log') },
+    { level: 'fatal', stream: fs.createWriteStream(path_log + '/fatal.log') },
+    { level: 'warn', stream: fs.createWriteStream(path_log + '/warn.log') },
+    { level: 'silent', stream: fs.createWriteStream(path_log + '/silent.log') },
+    { level: 'trace', stream: fs.createWriteStream(path_log + '/trace.log') },
     //{stream: process.stdout},
 ]
+
+const stream = PinoPretty({
+    colorize: true,
+})
 
 /**
  * Logger padrão par a exportação
@@ -61,5 +66,6 @@ export const logger = pino({
     colorize: true,
     translateTime: 'dd-mm-yyyy HH:MM:ss',
     timestamp: () => `,"time":"${new Date().toJSON()}"`,
+
 
 }, multistream(streams));

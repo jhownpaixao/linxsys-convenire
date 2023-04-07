@@ -3,7 +3,8 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('connections', {
+
+    return queryInterface.createTable('ClientGroups', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -18,17 +19,6 @@ module.exports = {
         type: Sequelize.JSON,
         allowNull: true,
       },
-      config_id: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        references: { model: 'connections_configs', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      },
-      uniqkey: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -36,32 +26,12 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      /* type: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: { model: 'connections_types', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      }, */
-      blocked: {
-        type: Sequelize.ENUM('Yes', 'No'),
-        defaultValue: 'No',
-        allowNull: false,
-      },
-      data: {
-        type: Sequelize.JSON,
-        allowNull: true,
-      },
-      /*       auth_token: {
-              type: Sequelize.STRING,
-              allowNull: true,
-            }, */
-      jid: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
       comments: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      params: {
+        type: Sequelize.JSON,
         allowNull: true,
       },
       created_at: {
@@ -77,6 +47,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('connections');
+    return queryInterface.dropTable('ClientGroups');
   }
 };

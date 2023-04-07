@@ -1,4 +1,4 @@
-import ConnectionManager from "../Utils/ConnectionManager";
+import ConnectionManager from "../Core/Utils/ConnectionManager";
 
 
 /* Constantes */

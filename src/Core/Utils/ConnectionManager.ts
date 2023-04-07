@@ -1,7 +1,7 @@
 
 import { WASocket } from "@adiwajshing/baileys"
 import { uuid } from "uuidv4";
-import { logger } from "./Logger";
+import { logger } from "../Logger";
 import { SendLocalResponse } from "./Responses"
 
 

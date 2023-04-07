@@ -1,36 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import { logger } from "./Logger";
-
-
-
-/**
- * Tipos padrões para o tipo de response
- * @date 26/03/2023 - 21:45:23
- *
- */
-declare type ResponseType = 'error' | 'success' | 'warning'
-
-/**
- * Objeto de response padronizado
- * @date 26/03/2023 - 21:45:23
- *
- */
-declare type HTTPResponse = {
-    status: boolean,
-    message: string,
-    type: ResponseType,
-    code?: number
-    timestamp?: number,
-    data?: any
-}
-
-export interface HTTPResponseError {
-    message: string,
-    code: number,
-    data?: object
-}
-
-
+import { logger } from "../Logger/Logger";
+import { HTTPResponse } from '../Types'
+import { HTTPResponseCode } from "../Config";
+const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart'
 /**
  * Envia uma Response HTTP padronizada
  * @date 25/03/2023 - 11:48:29
@@ -60,13 +32,28 @@ export function SendHTTPResponse(objResponse: HTTPResponse, res: Response, next?
             break;
     }
     objResponse.timestamp = Date.now()
-    if (!objResponse.code) objResponse.code = 200
+    if (!objResponse.code) objResponse.code = HTTPResponseCode.successfullyProcessedInformation
     res.status(objResponse.code);
+
+    let FormulatedResponse;
+
+    switch (ResponseFormulation) {
+        case 'direct':
+            if (objResponse['data']) FormulatedResponse = objResponse.data
+            break;
+        case 'standart':
+            FormulatedResponse = objResponse
+        default:
+            FormulatedResponse = objResponse
+            break;
+    }
+
+
     if (next) {
-        res.write(JSON.stringify(objResponse));
+        res.write(JSON.stringify(FormulatedResponse));
         next();
     } else {
-        res.send(JSON.stringify(objResponse));
+        res.send(JSON.stringify(FormulatedResponse));
     }
 };
 
@@ -89,10 +76,10 @@ export function SendLocalResponse(operation: boolean, info: string = '', data: a
     }
 }
 
-export async function CheckRequest(params: Array<string>): Promise<[boolean, string?]> {
+export async function CheckRequest(params: Object): Promise<[boolean, string?]> {
     let pass: boolean = true;
     let paramError: string = '';
-    for (const param of params) {
+    for (const [key, param] of Object.entries(params)) {
         if (
             !param ||
             param === null ||
@@ -101,6 +88,7 @@ export async function CheckRequest(params: Array<string>): Promise<[boolean, str
             (typeof param === 'object' && Object.values(param).length < 1)
         ) {
             pass = false;
+            paramError = key;
         }
     }
 
@@ -108,7 +96,7 @@ export async function CheckRequest(params: Array<string>): Promise<[boolean, str
 }
 
 export function ThrowHTTPErrorResponse(code: number, exception: any, res: Response) {
-    logger.error({ http_error_response: exception }, 'Uma requisição retornou um erro')
+    logger.error({ exception }, 'Uma requisição retornou um erro')
     SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res)
 };
 
