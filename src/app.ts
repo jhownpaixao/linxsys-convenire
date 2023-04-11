@@ -2,8 +2,15 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from 'cors'
 import bodyParser from "body-parser";
 import PinoHttp from "pino-http";
-import { UserRoutes, ConnectionRoutes } from "./Routes";
-import { CORSPolicyOptions, ExpressResponseOptions, SendHTTPResponse, logger, SetAllowedMethods, HTTPResponseCode } from "./Core";
+import { UserRoutes, ConnectionRoutes, AuthRoutes } from "./Routes";
+import {
+        CORSPolicyOptions,
+        ExpressResponseOptions,
+        SendHTTPResponse,
+        logger,
+        SetAllowedMethods,
+        HTTPResponseCode,
+} from "./Core";
 
 
 
@@ -28,6 +35,7 @@ const pinoHttp = PinoHttp({ logger: logger });
 const APP_PORT = process.env.BACKEND_PORT || 4000;
 const APP_URL = process.env.BACKEND_URL || 'http://localhost';
 
+
 (async () => {
 
 
@@ -44,6 +52,8 @@ const APP_URL = process.env.BACKEND_URL || 'http://localhost';
         /* Rotas */
         app.use('/connection', ConnectionRoutes);
         app.use('/user', UserRoutes);
+        app.use('/auth', AuthRoutes);
+
 
 
         app.use((req: Request, res: Response, next: NextFunction) => {

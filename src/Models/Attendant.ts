@@ -15,7 +15,7 @@ export class Attendant extends Model<InferAttributes<Attendant>, InferCreationAt
     declare name: string;
     declare pass: string;
     declare email: string;
-    uniqkey: CreationOptional<string> = uuid();
+    declare uniqkey: string
     declare block_with_venc: string;
     declare group_id: CreationOptional<number>;
     declare default_conn: CreationOptional<ForeignKey<Connection['id']>>;

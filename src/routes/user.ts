@@ -1,11 +1,12 @@
 import express from "express";
-import { UserController, AttendantController, ClientController, ConnectionController } from "../Controllers";
+import { UserController, AttendantController, ClientController, ConnectionController, AuthController } from "../Controllers";
 import { ThrowHTTPMethodNotAllowed } from "../Core";
 const routes = express.Router();
 const User = new UserController;
 const Attendant = new AttendantController
 const Client = new ClientController
 const Connection = new ConnectionController
+const Auth = new AuthController
 
 /* mydomain.com/user */
 
@@ -17,7 +18,7 @@ const Connection = new ConnectionController
 routes
     .route('/')
     .post(User.insert)
-    .get(User.GetAll)
+    .get(Auth.authorization, User.GetAll)
     .all(ThrowHTTPMethodNotAllowed)
 
 routes

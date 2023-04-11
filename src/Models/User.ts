@@ -11,13 +11,12 @@ import { Client } from './Clients';
 import { Connection } from './Connections';
 import { Contact } from './Clients';
 
-import { uuid } from "uuidv4";
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id?: CreationOptional<number>;
     declare name: string;
     declare pass: string;
     declare email: string;
-    uniqkey: CreationOptional<string> = uuid();
+    declare uniqkey: string
     declare type: string;
     declare block_with_venc: string;
     declare group_id: CreationOptional<number>;

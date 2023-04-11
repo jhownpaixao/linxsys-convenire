@@ -20,10 +20,12 @@ module.exports = {
         allowNull: false,
       },
       email: {
+        unique: true,
         type: Sequelize.STRING,
         allowNull: true,
       },
       uniqkey: {
+        unique: true,
         type: Sequelize.STRING,
         allowNull: false,
       },

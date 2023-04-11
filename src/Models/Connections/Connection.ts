@@ -9,7 +9,7 @@ export class Connection extends Model<InferAttributes<Connection>, InferCreation
     declare id?: CreationOptional<number>;
     declare name: string;
     declare connected_id?: CreationOptional<string>;
-    uniqkey: CreationOptional<string> = uuid();
+    declare uniqkey: string
     declare user_id: ForeignKey<User['id']>;
     declare config_id: ForeignKey<ConnectionsConfigs['id']>;
     declare type: number;

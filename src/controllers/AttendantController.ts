@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode } from "../Core";
+import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from "../Core";
 import { AttendantModel, Models } from "../Models";
 
 export class AttendantController extends Controller<AttendantModel> {
@@ -23,6 +23,7 @@ export class AttendantController extends Controller<AttendantModel> {
             const attendant = await user.createAttendant({
                 name,
                 email,
+                uniqkey: GenereateUniqKey(),
                 pass,
                 block_with_venc,
                 params

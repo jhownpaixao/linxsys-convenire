@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode } from "../../Core";
+import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from "../../Core";
 import { Models, ConnectionModel } from "../../Models";
 
 export class ConnectionController extends Controller<ConnectionModel> {
@@ -22,6 +22,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
             const connection = await user.createConnection({
                 name,
                 comments,
+                uniqkey: GenereateUniqKey(),
                 params,
                 type
             })
