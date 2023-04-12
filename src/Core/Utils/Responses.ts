@@ -163,4 +163,18 @@ export const SetAllowedMethods = async (app: core.Express) => {
     }
 }
 
+export const VerifyFailAuthorization = (err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === "UnauthorizedError") {
+        SendHTTPResponse({ message: 'Autorização inválida', status: false, type: 'error', code: HTTPResponseCode.informationUnauthorized }, res);
+    } else {
+        next(err)
+    }
+}
 
+export const VerifyFailProccess = (err: Error, req: Request, res: Response, next: NextFunction) => {
+    ThrowHTTPErrorResponse(500, err, res)
+}
+
+export const RouteNotFound = (err: Error, req: Request, res: Response, next: NextFunction) => {
+    SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res)
+}

@@ -1,16 +1,18 @@
 import * as crypto from 'crypto'
-import { NextFunction, Request, Response } from "express";
+import { CookieOptions, NextFunction,/*  Request, */ Response } from "express";
 import { uuid } from "uuidv4";
 import { SecurityOptions, SecurityDecrypt, SecurityEncrypt, CheckRequest, SendHTTPResponse, HTTPResponseCode, TimestampDifference } from '../Core';
 import { Models } from '../Models';
 import bcrypt from 'bcrypt';
-import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { UserModel } from '../Models';
-import { InferCreationAttributes } from 'sequelize';
 import { generateKeyPairSync } from 'crypto';
-import { dirname, join } from 'path';
-import { writeFileSync, readFileSync } from 'fs';
+import path from 'path';
+import { promises as fs } from 'fs';
+import { existsSync } from 'fs';
+import { expressjwt, Request } from 'express-jwt';
+import jwksRsa from 'jwks-rsa';
+
 dotenv.config();
 
 declare interface SecurityPendingAuthOptions {
@@ -19,13 +21,22 @@ declare interface SecurityPendingAuthOptions {
     params?: object
 }
 
-declare interface CustomRequest extends Request {
-    token: string | JwtPayload;
-}
 
+const host = process.env.BACKEND_URL || 'http://localhost';
+const port = process.env.BACKEND_AUTHENTICATOR_PORT || 3302
 export class AuthController {
     SecretKey = process.env.SECURITY_JWT_SECRET || 'REVAMER336aexCx000'
+    CookieExpiration = process.env.SECURITY_JWT_COOKIE_EXPIRATION || '90'
+    AuthExpiration = process.env.SECURITY_JWT_EXPIRATION || '1 day'
+    AuthIssuer = `${host}:${port}/LinxSys-EarlyAuth?&version=1.0`
+    AuthID = process.env.SECURITY_JWT_ID || '32566029'
+    AuthPasspharse = process.env.SECURITY_JWT_PASSPHARSE || 'CryptEARLYENV87'
+    AuthJWKSURI = `${host}:${port}/keys`
+    GeneratedToken: string = '';
+    PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
+    PrivateKeyPath = path.join(__dirname, '../keys/private.key');
     SecurityPendingAuth = new Map<string, SecurityPendingAuthOptions>();
+
 
     private generateToken = (data: string) => {
         const Securitykey = crypto.randomBytes(32);
@@ -87,9 +98,20 @@ export class AuthController {
         if (!user)
             return SendHTTPResponse({ message: 'Não foi possível realizar o login', status: false, type: 'error', code: HTTPResponseCode.informationNotFound }, res);
         console.log(this.SecretKey);
-        const token = jwt.sign({ user }, this.SecretKey, {
-            expiresIn: '1 days',
-        });
+        const token = await this.sign({ user });
+
+        if (!token) {
+            return SendHTTPResponse({ message: 'Não foi possível criar uma assinatura segura', status: false, type: 'error', code: HTTPResponseCode.iternalErro }, res);
+        }
+        const options: CookieOptions = {
+            maxAge: 1000 * 60 * 60 * 24, // 24hour
+            httpOnly: true, // The cookie only accessible by the web server
+            signed: true, // Indicates if the cookie should be signed
+            secure: true,
+            sameSite: 'strict',
+            domain: host
+        }
+        res.cookie('SIGNED_EDC', 'PASSED_ONLY', options);
         return SendHTTPResponse({ message: 'logado com sucesso', status: true, data: { token, user }, type: 'success' }, res);
     }
 
@@ -111,32 +133,23 @@ export class AuthController {
 
         //res.redirect(HTTPResponseCode.redirectingForResponse, `/auth/validate/${key}/${encrypted}`);
     }
-    public authorization = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const token = req.header('Authorization')?.replace('Bearer ', '');
 
-
-            if (!token) return SendHTTPResponse({ message: 'Autorização não foi encontrada', status: false, type: 'error', data: { need: { header: 'Authorization' } }, code: HTTPResponseCode.informationUnauthorized }, res);
-
-            const decoded = jwt.verify(token, this.SecretKey);
-            (req as CustomRequest).token = decoded;
-            next();
-
-        } catch (err) {
-            return SendHTTPResponse({ message: 'Autorização inválida', status: false, type: 'error', code: HTTPResponseCode.informationUnauthorized }, res);
-
-        }
-    }
+    public authorization = expressjwt({
+        // @ts-ignore
+        secret: jwksRsa.expressJwtSecret({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: this.AuthJWKSURI
+        }),
+        issuer: this.AuthIssuer,
+        algorithms: ['RS256']
+    });
 
     public createKeys = async (req: Request, res: Response, next: NextFunction) => {
         await this.generateKeys();
         return SendHTTPResponse({ message: 'Chaves geradas', status: true, type: 'success' }, res);
     }
-    public authenticateToken = async (token: string, User: typeof UserModel) => {
-        //const decoded: InferCreationAttributes<UserModel> = jwt.verify(token, this.SecretKey);
-
-    }
-
 
     public generateKeys = async () => {
         const { publicKey, privateKey } = generateKeyPairSync('rsa', {
@@ -149,37 +162,52 @@ export class AuthController {
                 type: 'pkcs8',
                 format: 'pem',
                 cipher: 'aes-256-cbc',
-                passphrase: '2209'
+                passphrase: this.AuthPasspharse
             }
         });
-        writeFileSync('../keys/private.key', privateKey,);
-        writeFileSync(join('keys', 'public.key.pem'), publicKey);
+        await fs.writeFile(this.PrivateKeyPath, privateKey);
+        await fs.writeFile(this.PublicKeyPath, publicKey);
     }
 
-    public signData = async (payload: any) => {
-        const privateKey = readFileSync(join('keys', '.private.key'));
+    public signData = async (req: Request, res: Response, next: NextFunction) => {
+        const privateKey = await fs.readFile(this.PrivateKeyPath);
+        const token = await this.sign(req.body);
+        return SendHTTPResponse({ message: 'Signed', status: true, type: 'success' }, res);
+    }
+
+    public sign = async (payload: any) => {
+
+        if (!existsSync(this.PrivateKeyPath)) return false;
+
+        const privateKey = await fs.readFile(this.PrivateKeyPath);
         const token = jwt.sign(payload, {
             key: privateKey,
-            passphrase: '2209'
+            passphrase: this.AuthPasspharse
         }, {
             algorithm: 'RS256',
-            expiresIn: '1 day',
-            issuer: '333333',
-            keyid: '220994'
+            expiresIn: this.AuthExpiration,
+            issuer: this.AuthIssuer,
+            keyid: this.AuthID,
         });
-        writeFileSync(join('keys', 'token.txt'), token);
+        return token;
     }
 
-    public verifyData = async (payload: any) => {
-        const token = readFileSync(join('keys', 'token.txt')).toString();
-        const publicKey = readFileSync(join('keys', '.public.key.pem'));
-        const decodedToken = jwt.verify(token, publicKey, {
-            issuer: '333333',
-            algorithms: ['RS256'],
-            maxAge: '1 day'
-        });
-        console.log(`Decoded token data`, decodedToken);
+    public verifyData = async (req: Request, res: Response, next: NextFunction) => {
+        try {
 
+
+            const publicKey = await fs.readFile(this.PublicKeyPath);
+
+            const decodedToken = jwt.verify(req.body.token, publicKey, {
+                issuer: this.AuthIssuer,
+                algorithms: ['RS256'],
+                maxAge: this.AuthExpiration
+            });
+            console.log(`Decoded token data`, decodedToken);
+            return SendHTTPResponse({ message: 'Verified', status: true, data: { decodedToken }, type: 'success' }, res);
+        } catch (error) {
+
+        }
     }
 
 }

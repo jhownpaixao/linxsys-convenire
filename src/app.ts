@@ -3,6 +3,7 @@ import cors from 'cors'
 import bodyParser from "body-parser";
 import PinoHttp from "pino-http";
 import { UserRoutes, ConnectionRoutes, AuthRoutes } from "./Routes";
+import cookieParser = require("cookie-parser");
 import {
         CORSPolicyOptions,
         ExpressResponseOptions,
@@ -10,6 +11,9 @@ import {
         logger,
         SetAllowedMethods,
         HTTPResponseCode,
+        VerifyFailAuthorization,
+        VerifyFailProccess,
+        RouteNotFound
 } from "./Core";
 
 
@@ -34,7 +38,7 @@ const app = express();
 const pinoHttp = PinoHttp({ logger: logger });
 const APP_PORT = process.env.BACKEND_PORT || 4000;
 const APP_URL = process.env.BACKEND_URL || 'http://localhost';
-
+const SECRET = process.env.SECURITY_JWT_SECRET || 'RDAsrc23Ia2';
 
 (async () => {
 
@@ -42,6 +46,7 @@ const APP_URL = process.env.BACKEND_URL || 'http://localhost';
         /* Configurações */
         app.use(express.json())
         app.use(express.urlencoded({ extended: false }))
+        app.use(cookieParser(SECRET));
         /* app.use(bodyParser.json()) */
         app.use(pinoHttp)
         app.all('*', ExpressResponseOptions);
@@ -50,15 +55,16 @@ const APP_URL = process.env.BACKEND_URL || 'http://localhost';
 
 
         /* Rotas */
+
         app.use('/connection', ConnectionRoutes);
         app.use('/user', UserRoutes);
         app.use('/auth', AuthRoutes);
 
+        app.use(VerifyFailAuthorization);
+        app.use(VerifyFailProccess);
+        app.use(RouteNotFound)
 
 
-        app.use((req: Request, res: Response, next: NextFunction) => {
-                SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res)
-        })
         /* Iniciar Servidor */
         app.listen(APP_PORT, () => {
                 console.log(`⚡ Servidor Iniciado| 🌍 ${APP_URL}:${APP_PORT}`)
