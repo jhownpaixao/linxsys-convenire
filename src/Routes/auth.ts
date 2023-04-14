@@ -23,11 +23,6 @@ routes
     .all(ThrowHTTPMethodNotAllowed)
 
 routes
-    .route('/create')
-    .get(Auth.createKeys)
-    .all(ThrowHTTPMethodNotAllowed)
-
-routes
     .route('/sign')
     .get(Auth.signData)
     .all(ThrowHTTPMethodNotAllowed)
@@ -40,6 +35,7 @@ routes
 routes
     .route('/teste')
     .get(Auth.authorization, function (req: JWTRequest, res: express.Response) {
+
         console.log(req.auth);
         res.send({ message: 'OKKKK' })
 

@@ -15,6 +15,7 @@ import {
         VerifyFailProccess,
         RouteNotFound
 } from "./Core";
+import { AuthController } from "./Controllers";
 
 
 
@@ -39,6 +40,7 @@ const pinoHttp = PinoHttp({ logger: logger });
 const APP_PORT = process.env.BACKEND_PORT || 4000;
 const APP_URL = process.env.BACKEND_URL || 'http://localhost';
 const SECRET = process.env.SECURITY_JWT_SECRET || 'RDAsrc23Ia2';
+const Auth = new AuthController;
 
 (async () => {
 
@@ -56,8 +58,8 @@ const SECRET = process.env.SECURITY_JWT_SECRET || 'RDAsrc23Ia2';
 
         /* Rotas */
 
-        app.use('/connection', ConnectionRoutes);
-        app.use('/user', UserRoutes);
+        app.use('/connection', Auth.authorization, ConnectionRoutes);
+        app.use('/user', Auth.authorization, UserRoutes);
         app.use('/auth', AuthRoutes);
 
         app.use(VerifyFailAuthorization);

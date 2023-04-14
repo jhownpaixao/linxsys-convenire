@@ -40,7 +40,7 @@ export class UserController extends Controller<UserModel> {
         SendHTTPResponse({ message: 'carregados com sucesso', type: 'success', status: true, data: list }, res)
     }
 
-    public Get = async (req: Request, res: Response, next: NextFunction) => {
+    public get = async (req: Request, res: Response, next: NextFunction) => {
         const { user_id } = req.params;
         const [check] = await CheckRequest({ user_id });
         if (!check) return SendHTTPResponse({ message: 'Requisição incompleta', status: false, type: 'error', code: HTTPResponseCode.incompleteRequest }, res);
@@ -50,8 +50,5 @@ export class UserController extends Controller<UserModel> {
 
         SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: user }, res)
     }
-
-
-
 
 }

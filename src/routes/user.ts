@@ -18,12 +18,12 @@ const Auth = new AuthController
 routes
     .route('/')
     .post(User.insert)
-    .get(Auth.authorization, User.GetAll)
+    .get(User.GetAll)
     .all(ThrowHTTPMethodNotAllowed)
 
 routes
     .route('/:user_id')
-    .get(User.Get)
+    .get(User.get)
     .all(ThrowHTTPMethodNotAllowed)
 
 /** 

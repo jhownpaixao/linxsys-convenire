@@ -12,7 +12,8 @@ import { promises as fs } from 'fs';
 import { existsSync } from 'fs';
 import { expressjwt, Request } from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
-
+import axios from 'axios'
+import jwktopem from 'jwk-to-pem'
 dotenv.config();
 
 declare interface SecurityPendingAuthOptions {
@@ -21,7 +22,7 @@ declare interface SecurityPendingAuthOptions {
     params?: object
 }
 
-
+export const ActiveSession = new Map<string, any>()
 const host = process.env.BACKEND_URL || 'http://localhost';
 const port = process.env.BACKEND_AUTHENTICATOR_PORT || 3302
 export class AuthController {
@@ -31,7 +32,7 @@ export class AuthController {
     AuthIssuer = `${host}:${port}/LinxSys-EarlyAuth?&version=1.0`
     AuthID = process.env.SECURITY_JWT_ID || '32566029'
     AuthPasspharse = process.env.SECURITY_JWT_PASSPHARSE || 'CryptEARLYENV87'
-    AuthJWKSURI = `${host}:${port}/keys`
+    AuthJWKSURI = `${host}:${port}`
     GeneratedToken: string = '';
     PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
     PrivateKeyPath = path.join(__dirname, '../keys/private.key');
@@ -97,7 +98,6 @@ export class AuthController {
 
         if (!user)
             return SendHTTPResponse({ message: 'Não foi possível realizar o login', status: false, type: 'error', code: HTTPResponseCode.informationNotFound }, res);
-        console.log(this.SecretKey);
         const token = await this.sign({ user });
 
         if (!token) {
@@ -108,10 +108,11 @@ export class AuthController {
             httpOnly: true, // The cookie only accessible by the web server
             signed: true, // Indicates if the cookie should be signed
             secure: true,
-            sameSite: 'strict',
-            domain: host
+            sameSite: 'strict'
         }
         res.cookie('SIGNED_EDC', 'PASSED_ONLY', options);
+
+        ActiveSession.set(user.uniqkey, user)
         return SendHTTPResponse({ message: 'logado com sucesso', status: true, data: { token, user }, type: 'success' }, res);
     }
 
@@ -140,74 +141,36 @@ export class AuthController {
             cache: true,
             rateLimit: true,
             jwksRequestsPerMinute: 5,
-            jwksUri: this.AuthJWKSURI
+            jwksUri: this.AuthJWKSURI + '/keys'
         }),
         issuer: this.AuthIssuer,
         algorithms: ['RS256']
     });
 
-    public createKeys = async (req: Request, res: Response, next: NextFunction) => {
-        await this.generateKeys();
-        return SendHTTPResponse({ message: 'Chaves geradas', status: true, type: 'success' }, res);
-    }
-
-    public generateKeys = async () => {
-        const { publicKey, privateKey } = generateKeyPairSync('rsa', {
-            modulusLength: 4096,
-            publicKeyEncoding: {
-                type: 'spki',
-                format: 'pem'
-            },
-            privateKeyEncoding: {
-                type: 'pkcs8',
-                format: 'pem',
-                cipher: 'aes-256-cbc',
-                passphrase: this.AuthPasspharse
-            }
-        });
-        await fs.writeFile(this.PrivateKeyPath, privateKey);
-        await fs.writeFile(this.PublicKeyPath, publicKey);
-    }
 
     public signData = async (req: Request, res: Response, next: NextFunction) => {
-        const privateKey = await fs.readFile(this.PrivateKeyPath);
         const token = await this.sign(req.body);
-        return SendHTTPResponse({ message: 'Signed', status: true, type: 'success' }, res);
+        return SendHTTPResponse({ message: 'Signed', status: true, type: 'success', data: { token } }, res);
     }
 
     public sign = async (payload: any) => {
-
-        if (!existsSync(this.PrivateKeyPath)) return false;
-
-        const privateKey = await fs.readFile(this.PrivateKeyPath);
-        const token = jwt.sign(payload, {
-            key: privateKey,
-            passphrase: this.AuthPasspharse
-        }, {
-            algorithm: 'RS256',
-            expiresIn: this.AuthExpiration,
-            issuer: this.AuthIssuer,
-            keyid: this.AuthID,
-        });
-        return token;
+        const { data } = await axios.post(this.AuthJWKSURI + '/sign', payload)
+        return data.token;
     }
 
     public verifyData = async (req: Request, res: Response, next: NextFunction) => {
+
+        const { token } = req.body
+        const { data } = await axios.get(this.AuthJWKSURI + '/keys')
+        const [firstKey] = data.keys
+        const publicKey = jwktopem(firstKey)
         try {
-
-
-            const publicKey = await fs.readFile(this.PublicKeyPath);
-
-            const decodedToken = jwt.verify(req.body.token, publicKey, {
-                issuer: this.AuthIssuer,
-                algorithms: ['RS256'],
-                maxAge: this.AuthExpiration
-            });
-            console.log(`Decoded token data`, decodedToken);
-            return SendHTTPResponse({ message: 'Verified', status: true, data: { decodedToken }, type: 'success' }, res);
-        } catch (error) {
-
+            const decoded = jwt.verify(token, publicKey)
+            res.send(decoded)
+        } catch (e) {
+            res.send({ error: e })
         }
+
     }
 
 }
