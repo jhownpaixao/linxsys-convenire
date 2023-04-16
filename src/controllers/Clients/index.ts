@@ -1,2 +1,2 @@
 export * from './ClientController';
-export * from './ContactController'
+export * from './ContactController';

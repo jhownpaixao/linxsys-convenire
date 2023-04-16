@@ -1,9 +1,16 @@
 import { SequelizeConnection } from '../../Core';
-import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, ForeignKey, BelongsToGetAssociationMixin, BelongsToSetAssociationMixin } from 'sequelize';
-import { uuid } from "uuidv4";
+import {
+    Model,
+    InferAttributes,
+    InferCreationAttributes,
+    DataTypes,
+    CreationOptional,
+    ForeignKey,
+    BelongsToGetAssociationMixin,
+    BelongsToSetAssociationMixin
+} from 'sequelize';
 import { User } from '../User';
 export class ClientGroup extends Model<InferAttributes<ClientGroup>, InferCreationAttributes<ClientGroup>> {
-
     declare id?: CreationOptional<number>;
     declare name: string;
     declare queues: CreationOptional<object>;
@@ -14,17 +21,20 @@ export class ClientGroup extends Model<InferAttributes<ClientGroup>, InferCreati
     declare getUser: BelongsToGetAssociationMixin<User>; // Note the null assertions!
     declare setUser: BelongsToSetAssociationMixin<User, number>;
 
-    static associate(models: any) {
+    static associate() {
         this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
     }
 }
 
-ClientGroup.init({
-    name: DataTypes.STRING,
-    queues: DataTypes.JSON,
-    user_id: DataTypes.INTEGER,
-    comments: DataTypes.STRING,
-    params: DataTypes.JSON,
-}, { sequelize: SequelizeConnection });
+ClientGroup.init(
+    {
+        name: DataTypes.STRING,
+        queues: DataTypes.JSON,
+        user_id: DataTypes.INTEGER,
+        comments: DataTypes.STRING,
+        params: DataTypes.JSON
+    },
+    { sequelize: SequelizeConnection }
+);
 
 //ClientGroup.sync();

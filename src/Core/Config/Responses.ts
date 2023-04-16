@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction } from 'express';
 
 /**
  * Função de configuração do Express
@@ -9,17 +9,15 @@ import { Request, Response, NextFunction } from "express"
  * @param {NextFunction} next
  */
 export const ExpressResponseOptions = (req: Request, res: Response, next: NextFunction) => {
-
     res.contentType('application/json');
     next();
-
-}
+};
 
 /**
  * Tipos de Status-Code para responses do Express
  * @date 06/04/2023 - 21:36:13
  *
- * 
+ *
  * */
 export const HTTPResponseCode = {
     /* Success */
@@ -45,5 +43,4 @@ export const HTTPResponseCode = {
     requestTimeOut: 408,
     informationUnauthorized: 401,
     informationBlocked: 403
-
-}
+};

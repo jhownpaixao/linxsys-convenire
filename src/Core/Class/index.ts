@@ -1,5 +1,3 @@
-import Controller from "./Controller";
+import Controller from './Controller';
 
-export {
-    Controller
-}
+export { Controller };

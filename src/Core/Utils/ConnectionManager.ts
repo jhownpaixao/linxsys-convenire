@@ -1,43 +1,42 @@
-
-import { WASocket } from "@adiwajshing/baileys"
-import { uuid } from "uuidv4";
-import { logger } from "../Logger";
-import { SendLocalResponse } from "./Responses"
-
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable no-unused-vars */
+import { uuid } from 'uuidv4';
+import { logger } from '../Logger';
+import { SendLocalResponse } from './Responses';
 
 /**
  * @interface ConectionManagerSAAS
- * 
-*/
+ *
+ */
 declare interface ConectionManagerSAAS {
     user: {
-        name: string,
-        id: number,
-        token?: string
-    }
+        name: string;
+        id: number;
+        token?: string;
+    };
 }
 
 /**
  * @interface ConectionManagerData
- * 
-*/
+ *
+ */
 declare interface ConectionManagerData {
-    created_timestamp: Date,
-    origin?: string
-    retries?: number,
+    created_timestamp: Date;
+    origin?: string;
+    retries?: number;
 }
 /**
  * @interface ConectionManagerConn
- * 
-*/
+ *
+ */
 declare interface ConectionManagerConn {
-    saas: ConectionManagerSAAS,
-    name: string,
-    type: number,
-    id: string,
-    status: number,
-    data: ConectionManagerData
-};
+    saas: ConectionManagerSAAS;
+    name: string;
+    type: number;
+    id: string;
+    status: number;
+    data: ConectionManagerData;
+}
 declare interface ConectionManagergetConnStatus {
     (code: string): number;
 }
@@ -65,7 +64,7 @@ const ConectionManagerConnStatus: ConectionManagergetConnStatus = (code) => {
             break;
     }
     return status;
-}
+};
 const ConectionManagerConnType: ConectionManagergetConnType = (code) => {
     let status: number;
     switch (code.toLowerCase()) {
@@ -83,8 +82,7 @@ const ConectionManagerConnType: ConectionManagergetConnType = (code) => {
             break;
     }
     return status;
-}
-
+};
 
 /**
  * Controller responsável pela integração da api @baileys
@@ -96,31 +94,30 @@ const ConectionManagerConnType: ConectionManagergetConnType = (code) => {
 class ConnectionManager {
     /* private sock: WASocket */
     private conns: Array<ConectionManagerConn> = [];
-    private MessageUpsertCallback: ((msg: Object) => {}) | undefined
-    private MonitorInterval: NodeJS.Timer | undefined
+    private MessageUpsertCallback: ((msg: Object) => {}) | undefined;
+    private MonitorInterval: NodeJS.Timer | undefined;
     constructor() {
         this.initialize();
     }
 
     private initialize() {
         /* Carregar variaveis */
-        logger.info({ ConnManager: 'Inicializado' }, 'Conexões prontas')
+        logger.info({ ConnManager: 'Inicializado' }, 'Conexões prontas');
         this.StartConnectionMonitor();
     }
     private StartConnectionMonitor() {
         this.MonitorInterval = setInterval(() => {
-            console.log(`[ConnectionMonitor]:: Atualizando conexões...`)
-        }, 10_000)
+            console.log(`[ConnectionMonitor]:: Atualizando conexões...`);
+        }, 10_000);
 
-        logger.info({ StartConnectionMonitor: 'Inicializado' }, 'Conexões prontas')
+        logger.info({ StartConnectionMonitor: 'Inicializado' }, 'Conexões prontas');
     }
     public async CreateConn(conn_name: string, type: string, user_id: number) {
-
         if (!conn_name || !type || !user_id) return SendLocalResponse(false, 'A requisição está incompleta');
         const conn = this.ExistsConn(conn_name);
 
         if (conn) {
-            return SendLocalResponse(false, 'A conexão já existe')
+            return SendLocalResponse(false, 'A conexão já existe');
         }
 
         const addConn: ConectionManagerConn = {
@@ -137,27 +134,26 @@ class ConnectionManager {
             type: ConectionManagerConnType(type),
             id: uuid(),
             status: ConectionManagerConnStatus('Disconected')
-        }
+        };
 
         this.conns.push(addConn);
 
-        return SendLocalResponse(true, 'A conexão adicionada com sucesso', addConn)
+        return SendLocalResponse(true, 'A conexão adicionada com sucesso', addConn);
     }
-
 
     public ReturnConns() {
         return this.conns;
     }
 
     private ExistsConn(conn_name: string) {
-        const conn = this.conns.find(conn => {
-            console.log("conn", conn);
+        const conn = this.conns.find((conn) => {
+            console.log('conn', conn);
 
             return conn.name === conn_name;
         });
         if (!conn) return false;
-        return conn
+        return conn;
     }
 }
 
-export default ConnectionManager
+export default ConnectionManager;

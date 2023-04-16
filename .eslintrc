@@ -1,0 +1,62 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    // By extending from a plugin config, we can get recommended rules without having to add them manually.
+    "eslint:recommended",
+    /*         "plugin:import/recommended", */
+    "plugin:@typescript-eslint/recommended",
+    // This disables the formatting rules in ESLint that Prettier is going to be responsible for handling.
+    // Make sure it"s always the last config, so it gets the chance to override other configs.
+    "eslint-config-prettier"
+  ],
+  "settings": {
+    "react": {
+      // Tells eslint-plugin-react to automatically detect the version of React to use.
+      "version": "detect"
+    },
+    // Tells eslint how to resolve imports
+    "import/resolver": {
+      "node": {
+        "paths": [
+          "src"
+        ],
+        "extensions": [
+          ".js",
+          ".ts"
+        ]
+      }
+    }
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "no-param-reassign": 0,
+    "import/order": 0,
+    "no-console": 0,
+    "prefer-destructuring": 0,
+    "no-shadow": 0,
+    "no-unused-vars": [
+      1,
+      {
+        "ignoreRestSiblings": false
+      }
+    ],
+    "prettier/prettier": [
+      2,
+      {
+        "bracketSpacing": true,
+        "printWidth": 140,
+        "singleQuote": true,
+        "trailingComma": "none",
+        "tabWidth": 4,
+        "useTabs": false,
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}

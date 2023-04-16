@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { InferCreationAttributes, InferAttributes, Model, CreationOptional } from 'sequelize';
-import { ModelType } from "../Types";
-import { MakeNullishOptional } from "sequelize/types/utils";
+import { ModelType } from '../Types';
+import { MakeNullishOptional } from 'sequelize/types/utils';
 
 /**
  * Inferface de garantia das propriedades
@@ -9,7 +10,7 @@ import { MakeNullishOptional } from "sequelize/types/utils";
  *
  * @export IControllerBase
  * @interface IControllerBase
- * @template T 
+ * @template T
  */
 export interface IControllerBase<T extends Model> {
     /**
@@ -37,11 +38,6 @@ export interface IControllerBase<T extends Model> {
      *
      */
     List(): Promise<T[]>;
-    /**
-     * Função básica de exclusão do model atual
-     * @date 26/03/2023 - 18:22:05
-     */
-    Delete(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 /**
  * Classe base Abstrata para criação dos controllers
@@ -74,17 +70,16 @@ export default abstract class Controller<T extends Model<InferAttributes<T>, Inf
         this.Model = model;
     }
 
-
     /**
-    * Função de retorno do istancimento de Model
-    * @date 26/03/2023 - 18:22:05
-    *
-    * @public
-    * @async
-    */
+     * Função de retorno do istancimento de Model
+     * @date 26/03/2023 - 18:22:05
+     *
+     * @public
+     * @async
+     */
     public async ResolveModel(id: string): Promise<false | T> {
-        const thisModel = await this.Model.findByPk(id)
-        if (!thisModel) return false
+        const thisModel = await this.Model.findByPk(id);
+        if (!thisModel) return false;
         return thisModel;
     }
 
@@ -101,17 +96,6 @@ export default abstract class Controller<T extends Model<InferAttributes<T>, Inf
         return operation;
     }
 
-
-    /**
-     * Função básica de exclusão do model atual
-     * @date 26/03/2023 - 18:22:05
-     *
-     * @public
-     * @async
-     */
-    public async Delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const result = this.Model.destroy({})
-    }
     /**
      * Função básica de listagem do model atual
      * @date 26/03/2023 - 18:22:05
@@ -124,7 +108,4 @@ export default abstract class Controller<T extends Model<InferAttributes<T>, Inf
         const operation = await this.Model.findAll();
         return operation;
     }
-
 }
-
-

@@ -1,4 +1,4 @@
-
+/* eslint-disable no-unused-vars */
 /**
  * Tipos declarados de conexões
  * @date 06/04/2023 - 21:32:12

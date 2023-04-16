@@ -1,15 +1,13 @@
-import ConnectionManager from "../Core/Utils/ConnectionManager";
-
+import ConnectionManager from '../Core/Utils/ConnectionManager';
 
 /* Constantes */
-const ConnManager = new ConnectionManager;
-
+const ConnManager = new ConnectionManager();
 
 /* Funções */
 export const ListConections = async () => {
     return ConnManager.ReturnConns();
-}
+};
 
 export const CreateConection = async (conn_name: string, type: string, user_id: number) => {
     return await ConnManager.CreateConn(conn_name, type, user_id);
-}
+};

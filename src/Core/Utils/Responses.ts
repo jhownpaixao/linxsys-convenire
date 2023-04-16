@@ -1,7 +1,7 @@
-import express, { Request, Response, NextFunction } from "express";
-import { logger } from "../Logger/Logger";
-import { HTTPResponse } from '../Types'
-import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from "../Config";
+import { Request, Response, NextFunction } from 'express';
+import { logger } from '../Logger/Logger';
+import { HTTPResponse } from '../Types';
+import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../Config';
 import * as core from 'express-serve-static-core';
 /**
  * Description placeholder
@@ -9,7 +9,7 @@ import * as core from 'express-serve-static-core';
  *
  * @type {*}
  */
-const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart'
+const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart';
 /**
  * Envia uma Response HTTP padronizada
  * @date 25/03/2023 - 11:48:29
@@ -21,40 +21,40 @@ const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart'
  */
 export function SendHTTPResponse(objResponse: HTTPResponse, res: Response, next?: NextFunction): void {
     if (!objResponse) {
-        logger.error({ info: 'O objeto de resposta está vazío' })
+        logger.error({ info: 'O objeto de resposta está vazío' });
     }
 
     switch (objResponse.type) {
         case 'success':
-            logger.info({ objResponse }, objResponse.message)
+            logger.info({ objResponse }, objResponse.message);
             break;
         case 'warning':
-            logger.warn({ objResponse }, objResponse.message)
+            logger.warn({ objResponse }, objResponse.message);
             break;
         case 'error':
-            logger.error({ objResponse }, objResponse.message)
+            logger.error({ objResponse }, objResponse.message);
             break;
         default:
-            logger.debug({ objResponse }, objResponse.message)
+            logger.debug({ objResponse }, objResponse.message);
             break;
     }
-    objResponse.timestamp = Date.now()
-    if (!objResponse.code) objResponse.code = HTTPResponseCode.successfullyProcessedInformation
+    objResponse.timestamp = Date.now();
+    if (!objResponse.code) objResponse.code = HTTPResponseCode.successfullyProcessedInformation;
     res.status(objResponse.code);
 
     let FormulatedResponse;
 
     switch (ResponseFormulation) {
         case 'direct':
-            if (objResponse['data']) FormulatedResponse = objResponse.data
+            if (objResponse['data']) FormulatedResponse = objResponse.data;
             break;
         case 'standart':
-            FormulatedResponse = objResponse
+            FormulatedResponse = objResponse;
+            break;
         default:
-            FormulatedResponse = objResponse
+            FormulatedResponse = objResponse;
             break;
     }
-
 
     if (next) {
         res.write(JSON.stringify(FormulatedResponse));
@@ -62,7 +62,7 @@ export function SendHTTPResponse(objResponse: HTTPResponse, res: Response, next?
     } else {
         res.send(JSON.stringify(FormulatedResponse));
     }
-};
+}
 
 /**
  * Envia uma Response LOCAL padronizada
@@ -74,13 +74,12 @@ export function SendHTTPResponse(objResponse: HTTPResponse, res: Response, next?
  * @param {*} [data={}]
  * @returns {{ operation: boolean; info: string; data: any; }}
  */
-export function SendLocalResponse(operation: boolean, info: string = '', data: any = {}) {
-
+export function SendLocalResponse(operation: boolean, info = '', data = {}) {
     return {
         operation,
         info,
         data
-    }
+    };
 }
 
 /**
@@ -92,9 +91,10 @@ export function SendLocalResponse(operation: boolean, info: string = '', data: a
  * @param {Object} params
  * @returns {Promise<[boolean, string?]>}
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export async function CheckRequest(params: Object): Promise<[boolean, string?]> {
-    let pass: boolean = true;
-    let paramError: string = '';
+    let pass = true;
+    let paramError = '';
     for (const [key, param] of Object.entries(params)) {
         if (
             !param ||
@@ -120,10 +120,10 @@ export async function CheckRequest(params: Object): Promise<[boolean, string?]> 
  * @param {*} exception
  * @param {Response} res
  */
-export function ThrowHTTPErrorResponse(code: number, exception: any, res: Response) {
-    logger.error({ exception }, 'Uma requisição retornou um erro')
-    SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res)
-};
+export function ThrowHTTPErrorResponse(code: number, exception: Error, res: Response) {
+    logger.error({ exception }, 'Uma requisição retornou um erro');
+    SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res);
+}
 
 /**
  * Expõe um metodo não permitido
@@ -134,10 +134,10 @@ export function ThrowHTTPErrorResponse(code: number, exception: any, res: Respon
  * @param {Response} res
  * @param {?NextFunction} [next]
  */
-export function ThrowHTTPMethodNotAllowed(req: Request, res: Response, next?: NextFunction) {
-    logger.error({ req }, 'Houve uma acesso à rota com o método não permitido')
-    SendHTTPResponse({ message: "Método não permitido", status: false, type: "error", code: HTTPResponseCode.methodNotAllowed }, res)
-};
+export function ThrowHTTPMethodNotAllowed(req: Request, res: Response) {
+    logger.error({ req }, 'Houve uma acesso à rota com o método não permitido');
+    SendHTTPResponse({ message: 'Método não permitido', status: false, type: 'error', code: HTTPResponseCode.methodNotAllowed }, res);
+}
 /**
  * Envia as opções definidas e suportadas pela rota
  * @date 07/04/2023 - 15:22:19
@@ -147,11 +147,11 @@ export function ThrowHTTPMethodNotAllowed(req: Request, res: Response, next?: Ne
  * @param {string} options
  */
 export function SendHTTPMethodOPTIONS(res: Response, options: string) {
-    res.header('Access-Control-Allow-Origin', Array(CORSPolicyOptions.origin).join(','));
+    res.header('Access-Control-Allow-Origin', /* Array(CORSPolicyOptions.origin).join(',') */ '*');
     res.header('Access-Control-Allow-Methods', options);
     res.header('Access-Control-Allow-Headers', Array(CORSPolicyOptions.allowedHeaders).join(','));
-    res.send(204);
-};
+    res.sendStatus(204);
+}
 /**
  * Denifi os métodos permitidos por rota (forma individual)
  * @date 07/04/2023 - 15:21:24
@@ -159,22 +159,25 @@ export function SendHTTPMethodOPTIONS(res: Response, options: string) {
  */
 export const SetAllowedMethods = async (app: core.Express) => {
     for (const [route, method] of Object.entries(AllowedMethods)) {
-        app.options(route, (req, res, next) => SendHTTPMethodOPTIONS(res, method))
+        app.options(route, (req, res) => SendHTTPMethodOPTIONS(res, method));
     }
-}
+};
 
 export const VerifyFailAuthorization = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (err.name === "UnauthorizedError") {
-        SendHTTPResponse({ message: 'Autorização inválida', status: false, type: 'error', code: HTTPResponseCode.informationUnauthorized }, res);
+    if (err.name === 'UnauthorizedError') {
+        SendHTTPResponse(
+            { message: 'Autorização inválida', status: false, type: 'error', code: HTTPResponseCode.informationUnauthorized },
+            res
+        );
     } else {
-        next(err)
+        next(err);
     }
-}
+};
 
-export const VerifyFailProccess = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    ThrowHTTPErrorResponse(500, err, res)
-}
+export const VerifyFailProccess = (err: Error, req: Request, res: Response) => {
+    ThrowHTTPErrorResponse(500, err, res);
+};
 
-export const RouteNotFound = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res)
-}
+export const RouteNotFound = (err: Error, req: Request, res: Response) => {
+    SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res);
+};

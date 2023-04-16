@@ -1,10 +1,21 @@
 import { SequelizeConnection } from '../Core';
 import {
-    Association, DataTypes, HasManyAddAssociationMixin, HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin,
-    HasManySetAssociationsMixin, HasManyAddAssociationsMixin, HasManyHasAssociationsMixin,
-    HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, Model, ModelDefined, Optional,
-    Sequelize, InferAttributes, InferCreationAttributes, CreationOptional, NonAttribute, ForeignKey,
+    DataTypes,
+    HasManyAddAssociationMixin,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManySetAssociationsMixin,
+    HasManyAddAssociationsMixin,
+    HasManyHasAssociationsMixin,
+    HasManyRemoveAssociationMixin,
+    HasManyRemoveAssociationsMixin,
+    Model,
+    InferAttributes,
+    InferCreationAttributes,
+    CreationOptional,
+    NonAttribute
 } from 'sequelize';
 import { Attendant } from './Attendant';
 import { Client } from './Clients';
@@ -16,13 +27,12 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare name: string;
     declare pass: string;
     declare email: string;
-    declare uniqkey: string
+    declare uniqkey: string;
     declare type: string;
     declare block_with_venc: string;
     declare group_id: CreationOptional<number>;
     declare date_venc: Date;
     declare params: CreationOptional<object>;
-
 
     declare getAttendants: HasManyGetAssociationsMixin<Attendant>; // Note the null assertions!
     declare addAttendant: HasManyAddAssociationMixin<Attendant, number>;
@@ -48,7 +58,6 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createClient: HasManyCreateAssociationMixin<Client, 'user_id'>;
     declare clients?: NonAttribute<Client[]>; // Note this is optional since it's only populated when explicitly requested in code
 
-
     declare getContacts: HasManyGetAssociationsMixin<Contact>; // Note the null assertions!
     declare addContact: HasManyAddAssociationMixin<Contact, number>;
     declare addContacts: HasManyAddAssociationsMixin<Contact, number>;
@@ -60,7 +69,6 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare countContacts: HasManyCountAssociationsMixin;
     declare createContact: HasManyCreateAssociationMixin<Contact, 'user_id'>;
     declare contacts?: NonAttribute<Contact[]>;
-
 
     declare getConnections: HasManyGetAssociationsMixin<Connection>; // Note the null assertions!
     declare addConnection: HasManyAddAssociationMixin<Connection, number>;
@@ -74,8 +82,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createConnection: HasManyCreateAssociationMixin<Connection, 'user_id'>;
     declare connections?: NonAttribute<Connection[]>; // Note this is optional since it's only populated when explicitly requested in code
 
-
-    static associate(models: any) {
+    static associate() {
         this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
         this.hasMany(Client, { foreignKey: 'user_id', as: 'clients' });
         this.hasMany(Connection, { foreignKey: 'user_id', as: 'connections' });
@@ -83,17 +90,19 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     }
 }
 
-User.init({
-    name: DataTypes.STRING,
-    pass: DataTypes.STRING,
-    email: DataTypes.STRING,
-    uniqkey: DataTypes.STRING,
-    type: DataTypes.STRING,
-    block_with_venc: DataTypes.STRING,
-    group_id: DataTypes.INTEGER,
-    date_venc: DataTypes.DATE,
-    params: DataTypes.JSON
-}, { sequelize: SequelizeConnection });
-
+User.init(
+    {
+        name: DataTypes.STRING,
+        pass: DataTypes.STRING,
+        email: DataTypes.STRING,
+        uniqkey: DataTypes.STRING,
+        type: DataTypes.STRING,
+        block_with_venc: DataTypes.STRING,
+        group_id: DataTypes.INTEGER,
+        date_venc: DataTypes.DATE,
+        params: DataTypes.JSON
+    },
+    { sequelize: SequelizeConnection }
+);
 
 //User.sync();
