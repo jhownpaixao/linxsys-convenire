@@ -121,6 +121,7 @@ export async function CheckRequest(params: Object): Promise<[boolean, string?]> 
  * @param {Response} res
  */
 export function ThrowHTTPErrorResponse(code: number, exception: Error, res: Response) {
+    console.log(res);
     logger.error({ exception }, 'Uma requisição retornou um erro');
     SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res);
 }
@@ -178,6 +179,6 @@ export const VerifyFailProccess = (err: Error, req: Request, res: Response) => {
     ThrowHTTPErrorResponse(500, err, res);
 };
 
-export const RouteNotFound = (err: Error, req: Request, res: Response) => {
+export const RouteNotFound = (req: Request, res: Response) => {
     SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res);
 };

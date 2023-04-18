@@ -57,8 +57,8 @@ const Auth = new AuthController();
     app.use('/auth', AuthRoutes);
 
     app.use(VerifyFailAuthorization);
-    app.use(VerifyFailProccess);
     app.use(RouteNotFound);
+    app.use(VerifyFailProccess);
 
     /* Iniciar Servidor */
     app.listen(APP_PORT, () => {
