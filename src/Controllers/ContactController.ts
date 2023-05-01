@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { Controller, SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../../Core';
+import { Controller, SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
 import { InferCreationAttributes } from 'sequelize';
-import { ContactModel } from '../../Services/Sequelize/Models';
+import { ContactModel } from '../Services/Sequelize/Models';
 
 export class ContactController extends Controller<ContactModel> {
     constructor() {

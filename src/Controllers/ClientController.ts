@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode } from '../../Core';
-import { ClientModel, Models } from '../../Services/Sequelize/Models';
+import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode } from '../Core';
+import { ClientModel, Models } from '../Services/Sequelize/Models';
 import { Op } from 'sequelize';
 
 export class ClientController extends Controller<ClientModel> {

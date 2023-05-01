@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../../Core';
-import { Models, ConnectionModel } from '../../Services/Sequelize/Models';
+import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../Core';
+import { Models, ConnectionModel } from '../Services/Sequelize/Models';
 
 export class ConnectionController extends Controller<ConnectionModel> {
     constructor() {
