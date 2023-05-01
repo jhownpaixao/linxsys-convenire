@@ -1,7 +1,6 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
-    'config': path.resolve(__dirname, 'src', 'Core', 'Database', 'cli-config.js'),
-    'migrations-path': path.resolve(__dirname, 'src', 'Core', 'Database', 'Migrations'),
-
-}
+    config: path.resolve(__dirname, 'src', 'Services', 'Sequelize', 'Database', 'cli-config.js'),
+    'migrations-path': path.resolve(__dirname, 'src', 'Services', 'Sequelize', 'Database', 'Migrations')
+};

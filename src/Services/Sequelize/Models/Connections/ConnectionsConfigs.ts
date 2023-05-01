@@ -1,4 +1,4 @@
-import { SequelizeConnection } from '../../Core';
+import { SequelizeConnection } from '../../Database';
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, ForeignKey } from 'sequelize';
 import { Chatbot } from '../Chatbot';
 export class ConnectionsConfigs extends Model<InferAttributes<ConnectionsConfigs>, InferCreationAttributes<ConnectionsConfigs>> {

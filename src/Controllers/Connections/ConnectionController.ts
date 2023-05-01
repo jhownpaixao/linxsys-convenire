@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../../Core';
-import { Models, ConnectionModel } from '../../Models';
+import { Models, ConnectionModel } from '../../Services/Sequelize/Models';
 
 export class ConnectionController extends Controller<ConnectionModel> {
     constructor() {
@@ -10,18 +10,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
     public add = async (req: Request, res: Response) => {
         const { user_id } = req.params;
         const { name, comments, type, params } = req.body;
-        const [check, need] = await CheckRequest({ user_id, type });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id, type });
 
         const user = await Models.User.findByPk(user_id);
         if (!user)
@@ -83,18 +72,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
 
     public getAll = async (req: Request, res: Response) => {
         const { user_id } = req.params;
-        const [check, need] = await CheckRequest({ user_id });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id });
 
         try {
             const user = await Models.User.findByPk(user_id, {
@@ -117,18 +95,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
         const { user_id, connection_id } = req.params;
         const { name, chatbot_id, default_messages, queues, params, comments } = req.body;
 
-        const [check, need] = await CheckRequest({ user_id, connection_id, name });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    data: { need },
-                    status: false,
-                    type: 'warning',
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id, connection_id, name });
 
         const user = await Models.User.findByPk(user_id);
         if (!user)
@@ -171,18 +138,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
     public getConfig = async (req: Request, res: Response) => {
         const { user_id, connection_id } = req.params;
 
-        const [check, need] = await CheckRequest({ user_id, connection_id });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id, connection_id });
 
         const user = await Models.User.findByPk(user_id);
         if (!user)

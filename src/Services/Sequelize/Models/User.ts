@@ -1,4 +1,4 @@
-import { SequelizeConnection } from '../Core';
+import { SequelizeConnection } from '../Database';
 import {
     DataTypes,
     HasManyAddAssociationMixin,

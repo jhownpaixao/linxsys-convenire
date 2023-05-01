@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 module.exports = {
     dialect: 'mysql',
@@ -9,5 +10,5 @@ module.exports = {
         timestamps: true,
         underscored: true
     },
-    models: ['../../Models'], // or [Player, Team],
-}
+    models: ['../../Models'] // or [Player, Team],
+};

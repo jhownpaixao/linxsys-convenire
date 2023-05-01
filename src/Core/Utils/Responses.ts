@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { logger } from '../Logger/Logger';
-import { HTTPResponse } from '../Types';
+import { logger } from '../../Services/Logger';
+import { HTTPResponse, ResponseType } from '../Types';
 import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../Config';
 import * as core from 'express-serve-static-core';
 /**
@@ -89,12 +89,11 @@ export function SendLocalResponse(operation: boolean, info = '', data = {}) {
  * @export
  * @async
  * @param {Object} params
- * @returns {Promise<[boolean, string?]>}
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export async function CheckRequest(params: Object): Promise<[boolean, string?]> {
+export async function CheckRequest(params: Object) {
     let pass = true;
-    let paramError = '';
+    const need = [];
     for (const [key, param] of Object.entries(params)) {
         if (
             !param ||
@@ -104,11 +103,11 @@ export async function CheckRequest(params: Object): Promise<[boolean, string?]> 
             (typeof param === 'object' && Object.values(param).length < 1)
         ) {
             pass = false;
-            paramError = key;
+            need.push(key);
         }
     }
 
-    return [pass, paramError];
+    if (!pass) throw new AppProcessError('Requisição incompleta', HTTPResponseCode.incompleteRequest, 'error', { need });
 }
 
 /**
@@ -121,7 +120,6 @@ export async function CheckRequest(params: Object): Promise<[boolean, string?]> 
  * @param {Response} res
  */
 export function ThrowHTTPErrorResponse(code: number, exception: Error, res: Response) {
-    console.log(res);
     logger.error({ exception }, 'Uma requisição retornou um erro');
     SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res);
 }
@@ -166,19 +164,33 @@ export const SetAllowedMethods = async (app: core.Express) => {
 
 export const VerifyFailAuthorization = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
-        SendHTTPResponse(
-            { message: 'Autorização inválida', status: false, type: 'error', code: HTTPResponseCode.informationUnauthorized },
-            res
-        );
+        throw new AppProcessError('Autorização inválida', HTTPResponseCode.informationUnauthorized);
     } else {
         next(err);
     }
 };
 
-export const VerifyFailProccess = (err: Error, req: Request, res: Response) => {
+export const VerifyFailProccess = async (err: Error, req: Request, res: Response, _: NextFunction) => {
+    if (err instanceof AppProcessError) {
+        return SendHTTPResponse({ message: err.message, type: err.level, status: false, code: err.statusCode, data: err.data }, res);
+    }
     ThrowHTTPErrorResponse(500, err, res);
 };
 
 export const RouteNotFound = (req: Request, res: Response) => {
     SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res);
 };
+
+export class AppProcessError {
+    public readonly message: string;
+    public readonly statusCode: number;
+    public readonly level: ResponseType;
+    public data: unknown;
+
+    constructor(message: string, statusCode = 400, level: ResponseType = 'error', data?: unknown) {
+        this.message = message;
+        this.statusCode = statusCode;
+        this.level = level;
+        this.data = data;
+    }
+}

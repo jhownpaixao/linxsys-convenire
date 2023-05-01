@@ -1,5 +1,5 @@
 import { SequelizeOptions } from 'sequelize-typescript';
-import { logger } from '../Logger';
+import { logger } from '../../Services/Logger';
 
 /**
  * Configurações padrão para o SEQUELIZE
@@ -7,7 +7,7 @@ import { logger } from '../Logger';
  *
  * @type {SequelizeOptions}
  */
-import SequelizeConnectionConfig from '../Database/cli-config';
+import SequelizeConnectionConfig from '../../Services/Sequelize/Database/cli-config';
 
 const SequelizeConnectionOptions = SequelizeConnectionConfig as SequelizeOptions;
 SequelizeConnectionOptions.logging = (msg) => logger.info({ Sequelize: msg });

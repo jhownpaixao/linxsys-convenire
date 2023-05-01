@@ -1,3 +1,1 @@
-import Controller from './Controller';
-
-export { Controller };
+export { default as Controller } from './Controller';

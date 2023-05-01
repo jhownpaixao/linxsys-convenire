@@ -10,7 +10,7 @@ import {
     HTTPResponseCode,
     TimestampDifference
 } from '../Core';
-import { Models } from '../Models';
+import { Models, UserModel } from '../Services/Sequelize/Models';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
@@ -20,7 +20,7 @@ import jwksRsa from 'jwks-rsa';
 import axios from 'axios';
 import jwktopem from 'jwk-to-pem';
 import { InferCreationAttributes } from 'sequelize';
-import { User } from '../Models/User';
+import { AuthConfig } from '../Core/Config/Auth';
 dotenv.config();
 
 declare interface SecurityPendingAuthOptions {
@@ -29,17 +29,8 @@ declare interface SecurityPendingAuthOptions {
     params?: object;
 }
 
-export const ActiveSession = new Map<string, InferCreationAttributes<User>>();
-const host = process.env.BACKEND_URL || 'http://localhost';
-const port = process.env.BACKEND_AUTHENTICATOR_PORT || 3302;
+export const ActiveSession = new Map<string, InferCreationAttributes<UserModel>>();
 export class AuthController {
-    SecretKey = process.env.SECURITY_JWT_SECRET || 'REVAMER336aexCx000';
-    CookieExpiration = process.env.SECURITY_JWT_COOKIE_EXPIRATION || '90';
-    AuthExpiration = process.env.SECURITY_JWT_EXPIRATION || '1 day';
-    AuthIssuer = `${host}:${port}/LinxSys-EarlyAuth?&version=1.0`;
-    AuthID = process.env.SECURITY_JWT_ID || '32566029';
-    AuthPasspharse = process.env.SECURITY_JWT_PASSPHARSE || 'CryptEARLYENV87';
-    AuthJWKSURI = `${host}:${port}`;
     GeneratedToken = '';
     PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
     PrivateKeyPath = path.join(__dirname, '../keys/private.key');
@@ -69,18 +60,7 @@ export class AuthController {
         /* EncodedKeyMap | EncondedDataCompare */
         const { ekm, edc } = req.params;
 
-        const [check, need] = await CheckRequest({ ekm, edc });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    data: { need },
-                    type: 'warning',
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ ekm, edc });
 
         const AuthData = this.SecurityPendingAuth.get(ekm);
         this.SecurityPendingAuth.delete(ekm);
@@ -150,18 +130,7 @@ export class AuthController {
     public initLogin = async (req: Request, res: Response) => {
         const { email, pass } = req.body;
 
-        const [check, need] = await CheckRequest({ email, pass });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    data: { need },
-                    type: 'warning',
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ email, pass });
 
         const foundUser = await Models.User.findOne({ where: { email } });
         if (!foundUser)
@@ -193,32 +162,19 @@ export class AuthController {
         //res.redirect(HTTPResponseCode.redirectingForResponse, `/auth/validate/${key}/${encrypted}`);
     };
 
-    public authorization = expressjwt({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        secret: jwksRsa.expressJwtSecret({
-            cache: true,
-            rateLimit: true,
-            jwksRequestsPerMinute: 5,
-            jwksUri: this.AuthJWKSURI + '/keys'
-        }),
-        issuer: this.AuthIssuer,
-        algorithms: ['RS256']
-    });
-
     public signData = async (req: Request, res: Response) => {
         const token = await this.sign(req.body);
         return SendHTTPResponse({ message: 'Signed', status: true, type: 'success', data: { token } }, res);
     };
 
     public sign = async (payload: unknown) => {
-        const { data } = await axios.post(this.AuthJWKSURI + '/sign', payload);
+        const { data } = await axios.post(AuthConfig.AuthJWKSURI + '/sign', payload);
         return data.token;
     };
 
     public verifyData = async (req: Request, res: Response) => {
         const { token } = req.body;
-        const { data } = await axios.get(this.AuthJWKSURI + '/keys');
+        const { data } = await axios.get(AuthConfig.AuthJWKSURI + '/keys');
         const [firstKey] = data.keys;
         const publicKey = jwktopem(firstKey);
         try {

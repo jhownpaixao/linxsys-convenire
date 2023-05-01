@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Controller, SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../../Core';
 import { InferCreationAttributes } from 'sequelize';
-import { ContactModel } from '../../Models';
+import { ContactModel } from '../../Services/Sequelize/Models';
 
 export class ContactController extends Controller<ContactModel> {
     constructor() {
@@ -11,12 +11,7 @@ export class ContactController extends Controller<ContactModel> {
     public RequestAdd = async (req: Request, res: Response): Promise<void> => {
         const { client_id, user_id } = req.params;
         const { value, comments, params } = req.body;
-        const [check] = await CheckRequest([value, client_id]);
-        if (!check)
-            return SendHTTPResponse(
-                { message: 'Requisição incompleta', status: false, type: 'error', code: HTTPResponseCode.incompleteRequest },
-                res
-            );
+        await CheckRequest([value, client_id]);
 
         const contact = await this.Add({
             client_id: parseInt(client_id),

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../Core';
-import { AttendantModel, Models } from '../Models';
+import { AttendantModel, Models } from '../Services/Sequelize/Models';
 
 export class AttendantController extends Controller<AttendantModel> {
     constructor() {
@@ -11,18 +11,7 @@ export class AttendantController extends Controller<AttendantModel> {
         const { user_id } = req.params;
         const { name, email, pass, block_with_venc, params } = req.body;
         /* Check params */
-        const [check, need] = await CheckRequest({ user_id, name, pass });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id, name, pass });
 
         const user = await Models.User.findByPk(user_id);
         if (!user)
@@ -66,18 +55,7 @@ export class AttendantController extends Controller<AttendantModel> {
 
     public getAll = async (req: Request, res: Response) => {
         const { user_id } = req.params;
-        const [check, need] = await CheckRequest({ user_id });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id });
 
         try {
             const user = await Models.User.findByPk(user_id, {

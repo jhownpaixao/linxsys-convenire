@@ -1,4 +1,4 @@
-import { SequelizeConnection } from '../../Core';
+import { SequelizeConnection } from '../../Database';
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, ForeignKey } from 'sequelize';
 import { Client } from './Client';
 import { User } from '../User';

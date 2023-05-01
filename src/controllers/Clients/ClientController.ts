@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode } from '../../Core';
-import { ClientModel, Models } from '../../Models';
+import { ClientModel, Models } from '../../Services/Sequelize/Models';
 import { Op } from 'sequelize';
 
 export class ClientController extends Controller<ClientModel> {
@@ -13,18 +13,7 @@ export class ClientController extends Controller<ClientModel> {
         const { nome, nascimento, email, cpf, contato, rg, cep, end, end_num, bairro, cidade, uf, group_id, params } = req.body;
 
         /* Check params */
-        const [check, need] = await CheckRequest({ user_id, nome, contato });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id, nome, contato });
 
         /* Check user */
         const user = await Models.User.findByPk(user_id);
@@ -123,18 +112,7 @@ export class ClientController extends Controller<ClientModel> {
 
     public getAll = async (req: Request, res: Response) => {
         const { user_id } = req.params;
-        const [check, need] = await CheckRequest({ user_id });
-        if (!check)
-            return SendHTTPResponse(
-                {
-                    message: 'Requisição incompleta',
-                    status: false,
-                    type: 'warning',
-                    data: { need },
-                    code: HTTPResponseCode.incompleteRequest
-                },
-                res
-            );
+        await CheckRequest({ user_id });
 
         try {
             const user = await Models.User.findByPk(user_id, {
@@ -156,12 +134,7 @@ export class ClientController extends Controller<ClientModel> {
         const { user_id, client_id } = req.params;
         const { contato, params, comments } = req.body;
 
-        const [check] = await CheckRequest({ user_id, client_id, contato });
-        if (!check)
-            return SendHTTPResponse(
-                { message: 'Requisição incompleta', status: false, type: 'warning', code: HTTPResponseCode.incompleteRequest },
-                res
-            );
+        await CheckRequest({ user_id, client_id, contato });
 
         const user = await Models.User.findByPk(user_id); /* Use 'any' for type, in case to use propetys of the model */
         if (!user)
@@ -210,12 +183,7 @@ export class ClientController extends Controller<ClientModel> {
     public getContacts = async (req: Request, res: Response) => {
         const { user_id, client_id } = req.params;
 
-        const [check] = await CheckRequest({ user_id, client_id });
-        if (!check)
-            return SendHTTPResponse(
-                { message: 'Requisição incompleta', status: false, type: 'warning', code: HTTPResponseCode.incompleteRequest },
-                res
-            );
+        await CheckRequest({ user_id, client_id });
 
         const user = await Models.User.findByPk(user_id);
         if (!user)
