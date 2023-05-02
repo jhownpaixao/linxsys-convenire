@@ -1,5 +1,6 @@
 import { User } from './User';
 import { Attendant } from './Attendant';
+import { Chatbot } from './Chatbot';
 import { Client, ClientGroup, Contact } from './Clients';
 import { Connection, ConnectionProfiles } from './Connections';
 
@@ -11,7 +12,8 @@ const Models = {
     ClientGroup,
     Contact,
     Connection,
-    ConnectionProfiles
+    ConnectionProfiles,
+    Chatbot
 };
 Attendant.associate();
 User.associate();
@@ -29,5 +31,6 @@ export {
     Contact as ContactModel,
     Connection as ConnectionModel,
     ConnectionProfiles as ConnectionProfilesModel,
+    Chatbot as ChatbotModel,
     Models
 };

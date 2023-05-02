@@ -6,6 +6,7 @@ import { UserMiddleware } from '../Middlewares/UserMiddleware';
 import { CustomerMiddleware } from '../Middlewares/CustomerMiddleware';
 import { ConnectionMiddleware } from '../Middlewares/ConnectionMiddleware';
 import { ConnectionProfileController } from '../Controllers/ConnectionProfileController';
+import { ChatbotController } from '../Controllers/ChatbotController';
 
 const routes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });
@@ -59,6 +60,11 @@ subRoutes
     .patch(ConnectionMiddleware.check ,ConnectionProfileController.vincule)
     .all(ThrowHTTPMethodNotAllowed);
 
-
+    /* Attendants */
+subRoutes
+    .route('/chatbot')
+    .post(ChatbotController.store)
+    .get(ChatbotController.list)
+    .all(ThrowHTTPMethodNotAllowed);
 
 export default routes;

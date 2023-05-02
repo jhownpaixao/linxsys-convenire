@@ -1,7 +1,7 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, GenereateUniqKey, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
-import { AttendantModel, ConnectionModel, ContactModel, CustomerModel, UserModel } from '../Sequelize/Models';
+import { AttendantModel, ChatbotModel, ConnectionModel, ContactModel, CustomerModel, UserModel } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 
@@ -153,5 +153,34 @@ export class UserService {
         const connection = await ConnectionModel.findByPk(conn_id);
         if (!connection) throw new AppProcessError('O cliente não foi localizado', HTTPResponseCode.informationNotFound);
         return await user.hasConnection(connection);
+    }
+
+    static async listChatbots(id: string | number) {
+        const list = await UserModel.findByPk(id, {
+            include: [
+                {
+                    association: UserModel.associations.chatbots
+                    /* include: [ConnectionModel.associations.profile] */
+                }
+            ]
+        });
+
+        return list?.chatbots || [];
+    }
+
+    static async getChatbot(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+        const user = await UserModel.findByPk(id);
+        if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
+        const chatbot = await user.getChatbots({
+            where: params
+        });
+        return chatbot;
+    }
+
+    static async hasChatbot(user_id: string | number, conn_id: string | number) {
+        const user = await this.get(user_id);
+        const chatbot = await ChatbotModel.findByPk(conn_id);
+        if (!chatbot) throw new AppProcessError('O chatbot não foi localizado', HTTPResponseCode.informationNotFound);
+        return await user.hasChatbot(chatbot);
     }
 }
