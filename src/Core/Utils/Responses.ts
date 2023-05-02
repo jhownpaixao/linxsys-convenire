@@ -120,7 +120,7 @@ export async function CheckRequest(params: Object) {
  * @param {Response} res
  */
 export function ThrowHTTPErrorResponse(code: number, exception: Error, res: Response) {
-    logger.error({ exception }, 'Uma requisição retornou um erro');
+    logger.error({ error: exception.message, stack: exception.stack }, 'Uma requisição retornou um erro');
     SendHTTPResponse({ message: 'Houve um erro ao acessar este recurso', type: 'error', status: false, code: 500 }, res);
 }
 

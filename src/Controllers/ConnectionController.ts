@@ -1,11 +1,35 @@
 import { Request, Response } from 'express';
-import { Controller, SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../Core';
-import { Models, ConnectionModel } from '../Services/Sequelize/Models';
+import { SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../Core';
+import { Models } from '../Services/Sequelize/Models';
+import { ConnectionService } from '../Services/AppService/ConnectionService';
+import { UserService } from '../Services/AppService/UserService';
+export class ConnectionController {
+    static store = async (req: Request, res: Response) => {
+        const { client_id, user_id } = req.params;
+        const { name, comments, type, params } = req.body;
 
-export class ConnectionController extends Controller<ConnectionModel> {
-    constructor() {
-        super(ConnectionModel);
-    }
+        await CheckRequest([name, type]);
+
+        const connection = await ConnectionService.create({
+            ...req.body,
+            client_id: parseInt(client_id),
+            user_id: parseInt(user_id)
+        });
+
+        SendHTTPResponse(
+            { message: 'conexão criada', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            res
+        );
+    };
+
+    static list = async (req: Request, res: Response) => {
+        const { user_id } = req.params;
+
+        await CheckRequest({ user_id });
+
+        const list = await UserService.listConnections(user_id);
+        SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: list }, res);
+    };
 
     public add = async (req: Request, res: Response) => {
         const { user_id } = req.params;
@@ -45,7 +69,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
                     res
                 );
 
-            const config = await connection.createConfig({
+            const config = await connection.createProfile({
                 name: `Configuration for ${connection.name}`
             });
             if (!config)
@@ -111,7 +135,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
                 res
             );
 
-        const config = await connection[0].getConfig();
+        const config = await connection[0].getProfile();
         if (!config)
             return SendHTTPResponse(
                 {
@@ -154,7 +178,7 @@ export class ConnectionController extends Controller<ConnectionModel> {
                 res
             );
 
-        const config = await connection[0].getConfig();
+        const config = await connection[0].getProfile();
         if (!config)
             return SendHTTPResponse(
                 {

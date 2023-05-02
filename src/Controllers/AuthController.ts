@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { CookieOptions, Response } from 'express';
+import { CookieOptions, Response, Request } from 'express';
 import { uuid } from 'uuidv4';
 import {
     SecurityOptions,
@@ -15,8 +15,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import { expressjwt, Request } from 'express-jwt';
-import jwksRsa from 'jwks-rsa';
 import axios from 'axios';
 import jwktopem from 'jwk-to-pem';
 import { InferCreationAttributes } from 'sequelize';
@@ -31,12 +29,12 @@ declare interface SecurityPendingAuthOptions {
 
 export const ActiveSession = new Map<string, InferCreationAttributes<UserModel>>();
 export class AuthController {
-    GeneratedToken = '';
-    PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
-    PrivateKeyPath = path.join(__dirname, '../keys/private.key');
-    SecurityPendingAuth = new Map<string, SecurityPendingAuthOptions>();
+    static GeneratedToken = '';
+    static PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
+    static PrivateKeyPath = path.join(__dirname, '../keys/private.key');
+    static SecurityPendingAuth = new Map<string, SecurityPendingAuthOptions>();
 
-    private generateToken = (data: string) => {
+    private static generateToken = (data: string) => {
         const Securitykey = crypto.randomBytes(32);
         const initVector = crypto.randomBytes(SecurityOptions.initialVector);
         const cipher = crypto.createCipheriv(SecurityOptions.AESMethod, Securitykey, initVector);
@@ -45,7 +43,7 @@ export class AuthController {
         return encryptedData;
     };
 
-    public createAuthRequest = async (uniqkey: string): Promise<[string, string]> => {
+    public static createAuthRequest = async (uniqkey: string): Promise<[string, string]> => {
         const [encrptKey, buffer] = await SecurityEncrypt(uniqkey);
         const key = this.generateToken(uuid());
         if (this.SecurityPendingAuth)
@@ -56,7 +54,7 @@ export class AuthController {
         return [key, encrptKey];
     };
 
-    public validateAuthRequest = async (req: Request, res: Response) => {
+    public static validateAuthRequest = async (req: Request, res: Response) => {
         /* EncodedKeyMap | EncondedDataCompare */
         const { ekm, edc } = req.params;
 
@@ -127,7 +125,7 @@ export class AuthController {
         return SendHTTPResponse({ message: 'logado com sucesso', status: true, data: { token, user }, type: 'success' }, res);
     };
 
-    public initLogin = async (req: Request, res: Response) => {
+    public static initLogin = async (req: Request, res: Response) => {
         const { email, pass } = req.body;
 
         await CheckRequest({ email, pass });
@@ -162,17 +160,17 @@ export class AuthController {
         //res.redirect(HTTPResponseCode.redirectingForResponse, `/auth/validate/${key}/${encrypted}`);
     };
 
-    public signData = async (req: Request, res: Response) => {
+    public static signData = async (req: Request, res: Response) => {
         const token = await this.sign(req.body);
         return SendHTTPResponse({ message: 'Signed', status: true, type: 'success', data: { token } }, res);
     };
 
-    public sign = async (payload: unknown) => {
+    public static sign = async (payload: unknown) => {
         const { data } = await axios.post(AuthConfig.AuthJWKSURI + '/sign', payload);
         return data.token;
     };
 
-    public verifyData = async (req: Request, res: Response) => {
+    public static verifyData = async (req: Request, res: Response) => {
         const { token } = req.body;
         const { data } = await axios.get(AuthConfig.AuthJWKSURI + '/keys');
         const [firstKey] = data.keys;

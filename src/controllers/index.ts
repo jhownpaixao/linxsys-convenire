@@ -1,7 +1,7 @@
-import { AttendantController } from './AttendantController';
-import { UserController } from './UserController';
-import { ClientController, ContactController } from './Clients';
-import { ConnectionController } from './Connections';
-import { AuthController } from './AuthController';
-
-export { UserController, AttendantController, ClientController, ContactController, ConnectionController, AuthController };
+export * from './ConnectionController';
+export * from './AttendantController';
+export * from './ContactController';
+export * from './MainController';
+export * from './UserController';
+export * from './CustomerController';
+export * from './AuthController';

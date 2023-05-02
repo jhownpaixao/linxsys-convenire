@@ -1,38 +1,30 @@
 import { Request, Response } from 'express';
-import { Controller, SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
-import { InferCreationAttributes } from 'sequelize';
-import { ContactModel } from '../Services/Sequelize/Models';
+import { SendHTTPResponse, CheckRequest } from '../Core';
+import { CustomerService } from '../Services/AppService/CustomerService';
+import { ContactService } from '../Services/AppService/ContactService';
 
-export class ContactController extends Controller<ContactModel> {
-    constructor() {
-        super(ContactModel);
-    }
-
-    public RequestAdd = async (req: Request, res: Response): Promise<void> => {
+export class ContactController {
+    static store = async (req: Request, res: Response) => {
         const { client_id, user_id } = req.params;
         const { value, comments, params } = req.body;
-        await CheckRequest([value, client_id]);
 
-        const contact = await this.Add({
-            client_id: parseInt(client_id),
-            user_id: parseInt(user_id),
+        await CheckRequest({ value });
+
+        const contact = await ContactService.create({
             value,
             comments,
-            params
+            params,
+            client_id: parseInt(client_id),
+            user_id: parseInt(user_id)
         });
 
-        if (contact) {
-            return SendHTTPResponse({ message: 'contato criado', type: 'success', status: true, data: contact, code: 201 }, res);
-        }
-        return SendHTTPResponse({ message: 'não foi possível criar o contato', type: 'error', status: false, code: 203 }, res);
+        SendHTTPResponse({ message: 'contato criado', type: 'success', status: true, data: contact, code: 201 }, res);
     };
 
-    public Add = async (data: InferCreationAttributes<ContactModel>) => {
-        try {
-            const contact = await this.Create(data);
-            return contact;
-        } catch (error) {
-            return false;
-        }
+    static list = async (req: Request, res: Response) => {
+        const { client_id } = req.params;
+
+        const list = await CustomerService.listContacts(client_id);
+        SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: list }, res);
     };
 }

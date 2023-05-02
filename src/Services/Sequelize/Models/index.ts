@@ -1,7 +1,7 @@
 import { User } from './User';
 import { Attendant } from './Attendant';
 import { Client, ClientGroup, Contact } from './Clients';
-import { Connection, ConnectionsConfigs } from './Connections';
+import { Connection, ConnectionProfiles } from './Connections';
 
 /* const Models = SequelizeConnection.models; */
 const Models = {
@@ -11,7 +11,7 @@ const Models = {
     ClientGroup,
     Contact,
     Connection,
-    ConnectionsConfigs
+    ConnectionProfiles
 };
 Attendant.associate();
 User.associate();
@@ -19,15 +19,15 @@ Client.associate();
 ClientGroup.associate();
 Contact.associate();
 Connection.associate();
-ConnectionsConfigs.associate();
+ConnectionProfiles.associate();
 
 export {
     Attendant as AttendantModel,
     User as UserModel,
-    Client as ClientModel,
+    Client as CustomerModel,
     ClientGroup as ClientGroupModel,
     Contact as ContactModel,
     Connection as ConnectionModel,
-    ConnectionsConfigs as ConnectionsConfigsModel,
+    ConnectionProfiles as ConnectionProfilesModel,
     Models
 };

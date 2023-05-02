@@ -5,32 +5,25 @@ import { ThrowHTTPMethodNotAllowed } from '../Core';
 import { Request as JWTRequest } from 'express-jwt';
 import { AuthMiddleware } from '../Middlewares/AuthMiddleware';
 const routes = express.Router();
-const Auth = new AuthController();
 
-/* mydomain.com/user */
-
-/**
- *
- * Main Auth
- *
- */
+/* Main AuthRoute */
 routes
     .route('/')
-    .post(Auth.initLogin)
+    .post(AuthController.initLogin)
     .all(ThrowHTTPMethodNotAllowed);
 
 routes
     .route('/validate/:ekm/:edc')
-    .get(Auth.validateAuthRequest)
+    .get(AuthController.validateAuthRequest)
     .all(ThrowHTTPMethodNotAllowed);
 
 routes
     .route('/sign')
-    .get(Auth.signData)
+    .get(AuthController.signData)
     .all(ThrowHTTPMethodNotAllowed);
 
 routes.route('/verify')
-    .get(Auth.verifyData)
+    .get(AuthController.verifyData)
     .all(ThrowHTTPMethodNotAllowed);
 
 routes

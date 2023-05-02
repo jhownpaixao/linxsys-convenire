@@ -23,7 +23,7 @@ export interface ISequelizeService<T extends Model> {
      * Função básica de criação do model atual
      * @date 26/03/2023 - 18:22:05
      */
-    create(data: MakeNullishOptional<InferCreationAttributes<T>>): Promise<T>;
+    create(data: /* MakeNullishOptional<InferCreationAttributes<T>> */ unknown): Promise<T>;
 
     /**
      * Função básica de exclusão do model atual

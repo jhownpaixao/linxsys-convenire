@@ -11,19 +11,17 @@ import { fork } from 'child_process'; */
 import {
     CORSPolicyOptions,
     ExpressResponseOptions,
-    logger,
     SetAllowedMethods,
     VerifyFailAuthorization,
     VerifyFailProccess,
     RouteNotFound
 } from '../Core';
-import { AuthController } from '../Controllers';
+import { logger } from '../Services/Logger';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });
 
 const SECRET = process.env.SECURITY_JWT_SECRET || 'RDAsrc23Ia2';
-const Auth = new AuthController();
 
 /* Configurações */
 app.use(express.json());

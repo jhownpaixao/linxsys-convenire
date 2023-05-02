@@ -1,54 +1,26 @@
 import * as fs from 'fs';
 import { multistream, Streams } from 'pino-multi-stream';
-import * as path from 'path';
-import * as dotenv from 'dotenv';
-import moment from 'moment';
 import pino from 'pino';
-/* import PinoPretty from 'pino-pretty' */
-dotenv.config();
-/**
- * Define a data atual pelo moment
- * @date 24/03/2023 - 20:19:19
- *
- */
-const today: string = moment().format('DD-MM-YYYY');
-/**
- * Define a hora atual pelo moment
- * @date 24/03/2023 - 20:19:18
- *
- */
-const hour: string = moment().format('HH_mm');
-/**
- * Diretório pardrão de logs
- * @date 24/03/2023 - 20:19:18
- *
- */
-const dir_log = '../../../logs/';
+import { LoggerConfig } from '../../Core/Config/Logger';
 
-fs.mkdirSync(path.resolve(__dirname, dir_log, today, hour), { recursive: true });
-/**
- * Path completo e montado do log atual à ser gerado
- * @date 24/03/2023 - 20:19:18
- *
- */
-const path_log: string = path.resolve(__dirname, dir_log, today, hour);
-
+fs.mkdirSync(LoggerConfig.path, { recursive: true });
 /**
  * Streams personalizados para a geração dos logs
  * @date 24/03/2023 - 20:19:18
  *
  */
 const streams: Streams = [
-    { stream: fs.createWriteStream(path_log + '/all.log') },
-    { level: 'debug', stream: fs.createWriteStream(path_log + '/debug.log') },
-    { level: 'error', stream: fs.createWriteStream(path_log + '/error.log') },
-    { level: 'info', stream: fs.createWriteStream(path_log + '/info.log') },
-    { level: 'fatal', stream: fs.createWriteStream(path_log + '/fatal.log') },
-    { level: 'warn', stream: fs.createWriteStream(path_log + '/warn.log') },
-    { level: 'silent', stream: fs.createWriteStream(path_log + '/silent.log') },
-    { level: 'trace', stream: fs.createWriteStream(path_log + '/trace.log') }
-    //{stream: process.stdout},
+    { stream: fs.createWriteStream(LoggerConfig.path + '/all' + LoggerConfig.fileformat) },
+    { level: 'debug', stream: fs.createWriteStream(LoggerConfig.path + '/debug' + LoggerConfig.fileformat) },
+    { level: 'error', stream: fs.createWriteStream(LoggerConfig.path + '/error' + LoggerConfig.fileformat) },
+    { level: 'info', stream: fs.createWriteStream(LoggerConfig.path + '/info' + LoggerConfig.fileformat) },
+    { level: 'fatal', stream: fs.createWriteStream(LoggerConfig.path + '/fatal' + LoggerConfig.fileformat) },
+    { level: 'warn', stream: fs.createWriteStream(LoggerConfig.path + '/warn' + LoggerConfig.fileformat) },
+    { level: 'silent', stream: fs.createWriteStream(LoggerConfig.path + '/silent' + LoggerConfig.fileformat) },
+    { level: 'trace', stream: fs.createWriteStream(LoggerConfig.path + '/trace' + LoggerConfig.fileformat) }
 ];
+
+LoggerConfig.console ?? streams.push({ stream: process.stdout });
 
 /**
  * Logger padrão par a exportação

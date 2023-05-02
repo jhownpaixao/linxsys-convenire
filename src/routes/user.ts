@@ -1,16 +1,18 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { UserController, AttendantController, ClientController, ConnectionController } from '../Controllers';
+import { UserController, CustomerController, ConnectionController, AttendantController, ContactController } from '../Controllers';
 import { ThrowHTTPMethodNotAllowed } from '../Core';
+import { UserMiddleware } from '../Middlewares/UserMiddleware';
+import { CustomerMiddleware } from '../Middlewares/CustomerMiddleware';
+import { ConnectionMiddleware } from '../Middlewares/ConnectionMiddleware';
+import { ConnectionProfileController } from '../Controllers/ConnectionProfileController';
 
 const routes = express.Router();
-const subRoutes = express.Router({mergeParams:true});
-const Attendant = new AttendantController();
-const Client = new ClientController();
+const subRoutes = express.Router({ mergeParams: true });
 const Connection = new ConnectionController();
 
 /* Main UserRoute */
-routes.use('/:user_id',subRoutes)
+routes.use('/:user_id', UserMiddleware.check, subRoutes);
 
 routes
     .route('/')
@@ -20,40 +22,43 @@ routes
 
 routes
     .route('/:user_id')
-    .get(UserController.get)
+    .get(UserMiddleware.check, UserController.get)
     .all(ThrowHTTPMethodNotAllowed);
 
 /* Attendants */
 subRoutes
     .route('/attendants')
-    .post(Attendant.add)
-    .get(Attendant.getAll)
+    .post(AttendantController.store)
+    .get(AttendantController.list)
     .all(ThrowHTTPMethodNotAllowed);
 
-/* Clients */
+/* Customers */
 subRoutes
     .route('/clients')
-    .post(Client.add)
-    .get(Client.getAll)
+    .post(CustomerController.store)
+    .get(CustomerController.list)
     .all(ThrowHTTPMethodNotAllowed);
-
 /* Clients -> Contacts */
 subRoutes
     .route('/clients/:client_id/contacts')
-    .post(Client.addContact)
-    .get(Client.getContacts)
+    .post(CustomerMiddleware.check, ContactController.store)
+    .get(CustomerMiddleware.check, ContactController.list)
     .all(ThrowHTTPMethodNotAllowed);
 
+/* Connections */
 subRoutes
     .route('/connections')
-    .post(Connection.add).get(Connection.getAll)
+    .post(ConnectionController.store)
+    .get(ConnectionController.list)
     .all(ThrowHTTPMethodNotAllowed);
-    
 /* Connections -> Configs*/
 subRoutes
     .route('/connections/:connection_id/config')
-    .get(Connection.getConfig)
-    .patch(Connection.editConfig)
+    .post(ConnectionMiddleware.check , ConnectionProfileController.store) //<-- Apenas usado para criar uma novo perfil sem vinculação
+    .get(ConnectionMiddleware.check , ConnectionProfileController.get)
+    .patch(ConnectionMiddleware.check ,ConnectionProfileController.vincule)
     .all(ThrowHTTPMethodNotAllowed);
+
+
 
 export default routes;

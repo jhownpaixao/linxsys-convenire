@@ -23,6 +23,7 @@ export const HTTPResponseCode = {
     /* Success */
     continue: 100,
     accepted: 202,
+    created: 201,
     successfullyProcessedInformation: 200,
     informationNotFound: 203,
     partiallyCompletedProcess: 206,

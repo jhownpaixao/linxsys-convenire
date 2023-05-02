@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
-import { UserService } from '../Services';
-
-const service = new UserService();
+import { UserService } from '../Services/AppService/UserService';
 
 export class UserController {
     static store = async (req: Request, res: Response): Promise<void> => {
@@ -10,7 +8,7 @@ export class UserController {
 
         await CheckRequest({ name, email, pass, type, block_with_venc });
 
-        const user = await service.create({
+        const user = await UserService.create({
             name,
             email,
             pass,
@@ -19,7 +17,6 @@ export class UserController {
             date_venc,
             params
         });
-
         SendHTTPResponse(
             {
                 message: 'Usuário criado com sucesso',
@@ -33,15 +30,16 @@ export class UserController {
     };
 
     static list = async (req: Request, res: Response) => {
-        const list = await service.list();
+        const list = await UserService.list();
         SendHTTPResponse({ message: 'carregados com sucesso', type: 'success', status: true, data: list }, res);
     };
 
     static get = async (req: Request, res: Response) => {
         const { user_id } = req.params;
+
         await CheckRequest({ user_id });
 
-        const user = await service.get(user_id);
+        const user = await UserService.get(user_id);
         SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: user }, res);
     };
 }
