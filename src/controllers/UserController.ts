@@ -35,9 +35,7 @@ export class UserController {
     };
 
     static get = async (req: Request, res: Response) => {
-        const { user_id } = req.params;
-
-        await CheckRequest({ user_id });
+        const user_id = req.user.id;
 
         const user = await UserService.get(user_id);
         SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: user }, res);

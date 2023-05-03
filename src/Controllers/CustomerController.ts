@@ -5,10 +5,10 @@ import { UserService } from '../Services/AppService/UserService';
 
 export class CustomerController {
     static store = async (req: Request, res: Response) => {
-        const { user_id } = req.params;
+        const user_id = req.user.id;
         const { nome, contato } = req.body;
 
-        await CheckRequest({ user_id, contato, nome });
+        await CheckRequest({ contato, nome });
 
         const client = await CustomerService.create({
             ...req.body,
@@ -18,9 +18,7 @@ export class CustomerController {
     };
 
     static list = async (req: Request, res: Response) => {
-        const { user_id } = req.params;
-
-        await CheckRequest({ user_id });
+        const user_id = req.user.id;
 
         const list = await UserService.listCustomers(user_id);
         SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: list }, res);

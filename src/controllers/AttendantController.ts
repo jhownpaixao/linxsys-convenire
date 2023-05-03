@@ -5,10 +5,10 @@ import { UserService } from '../Services/AppService/UserService';
 
 export class AttendantController {
     static store = async (req: Request, res: Response) => {
-        const { user_id } = req.params;
+        const user_id = req.user.id;
         const { name, email, pass, block_with_venc, params } = req.body;
 
-        await CheckRequest({ user_id, name, pass });
+        await CheckRequest({ name, pass });
 
         const attendant = await AttendantService.create({
             name,
@@ -16,13 +16,13 @@ export class AttendantController {
             pass,
             block_with_venc,
             params,
-            user_id: parseInt(user_id)
+            user_id: user_id
         });
         SendHTTPResponse({ message: 'Atendente criado com sucesso', type: 'success', status: true, data: attendant }, res);
     };
 
     static list = async (req: Request, res: Response) => {
-        const { user_id } = req.params;
+        const user_id = req.user.id;
 
         await CheckRequest({ user_id });
 

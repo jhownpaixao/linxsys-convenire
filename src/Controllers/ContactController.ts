@@ -5,7 +5,8 @@ import { ContactService } from '../Services/AppService/ContactService';
 
 export class ContactController {
     static store = async (req: Request, res: Response) => {
-        const { client_id, user_id } = req.params;
+        const user_id = req.user.id;
+        const { client_id } = req.params;
         const { value, comments, params } = req.body;
 
         await CheckRequest({ value });
@@ -15,7 +16,7 @@ export class ContactController {
             comments,
             params,
             client_id: parseInt(client_id),
-            user_id: parseInt(user_id)
+            user_id: user_id
         });
 
         SendHTTPResponse({ message: 'contato criado', type: 'success', status: true, data: contact, code: 201 }, res);
