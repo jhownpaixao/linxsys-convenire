@@ -1,7 +1,15 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, GenereateUniqKey, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
-import { AttendantModel, ChatbotModel, ConnectionModel, ContactModel, CustomerModel, UserModel } from '../Sequelize/Models';
+import {
+    AttendantModel,
+    ChatbotModel,
+    ConnectionModel,
+    ConnectionProfilesModel,
+    ContactModel,
+    CustomerModel,
+    UserModel
+} from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 
@@ -61,6 +69,13 @@ export class UserService {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         return user;
+    }
+
+    static async getWith(params: WhereOptions<InferAttributes<UserModel, { omit: never }>>) {
+        const register = await UserModel.findOne({
+            where: params
+        });
+        return register;
     }
 
     static async list() {
@@ -182,5 +197,34 @@ export class UserService {
         const chatbot = await ChatbotModel.findByPk(conn_id);
         if (!chatbot) throw new AppProcessError('O chatbot não foi localizado', HTTPResponseCode.informationNotFound);
         return await user.hasChatbot(chatbot);
+    }
+
+    static async listProfiles(id: string | number) {
+        const list = await UserModel.findByPk(id, {
+            include: [
+                {
+                    association: UserModel.associations.profiles
+                    /* include: [ConnectionModel.associations.profile] */
+                }
+            ]
+        });
+
+        return list?.profiles || [];
+    }
+
+    static async getProfile(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+        const user = await UserModel.findByPk(id);
+        if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
+        const profiles = await user.getProfiles({
+            where: params
+        });
+        return profiles;
+    }
+
+    static async hasProfile(user_id: string | number, conn_id: string | number) {
+        const user = await this.get(user_id);
+        const profiles = await ConnectionProfilesModel.findByPk(conn_id);
+        if (!profiles) throw new AppProcessError('O perfil de conexão não foi localizado', HTTPResponseCode.informationNotFound);
+        return await user.hasProfile(profiles);
     }
 }

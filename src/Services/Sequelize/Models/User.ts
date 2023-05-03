@@ -19,7 +19,7 @@ import {
 } from 'sequelize';
 import { Attendant } from './Attendant';
 import { Client } from './Clients';
-import { Connection } from './Connections';
+import { Connection, ConnectionProfiles } from './Connections';
 import { Contact } from './Clients';
 import { Chatbot } from './Chatbot';
 
@@ -95,10 +95,23 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createConnection: HasManyCreateAssociationMixin<Connection, 'user_id'>;
     declare connections?: NonAttribute<Connection[]>; // Note this is optional since it's only populated when explicitly requested in code
 
+    declare getProfiles: HasManyGetAssociationsMixin<ConnectionProfiles>; // Note the null assertions!
+    declare addProfile: HasManyAddAssociationMixin<ConnectionProfiles, number>;
+    declare addProfiles: HasManyAddAssociationsMixin<ConnectionProfiles, number>;
+    declare setProfiles: HasManySetAssociationsMixin<ConnectionProfiles, number>;
+    declare removeProfile: HasManyRemoveAssociationMixin<ConnectionProfiles, number>;
+    declare removeProfiles: HasManyRemoveAssociationsMixin<ConnectionProfiles, number>;
+    declare hasProfile: HasManyHasAssociationMixin<ConnectionProfiles, number>;
+    declare hasProfiles: HasManyHasAssociationsMixin<ConnectionProfiles, number>;
+    declare countProfiles: HasManyCountAssociationsMixin;
+    declare createProfile: HasManyCreateAssociationMixin<ConnectionProfiles, 'user_id'>;
+    declare profiles?: NonAttribute<ConnectionProfiles[]>;
+
     static associate() {
         this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
         this.hasMany(Client, { foreignKey: 'user_id', as: 'clients' });
         this.hasMany(Connection, { foreignKey: 'user_id', as: 'connections' });
+        this.hasMany(ConnectionProfiles, { foreignKey: 'user_id', as: 'profiles' });
         this.hasMany(Contact, { foreignKey: 'user_id', as: 'contacts' });
         this.hasMany(Chatbot, { foreignKey: 'user_id', as: 'chatbots' });
     }

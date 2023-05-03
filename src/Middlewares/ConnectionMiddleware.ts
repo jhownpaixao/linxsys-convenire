@@ -5,7 +5,8 @@ import { ConnectionService } from '../Services/AppService/ConnectionService';
 
 export class ConnectionMiddleware {
     static check = async (req: Request, res: Response, next: NextFunction) => {
-        const { user_id, connection_id } = req.params;
+        const user_id = req.user.id;
+        const { connection_id } = req.params;
 
         await CheckRequest({ connection_id });
         await ConnectionService.get(connection_id);

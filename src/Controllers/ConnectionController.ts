@@ -5,15 +5,16 @@ import { ConnectionService } from '../Services/AppService/ConnectionService';
 import { UserService } from '../Services/AppService/UserService';
 export class ConnectionController {
     static store = async (req: Request, res: Response) => {
-        const { client_id, user_id } = req.params;
-        const { name, comments, type, params } = req.body;
+        const user_id = req.user.id;
+        const { client_id } = req.params;
+        const { name, type } = req.body;
 
         await CheckRequest([name, type]);
 
         const connection = await ConnectionService.create({
             ...req.body,
             client_id: parseInt(client_id),
-            user_id: parseInt(user_id)
+            user_id: user_id
         });
 
         SendHTTPResponse(

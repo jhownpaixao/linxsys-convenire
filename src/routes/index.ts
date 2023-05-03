@@ -12,7 +12,7 @@ import { UserMiddleware } from '../Middlewares/UserMiddleware';
 const routes = Router();
 
 routes.use('/auth', AuthRoutes);
-routes.use('/user', AuthMiddleware.Authorization, UserRoutes);
+routes.use('/user', AuthMiddleware.Authorization, UserMiddleware.recover, UserRoutes);
 routes.use('/connection', AuthMiddleware.Authorization, UserMiddleware.recover, ConnectionRoutes);
 routes.use('/chatbot', AuthMiddleware.Authorization, UserMiddleware.recover, ChatbotRoutes);
 routes.use('/workflow', AuthMiddleware.Authorization, UserMiddleware.recover, WorkflowRoutes);

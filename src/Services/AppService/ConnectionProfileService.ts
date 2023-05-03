@@ -5,9 +5,9 @@ import { ConnectionProfilesModel } from '../Sequelize/Models';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 
 export class ConnectionProfileService {
-    static async create(data: MakeNullishOptional<InferCreationAttributes<ConnectionProfilesModel>>) {
+    static async create(data: MakeNullishOptional<InferCreationAttributes<ConnectionProfilesModel>>, user_id: string | number) {
         const register = await ConnectionProfilesModel.findOne({
-            where: { name: data.name }
+            where: { name: data.name, user_id }
         });
         if (register) throw new AppProcessError('Este nome de perfil já está em uso', HTTPResponseCode.informationAlreadyExists, 'error');
 

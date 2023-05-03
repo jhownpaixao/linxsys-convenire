@@ -12,11 +12,13 @@ import {
     NonAttribute
 } from 'sequelize';
 import { Chatbot } from '../Chatbot';
+import { User } from '../User';
 export class ConnectionProfiles extends Model<InferAttributes<ConnectionProfiles>, InferCreationAttributes<ConnectionProfiles>> {
     declare id?: CreationOptional<number>;
     declare name: string;
     declare queues: CreationOptional<object>;
     declare chatbot_id: ForeignKey<Chatbot['id']>;
+    declare user_id: ForeignKey<User['id']>;
     declare default_messages: CreationOptional<object>;
     declare comments: CreationOptional<string>;
     declare params: CreationOptional<object>;
@@ -27,6 +29,7 @@ export class ConnectionProfiles extends Model<InferAttributes<ConnectionProfiles
     declare chatbot?: NonAttribute<Chatbot>;
 
     static associate() {
+        this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
         this.hasOne(Chatbot, { foreignKey: 'id', as: 'chatbot' });
     }
 }
@@ -36,6 +39,7 @@ ConnectionProfiles.init(
         name: DataTypes.STRING,
         queues: DataTypes.JSON,
         chatbot_id: DataTypes.INTEGER,
+        user_id: DataTypes.INTEGER,
         default_messages: DataTypes.JSON,
         params: DataTypes.JSON,
         comments: DataTypes.STRING

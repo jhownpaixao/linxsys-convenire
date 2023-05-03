@@ -22,6 +22,13 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: true
             },
+            user_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: { model: 'users', key: 'id' },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE'
+            },
             default_messages: {
                 type: Sequelize.JSON,
                 allowNull: true

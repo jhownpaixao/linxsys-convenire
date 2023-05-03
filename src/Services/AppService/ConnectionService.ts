@@ -4,6 +4,7 @@ import { logger } from '../Logger';
 import { ConnectionModel, ConnectionProfilesModel } from '../Sequelize/Models';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 import { ConnectionProfileService } from './ConnectionProfileService';
+import { UserService } from './UserService';
 
 export class ConnectionService {
     static async create(data: MakeNullishOptional<InferCreationAttributes<ConnectionModel>>) {
@@ -77,11 +78,15 @@ export class ConnectionService {
         return profile;
     }
 
-    static async setProfile(id: string | number, profile_id: string | number) {
-        const conn = await ConnectionModel.findByPk(id);
+    static async setProfile(user_id: string | number, conn_id: string | number, profile_id: string | number) {
+        const conn = await ConnectionModel.findByPk(conn_id);
         if (!conn) throw new AppProcessError('A conexão não foi localizada', HTTPResponseCode.informationNotFound);
 
         const profile = await ConnectionProfileService.get(profile_id);
+
+        if (!(await UserService.hasProfile(user_id, profile_id)))
+            throw new AppProcessError('O perfil de conexão não pertence à este usuário', HTTPResponseCode.informationBlocked);
+
         await conn.setProfile(profile);
     }
 }
