@@ -7,27 +7,23 @@ import { AuthMiddleware } from '../Middlewares/AuthMiddleware';
 const AuthRoutes = express.Router();
 
 /* Main AuthRoute */
-AuthRoutes
-    .route('/')
-    .post(AuthController.initLogin)
+AuthRoutes.route('/')
+    .post(AuthController.login)
     .all(ThrowHTTPMethodNotAllowed);
 
-AuthRoutes
-    .route('/validate/:ekm/:edc')
-    .get(AuthController.validateAuthRequest)
+AuthRoutes.route('/validate/:ekm/:edc')
+    .get(AuthController.validadeLogin)
     .all(ThrowHTTPMethodNotAllowed);
 
-AuthRoutes
-    .route('/sign')
-    .get(AuthController.signData)
+AuthRoutes.route('/sign')
+    .get(AuthController.sign)
     .all(ThrowHTTPMethodNotAllowed);
 
 AuthRoutes.route('/verify')
-    .get(AuthController.verifyData)
+    .get(AuthController.verify)
     .all(ThrowHTTPMethodNotAllowed);
 
-AuthRoutes
-    .route('/teste')
+AuthRoutes.route('/teste')
     .get(AuthMiddleware.Authorization, function (req: JWTRequest, res: express.Response) {
         console.log(req.auth);
         res.send({ message: 'OKKKK' });

@@ -5,7 +5,7 @@ export const SecurityOptions = {
     initialVector: 16
 };
 
-export async function SecurityEncrypt(data: string | object): Promise<[string, Buffer]> {
+export function SecurityEncrypt(data: string | object): [string, Buffer] {
     if (process.versions.openssl <= '1.0.1f') {
         throw new Error('OpenSSL Version too old, vulnerability to Heartbleed');
     }
@@ -19,7 +19,7 @@ export async function SecurityEncrypt(data: string | object): Promise<[string, B
     return [iv.toString('hex') + ':' + encrypted.toString('hex'), key];
 }
 
-export async function SecurityDecrypt(data: string, key: Buffer) {
+export function SecurityDecrypt(data: string, key: Buffer) {
     try {
         const textParts = data.split(':');
         const iv = Buffer.from(textParts.shift() as string, 'hex');

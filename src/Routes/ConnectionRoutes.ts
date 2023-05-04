@@ -8,7 +8,7 @@ import { ConnectionProfileController } from '../Controllers/ConnectionProfileCon
 const ConnectionRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });
 
-ConnectionRoutes.use('/:connection_id', ConnectionMiddleware.check, subRoutes);
+ConnectionRoutes.use('/:connection_id([0-9]{1,24})', ConnectionMiddleware.check, subRoutes);
 
 ConnectionRoutes
     .route('/')

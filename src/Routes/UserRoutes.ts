@@ -6,7 +6,7 @@ import { ThrowHTTPMethodNotAllowed } from '../Core';
 const UserRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });
 
-UserRoutes.use('/:user_id', subRoutes);
+UserRoutes.use('/:user_id([0-9]{1,24})', subRoutes);
 
 UserRoutes.route('/')
     .post(UserController.store)

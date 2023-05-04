@@ -88,6 +88,13 @@ export class UserService {
         }
     }
 
+    static generateSafeCopy(user: MakeNullishOptional<InferCreationAttributes<UserModel>>) {
+        delete user.pass;
+        delete user.uniqkey;
+        return user;
+    }
+
+    /* SubItens */
     static async listAttendants(id: string | number) {
         const list = await UserModel.findByPk(id, {
             include: [UserModel.associations.attendants]

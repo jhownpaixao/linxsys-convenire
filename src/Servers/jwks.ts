@@ -35,6 +35,7 @@ interface KeyObjectProps {
 interface IKeyStoreFromJson {
     keys: KeyObjectProps[];
 }
+
 keyStore.generate('RSA', 2048, { alg: 'RS256', use: 'sig' }).then(() => {
     fs.writeFileSync(KeyStoreFile, JSON.stringify(keyStore.toJSON(true), null, '  '));
 });
@@ -50,7 +51,7 @@ app.post('/sign', async (req, res) => {
     const keyStore = await jose.JWK.asKeyStore(ks.toString());
     const [key] = keyStore.all({ use: 'sig' });
 
-    const opt = { compact: true, jwk: key, fields: { typ: 'jwt' } };
+    const opt: jose.JWS.SignOptions = { compact: true, /* jwk: key, */ fields: { typ: 'jwt' } };
     const payload = JSON.stringify({
         exp: Math.floor((Date.now() + ms('1d')) / 1000),
         iat: Math.floor(Date.now() / 1000),
@@ -77,6 +78,19 @@ app.get('/del', async (req, res) => {
     fs.writeFileSync('keys1.json', JSON.stringify(ks, null, ' '));
     const keyStore = await jose.JWK.asKeyStore(JSON.stringify(ks));
     res.send(keyStore.toJSON());
+});
+
+app.post('/encrypt', async (req, res) => {
+    const { payload, type } = req.body;
+    const t = type || 'utf8';
+    const encode = jose.util.base64url.encode(payload, t);
+    res.send(encode);
+});
+
+app.post('/decrypt', async (req, res) => {
+    const { payload } = req.body;
+    const decode = jose.util.base64url.decode(payload);
+    res.send(decode);
 });
 
 app.listen(port, () => console.log(`🔒 Servidor de Autenticação Iniciado | 🌍 ${host}:${port}`));
