@@ -2,8 +2,8 @@
 import express from 'express';
 import { ConnectionController } from '../Controllers';
 import { ThrowHTTPMethodNotAllowed } from '../Core';
-import { ConnectionMiddleware } from '../Middlewares/ConnectionMiddleware';
-import { ConnectionProfileController } from '../Controllers/ConnectionProfileController';
+import { ConnectionMiddleware } from '../Middlewares';
+import { ConnectionProfileController } from '../Controllers';
 
 const ConnectionRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });

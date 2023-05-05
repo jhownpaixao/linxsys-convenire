@@ -23,7 +23,7 @@ export class UserMiddleware {
         if (!auth) throw new AppProcessError('Autorização não encontrada', HTTPResponseCode.informationUnauthorized);
 
         const user = auth.user;
-        if (!user) throw new AppProcessError('Usuário não consta na autorização', HTTPResponseCode.informationUnauthorized);
+        if (!user) throw new AppProcessError('Autorização inválida', HTTPResponseCode.informationUnauthorized);
 
         const chu = await UserService.getWith({
             uniqkey: user.uniqkey,

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
-import { UserService } from '../Services/AppService/UserService';
+import { UserService } from '../Services/AppService';
 
 export class UserController {
     static store = async (req: Request, res: Response): Promise<void> => {

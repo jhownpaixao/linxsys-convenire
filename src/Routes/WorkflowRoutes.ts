@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { ThrowHTTPMethodNotAllowed } from '../Core';
-import { ChatbotController } from '../Controllers/ChatbotController';
+import { ChatbotController } from '../Controllers';
 
 const WorkflowRoutes = express.Router();
 

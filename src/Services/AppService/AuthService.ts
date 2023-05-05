@@ -77,7 +77,7 @@ export class AuthService {
             throw new AppProcessError('Este usuário já está logado', HTTPResponseCode.informationBlocked);
 
         const safe = UserService.generateSafeCopy(user);
-        const token = await this.signData({ safe });
+        const token = await this.signData({ user: safe });
 
         if (!token) throw new AppProcessError('Não foi possível criar uma assinatura segura', HTTPResponseCode.iternalErro);
 
@@ -89,7 +89,7 @@ export class AuthService {
     }
 
     static async login(data: RequestLogin) {
-        const foundUser = await UserService.getWith({ email: data });
+        const foundUser = await UserService.getWith({ email: data.email });
         if (!foundUser) throw new AppProcessError('Email incorreto', HTTPResponseCode.informationNotTrue);
 
         if (!bcrypt.compareSync(data.pass, foundUser.pass))

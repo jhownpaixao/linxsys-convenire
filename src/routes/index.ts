@@ -5,9 +5,8 @@ import WorkflowRoutes from './WorkflowRoutes';
 import AttendantRoute from './AttendantRoutes';
 import AuthRoutes from './AuthRoutes';
 import { Router } from 'express';
-import { AuthMiddleware } from '../Middlewares/AuthMiddleware';
 import CustomerRoutes from './CustomerRoutes';
-import { UserMiddleware } from '../Middlewares/UserMiddleware';
+import { UserMiddleware, AuthMiddleware } from '../Middlewares';
 
 const routes = Router();
 

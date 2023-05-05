@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../Core';
 import { Models } from '../Services/Sequelize/Models';
-import { ConnectionService } from '../Services/AppService/ConnectionService';
-import { UserService } from '../Services/AppService/UserService';
+import { UserService, ConnectionService } from '../Services/AppService';
 export class ConnectionController {
     static store = async (req: Request, res: Response) => {
         const user_id = req.user.id;

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
-import { ChatbotService } from '../Services/AppService/ChatbotService';
-import { UserService } from '../Services/AppService/UserService';
+import { UserService, ChatbotService } from '../Services/AppService';
 
 export class ChatbotController {
     static store = async (req: Request, res: Response) => {

@@ -12,6 +12,7 @@ export class ConnectionProfileService {
         if (register) throw new AppProcessError('Este nome de perfil já está em uso', HTTPResponseCode.informationAlreadyExists, 'error');
 
         try {
+            data.user_id = parseInt(user_id as string);
             const register = await ConnectionProfilesModel.create(data);
             return register;
         } catch (error) {

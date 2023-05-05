@@ -12,33 +12,32 @@ import {
     CORSPolicyOptions,
     ExpressResponseOptions,
     SetAllowedMethods,
-    VerifyFailAuthorization,
-    VerifyFailProccess,
-    RouteNotFound
+    handleAuthorizationFailure,
+    handleProcessFailure,
+    handleRouteNotFound
 } from '../Core';
 import { logger } from '../Services/Logger';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });
-
 const SECRET = process.env.SECURITY_JWT_SECRET || 'RDAsrc23Ia2';
 
 /* Configurações */
+app.all('*', ExpressResponseOptions); //set json response type
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(SECRET));
 /* app.use(bodyParser.json()) */
 app.use(pinoHttp);
-app.all('*', ExpressResponseOptions);
+
 SetAllowedMethods(app);
 app.use(cors(CORSPolicyOptions));
 
 /* Rotas */
 app.use(routes);
-
-app.use(VerifyFailAuthorization);
-app.use(RouteNotFound);
-app.use(VerifyFailProccess);
+app.use(handleAuthorizationFailure);
+app.use(handleRouteNotFound);
+app.use(handleProcessFailure);
 
 export default app;
 

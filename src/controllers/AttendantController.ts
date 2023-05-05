@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest } from '../Core';
-import { AttendantService } from '../Services/AppService/AttendantService';
-import { UserService } from '../Services/AppService/UserService';
+import { UserService, AttendantService } from '../Services/AppService';
 
 export class AttendantController {
     static store = async (req: Request, res: Response) => {

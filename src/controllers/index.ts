@@ -5,3 +5,5 @@ export * from './MainController';
 export * from './UserController';
 export * from './CustomerController';
 export * from './AuthController';
+export * from './ChatbotController';
+export * from './ConnectionProfileController';

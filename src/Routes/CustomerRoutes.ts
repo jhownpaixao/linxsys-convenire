@@ -2,7 +2,7 @@
 import express from 'express';
 import { ContactController } from '../Controllers';
 import { ThrowHTTPMethodNotAllowed } from '../Core';
-import { CustomerMiddleware } from '../Middlewares/CustomerMiddleware';
+import { CustomerMiddleware } from '../Middlewares';
 
 const CustomerRoutes = express.Router();
 

@@ -84,6 +84,9 @@ export class ConnectionService {
 
         const profile = await ConnectionProfileService.get(profile_id);
 
+        if (conn.config_id == profile_id)
+            throw new AppProcessError('Este perfil já está vinculado à esta conexão', HTTPResponseCode.informationAlreadyExists, 'warning');
+
         if (!(await UserService.hasProfile(user_id, profile_id)))
             throw new AppProcessError('O perfil de conexão não pertence à este usuário', HTTPResponseCode.informationBlocked);
 

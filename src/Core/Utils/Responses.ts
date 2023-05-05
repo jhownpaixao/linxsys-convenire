@@ -3,11 +3,11 @@ import { logger } from '../../Services/Logger';
 import { HTTPResponse, ResponseType } from '../Types';
 import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../Config';
 import * as core from 'express-serve-static-core';
+
 /**
  * Description placeholder
  * @date 07/04/2023 - 15:22:19
  *
- * @type {*}
  */
 const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart';
 /**
@@ -69,9 +69,6 @@ export function SendHTTPResponse(objResponse: HTTPResponse, res: Response, next?
  * @date 25/03/2023 - 11:48:29
  *
  * @export
- * @param {boolean} operation
- * @param {string} [info='']
- * @param {*} [data={}]
  * @returns {{ operation: boolean; info: string; data: any; }}
  */
 export function SendLocalResponse(operation: boolean, info = '', data = {}) {
@@ -137,6 +134,7 @@ export function ThrowHTTPMethodNotAllowed(req: Request, res: Response) {
     logger.error({ req }, 'Houve uma acesso à rota com o método não permitido');
     SendHTTPResponse({ message: 'Método não permitido', status: false, type: 'error', code: HTTPResponseCode.methodNotAllowed }, res);
 }
+
 /**
  * Envia as opções definidas e suportadas pela rota
  * @date 07/04/2023 - 15:22:19
@@ -151,6 +149,7 @@ export function SendHTTPMethodOPTIONS(res: Response, options: string) {
     res.header('Access-Control-Allow-Headers', Array(CORSPolicyOptions.allowedHeaders).join(','));
     res.sendStatus(204);
 }
+
 /**
  * Denifi os métodos permitidos por rota (forma individual)
  * @date 07/04/2023 - 15:21:24
@@ -162,22 +161,22 @@ export const SetAllowedMethods = async (app: core.Express) => {
     }
 };
 
-export const VerifyFailAuthorization = (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const handleAuthorizationFailure = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
-        throw new AppProcessError('Autorização inválida', HTTPResponseCode.informationUnauthorized);
+        throw new AppProcessError('Falha na autorização', HTTPResponseCode.informationUnauthorized);
     } else {
         next(err);
     }
 };
 
-export const VerifyFailProccess = async (err: Error, req: Request, res: Response, _: NextFunction) => {
+export const handleProcessFailure = async (err: Error, req: Request, res: Response, _: NextFunction) => {
     if (err instanceof AppProcessError) {
         return SendHTTPResponse({ message: err.message, type: err.level, status: false, code: err.statusCode, data: err.data }, res);
     }
     ThrowHTTPErrorResponse(500, err, res);
 };
 
-export const RouteNotFound = (req: Request, res: Response) => {
+export const handleRouteNotFound = (req: Request, res: Response) => {
     SendHTTPResponse({ message: 'Rota não encontrado', type: 'error', status: false, code: HTTPResponseCode.routeNotFound }, res);
 };
 
