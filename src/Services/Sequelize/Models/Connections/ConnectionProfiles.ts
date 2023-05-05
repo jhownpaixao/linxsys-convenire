@@ -6,10 +6,10 @@ import {
     DataTypes,
     CreationOptional,
     ForeignKey,
-    HasOneGetAssociationMixin,
-    HasOneSetAssociationMixin,
-    HasOneCreateAssociationMixin,
-    NonAttribute
+    NonAttribute,
+    BelongsToGetAssociationMixin,
+    BelongsToSetAssociationMixin,
+    BelongsToCreateAssociationMixin
 } from 'sequelize';
 import { Chatbot } from '../Chatbot';
 import { User } from '../User';
@@ -23,14 +23,14 @@ export class ConnectionProfiles extends Model<InferAttributes<ConnectionProfiles
     declare comments: CreationOptional<string>;
     declare params: CreationOptional<object>;
 
-    declare getChatbot: HasOneGetAssociationMixin<Chatbot>; // Note the null assertions!
-    declare setChatbot: HasOneSetAssociationMixin<Chatbot, number>;
-    declare createChatbot: HasOneCreateAssociationMixin<Chatbot>;
+    declare getChatbot: BelongsToGetAssociationMixin<Chatbot>;
+    declare setChatbot: BelongsToSetAssociationMixin<Chatbot, ForeignKey<Chatbot['id']>>;
+    declare createChatbot: BelongsToCreateAssociationMixin<Chatbot>;
     declare chatbot?: NonAttribute<Chatbot>;
 
     static associate() {
         this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-        this.hasOne(Chatbot, { foreignKey: 'id', as: 'chatbot' });
+        this.belongsTo(Chatbot, { foreignKey: 'chatbot_id', as: 'chatbot' });
     }
 }
 

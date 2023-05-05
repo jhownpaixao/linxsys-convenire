@@ -3,12 +3,13 @@ import express from 'express';
 import { ConnectionController } from '../Controllers';
 import { ThrowHTTPMethodNotAllowed } from '../Core';
 import { ConnectionMiddleware } from '../Middlewares';
-import { ConnectionProfileController } from '../Controllers';
+import ConnectionProfileRoutes from './ConnectionProfileRoutes';
 
 const ConnectionRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });
 
 ConnectionRoutes.use('/:connection_id([0-9]{1,24})', ConnectionMiddleware.check, subRoutes);
+ConnectionRoutes.use('/profile', ConnectionProfileRoutes);
 
 ConnectionRoutes
     .route('/')
@@ -17,10 +18,10 @@ ConnectionRoutes
     .all(ThrowHTTPMethodNotAllowed);
 
 subRoutes
-    .route('/config')
-    .post(ConnectionMiddleware.check , ConnectionProfileController.store) //<-- Apenas usado para criar uma novo perfil sem vinculação
-    .get(ConnectionMiddleware.check , ConnectionProfileController.get)
-    .patch(ConnectionMiddleware.check ,ConnectionProfileController.vincule)
+    .route('/profile')
+    .post(ConnectionController.addProfile) //<-- Apenas usado para criar uma novo perfil sem vinculação
+    .get(ConnectionController.getProfile)
+    .patch(ConnectionController.vinculeProfile)
     .all(ThrowHTTPMethodNotAllowed);
 
 export default ConnectionRoutes;

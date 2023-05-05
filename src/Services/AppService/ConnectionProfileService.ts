@@ -1,8 +1,10 @@
-import { MakeNullishOptional } from 'sequelize/types/utils';
+import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
-import { ConnectionProfilesModel } from '../Sequelize/Models';
-import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
+import { ChatbotModel, ConnectionProfilesModel } from '../Sequelize/Models';
+import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
+import { ChatbotService } from './ChatbotService';
+import { UserService } from './UserService';
 
 export class ConnectionProfileService {
     static async create(data: MakeNullishOptional<InferCreationAttributes<ConnectionProfilesModel>>, user_id: string | number) {
@@ -63,5 +65,49 @@ export class ConnectionProfileService {
             logger.error({ error }, msg);
             throw new Error(msg);
         }
+    }
+
+    static async getChatbot(id: string | number) {
+        const profile = await this.get(id);
+        const chatbot = await profile.getChatbot();
+        if (!chatbot)
+            throw new AppProcessError('Este perfil não possui um chatbot vinculado', HTTPResponseCode.informationNotFound, 'warning');
+        return chatbot;
+    }
+
+    static async addChatbot(
+        id: string | number,
+        params: Optional<
+            InferCreationAttributes<ChatbotModel, { omit: never }>,
+            NullishPropertiesOf<InferCreationAttributes<ChatbotModel, { omit: never }>>
+        >
+    ) {
+        const profile = await this.get(id);
+
+        try {
+            const chatbot = await profile.createChatbot({
+                ...params,
+                user_id: profile.user_id
+            });
+
+            return chatbot;
+        } catch (error) {
+            const msg = 'Erro ao criar o chatbot de conexão';
+            logger.error({ error }, msg);
+            throw new Error(msg);
+        }
+    }
+
+    static async setChatbot(user_id: string | number, profile_id: string | number, chatbot_id: string | number) {
+        const profile = await this.get(profile_id);
+        const chatbot = await ChatbotService.get(profile_id);
+
+        if (profile.chatbot_id == chatbot_id)
+            throw new AppProcessError('Este chatbot já está vinculado à este perfil', HTTPResponseCode.informationAlreadyExists, 'warning');
+
+        if (!(await UserService.hasChatbot(user_id, chatbot_id)))
+            throw new AppProcessError('O perfil de conexão não pertence à este usuário', HTTPResponseCode.informationBlocked);
+
+        await profile.setChatbot(chatbot);
     }
 }

@@ -1,8 +1,8 @@
-import { MakeNullishOptional } from 'sequelize/types/utils';
+import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, GenereateUniqKey, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
 import { ConnectionModel, ConnectionProfilesModel } from '../Sequelize/Models';
-import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
+import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
 import { ConnectionProfileService } from './ConnectionProfileService';
 import { UserService } from './UserService';
 
@@ -72,10 +72,34 @@ export class ConnectionService {
     static async getProfile(id: string | number) {
         const conn = await ConnectionModel.findByPk(id);
         if (!conn) throw new AppProcessError('A conexão não foi localizada', HTTPResponseCode.informationNotFound);
-        const profile = await conn.getProfile({
-            include: [ConnectionProfilesModel.associations.chatbot]
-        });
+        const profile = await conn.getProfile();
+        if (!profile)
+            throw new AppProcessError('Esta conexão não possui um perfil vinculado', HTTPResponseCode.informationNotFound, 'warning');
+
         return profile;
+    }
+
+    static async addProfile(
+        id: string | number,
+        params: Optional<
+            InferCreationAttributes<ConnectionProfilesModel, { omit: never }>,
+            NullishPropertiesOf<InferCreationAttributes<ConnectionProfilesModel, { omit: never }>>
+        >
+    ) {
+        const conn = await ConnectionModel.findByPk(id);
+        if (!conn) throw new AppProcessError('A conexão não foi localizada', HTTPResponseCode.informationNotFound);
+        try {
+            const profile = await conn.createProfile({
+                ...params,
+                user_id: conn.user_id
+            });
+
+            return profile;
+        } catch (error) {
+            const msg = 'Erro ao criar o perfil de conexão';
+            logger.error({ error }, msg);
+            throw new Error(msg);
+        }
     }
 
     static async setProfile(user_id: string | number, conn_id: string | number, profile_id: string | number) {

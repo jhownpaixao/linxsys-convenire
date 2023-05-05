@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, ThrowHTTPErrorResponse, HTTPResponseCode, GenereateUniqKey } from '../Core';
-import { Models } from '../Services/Sequelize/Models';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
 import { UserService, ConnectionService } from '../Services/AppService';
 export class ConnectionController {
     static store = async (req: Request, res: Response) => {
@@ -8,7 +7,7 @@ export class ConnectionController {
         const { client_id } = req.params;
         const { name, type } = req.body;
 
-        await CheckRequest([name, type]);
+        await CheckRequest({ name, type });
 
         const connection = await ConnectionService.create({
             ...req.body,
@@ -29,66 +28,38 @@ export class ConnectionController {
         SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: list }, res);
     };
 
-    public add = async (req: Request, res: Response) => {
-        const user_id = req.user.id;
-        const { name, comments, type, params } = req.body;
-        await CheckRequest({ type });
+    static addProfile = async (req: Request, res: Response) => {
+        const { connection_id } = req.params;
+        const { name } = req.body;
 
-        const user = await Models.User.findByPk(user_id);
-        if (!user)
-            return SendHTTPResponse(
-                { message: 'O usuário não foi localizado', type: 'error', status: false, code: HTTPResponseCode.informationNotFound },
-                res
-            );
+        await CheckRequest({ name });
 
-        const connection = await Models.Connection.findOne({ where: { name, user_id } });
-        if (connection)
-            return SendHTTPResponse(
-                {
-                    message: 'Esta conexão já esta registrada',
-                    type: 'warning',
-                    status: true,
-                    code: HTTPResponseCode.informationAlreadyExists
-                },
-                res
-            );
+        const connection = await ConnectionService.addProfile(connection_id, {
+            name
+        });
 
-        try {
-            const connection = await user.createConnection({
-                name,
-                comments,
-                uniqkey: GenereateUniqKey(),
-                params,
-                type
-            });
-            if (!connection)
-                return SendHTTPResponse(
-                    { message: 'Não foi possível criar a conexão', type: 'error', status: false, code: HTTPResponseCode.iternalErro },
-                    res
-                );
+        SendHTTPResponse(
+            { message: 'Perfil criado e vinculado', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            res
+        );
+    };
 
-            const config = await connection.createProfile({
-                name: `Configuration for ${connection.name}`
-            });
-            if (!config)
-                return SendHTTPResponse(
-                    {
-                        message: 'A conexão foi criada, mas não foi possível adicionar as configurações',
-                        type: 'error',
-                        status: false,
-                        code: HTTPResponseCode.partiallyCompletedProcess
-                    },
-                    res
-                );
+    static getProfile = async (req: Request, res: Response) => {
+        const { connection_id } = req.params;
 
-            return SendHTTPResponse(
-                { message: 'Conexão criada com sucesso', type: 'success', status: true, data: { connection, config } },
-                res
-            );
-        } catch (error) {
-            console.log(error);
+        const connection = await ConnectionService.getProfile(connection_id);
+        SendHTTPResponse(
+            { message: 'Carregado com sucesso', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            res
+        );
+    };
 
-            return ThrowHTTPErrorResponse(500, error as Error, res);
-        }
+    static vinculeProfile = async (req: Request, res: Response) => {
+        const { connection_id } = req.params;
+        const { profile_id } = req.body;
+
+        await ConnectionService.setProfile(req.user.id, connection_id, profile_id);
+
+        SendHTTPResponse({ message: 'perfil vínculado com sucesso', type: 'success', status: true }, res);
     };
 }

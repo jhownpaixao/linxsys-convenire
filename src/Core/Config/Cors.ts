@@ -8,6 +8,7 @@ dotenv.config();
  *
  */
 const Origins = String(process.env.FRONTENDS_URL).split(',') || ['http://localhost:3001'];
+
 /**
  * Configuração do Cross-origin Resource Sharing
  * @date 06/04/2023 - 21:34:08
