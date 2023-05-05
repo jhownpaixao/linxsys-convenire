@@ -19,7 +19,7 @@ subRoutes
     .route('/chatbot')
     .post(ConnectionProfileController.addChatbot)
     .get(ConnectionProfileController.getChatbot)
-    .patch(ConnectionProfileController.vinculeChatbot)
+    .put(ConnectionProfileController.vinculeChatbot)
     .all(ThrowHTTPMethodNotAllowed);
 
 

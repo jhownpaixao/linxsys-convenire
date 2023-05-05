@@ -41,12 +41,12 @@
     "no-console": 0,
     "prefer-destructuring": 0,
     "no-shadow": 0,
-    "no-unused-vars": [
+    /* "no-unused-vars": [
       1,
       {
         "ignoreRestSiblings": false
       }
-    ],
+    ], */
     "prettier/prettier": [
       2,
       {

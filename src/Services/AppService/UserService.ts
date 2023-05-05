@@ -41,22 +41,28 @@ export class UserService {
     }
 
     static async delete(id: string | number) {
-        const user = await UserModel.findOne({
-            where: { id }
-        });
-
+        const user = await this.get(id);
         if (!user) {
             throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         }
-
-        await user.destroy();
+        try {
+            await user.destroy();
+            return;
+        } catch (error) {
+            logger.error({ id, error }, 'Erro ao excluír o usuário');
+            throw new Error('Erro ao atualizar o usuário');
+        }
     }
 
-    static async update(data: MakeNullishOptional<InferCreationAttributes<UserModel>>) {
-        const user = await this.get(data.id as number);
+    static async update(id: string | number, data: MakeNullishOptional<InferCreationAttributes<UserModel>>) {
+        const user = await this.get(id);
+        const hash = await bcrypt.hash(data.pass, 10);
 
         try {
-            await user.update(data);
+            await user.update({
+                ...data,
+                pass: hash
+            });
             await user.reload();
             return user;
         } catch (error) {

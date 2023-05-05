@@ -14,7 +14,8 @@ const Models = {
     Contact,
     Connection,
     ConnectionProfiles,
-    Chatbot
+    Chatbot,
+    Workflow
 };
 Attendant.associate();
 User.associate();
@@ -23,6 +24,8 @@ ClientGroup.associate();
 Contact.associate();
 Connection.associate();
 ConnectionProfiles.associate();
+Workflow.associate();
+Chatbot.associate();
 
 export {
     Attendant as AttendantModel,

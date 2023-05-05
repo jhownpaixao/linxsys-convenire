@@ -1,13 +1,14 @@
 import { expressjwt } from 'express-jwt';
 import { AuthConfig } from '../Core/Config/Auth';
 import jwksRsa from 'jwks-rsa';
+import { UserType } from '../Core/Types/User';
 
 export type UserAuthMiddlewareProps = {
     id: number;
     name: string;
     email: string;
     uniqkey: string;
-    type: string;
+    type: UserType;
     group_id: number | null;
     date_venc: string;
     params: object | null;
@@ -20,7 +21,7 @@ export type AuthMiddlewareProps = {
     user: UserAuthMiddlewareProps;
 };
 export class AuthMiddleware {
-    static Authorization = expressjwt({
+    static Token = expressjwt({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         secret: jwksRsa.expressJwtSecret({

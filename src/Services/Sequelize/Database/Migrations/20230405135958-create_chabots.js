@@ -34,9 +34,12 @@ module.exports = {
                 defaultValue: 'No',
                 allowNull: false
             },
-            workflow: {
-                type: Sequelize.JSON,
-                allowNull: true
+            workflow_id: {
+                type: Sequelize.INTEGER,
+                allowNull: true,
+                references: { model: 'workflows', key: 'id' },
+                onUpdate: 'CASCADE',
+                onDelete: 'SET NULL'
             },
             comments: {
                 type: Sequelize.INTEGER,

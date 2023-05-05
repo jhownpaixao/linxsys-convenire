@@ -21,7 +21,7 @@ subRoutes
     .route('/profile')
     .post(ConnectionController.addProfile) //<-- Apenas usado para criar uma novo perfil sem vinculação
     .get(ConnectionController.getProfile)
-    .patch(ConnectionController.vinculeProfile)
+    .put(ConnectionController.vinculeProfile)
     .all(ThrowHTTPMethodNotAllowed);
 
 export default ConnectionRoutes;

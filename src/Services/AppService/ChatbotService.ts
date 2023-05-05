@@ -1,8 +1,10 @@
-import { MakeNullishOptional } from 'sequelize/types/utils';
+import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
-import { ChatbotModel } from '../Sequelize/Models';
-import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
+import { ChatbotModel, WorkflowModel } from '../Sequelize/Models';
+import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
+import { WorkflowService } from './WorkflowService';
+import { UserService } from './UserService';
 
 export class ChatbotService {
     static async create(data: MakeNullishOptional<InferCreationAttributes<ChatbotModel>>) {
@@ -62,5 +64,53 @@ export class ChatbotService {
             logger.error({ error }, msg);
             throw new Error(msg);
         }
+    }
+
+    static async getWorkflow(id: string | number) {
+        const chatbot = await this.get(id);
+        const workflow = await chatbot.getWorkflow();
+        if (!workflow)
+            throw new AppProcessError('Este chatbot não possui um workflow vinculado', HTTPResponseCode.informationNotFound, 'warning');
+        return workflow;
+    }
+
+    static async addWorkflow(
+        id: string | number,
+        params: Optional<
+            InferCreationAttributes<WorkflowModel, { omit: never }>,
+            NullishPropertiesOf<InferCreationAttributes<WorkflowModel, { omit: never }>>
+        >
+    ) {
+        const chatbot = await this.get(id);
+
+        try {
+            const workflow = await chatbot.createWorkflow({
+                ...params,
+                user_id: chatbot.user_id
+            });
+
+            return workflow;
+        } catch (error) {
+            const msg = 'Erro ao criar o workflow deste chatbot';
+            logger.error({ error }, msg);
+            throw new Error(msg);
+        }
+    }
+
+    static async setWorkflow(user_id: string | number, chatbot_id: string | number, workflow_id: string | number) {
+        const chatbot = await this.get(chatbot_id);
+        const workflow = await WorkflowService.get(workflow_id);
+
+        if (chatbot.workflow_id == workflow_id)
+            throw new AppProcessError(
+                'Este chatbot já está vinculado à este workflow',
+                HTTPResponseCode.informationAlreadyExists,
+                'warning'
+            );
+
+        if (!(await UserService.hasWorkflow(user_id, workflow_id)))
+            throw new AppProcessError('O workflow não pertence à este usuário', HTTPResponseCode.informationBlocked);
+
+        await chatbot.setWorkflow(workflow);
     }
 }

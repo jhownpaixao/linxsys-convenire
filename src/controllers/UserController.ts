@@ -40,4 +40,19 @@ export class UserController {
         const user = await UserService.get(user_id);
         SendHTTPResponse({ message: 'Carregado com sucesso', type: 'success', status: true, data: user }, res);
     };
+
+    static update = async (req: Request, res: Response) => {
+        const { user_id } = req.params;
+        const params = req.body;
+
+        const user = await UserService.update(user_id, params);
+        SendHTTPResponse({ message: 'Atualizado com sucesso', type: 'success', status: true, data: user }, res);
+    };
+
+    static exclude = async (req: Request, res: Response) => {
+        const { user_id } = req.params;
+
+        await UserService.delete(user_id);
+        SendHTTPResponse({ message: 'Excluído', type: 'success', status: true }, res);
+    };
 }

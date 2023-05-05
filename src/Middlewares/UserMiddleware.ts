@@ -2,16 +2,21 @@ import { NextFunction, Request, Response } from 'express';
 import { AppProcessError, CheckRequest, HTTPResponseCode } from '../Core';
 import { UserService } from '../Services/AppService/UserService';
 import { AuthMiddlewareProps } from './AuthMiddleware';
+import { UserType } from '../Core/Types/User';
 
 export class UserMiddleware {
-    static recover = async (req: Request, res: Response, next: NextFunction) => {
-        const user = await this.authObjectValidate(req.auth);
+    static Authorization = (level = 1) => {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            const user = await this.authObjectValidate(req.auth);
 
-        req.user = user;
-        return next();
+            const userLvl = parseInt(UserType[user.type]);
+            if (userLvl > level) throw new AppProcessError('Nível de acesso incompatível', HTTPResponseCode.informationBlocked);
+
+            req.user = user;
+            return next();
+        };
     };
-
-    static checkinparam = async (req: Request, res: Response, next: NextFunction) => {
+    static check = async (req: Request, res: Response, next: NextFunction) => {
         const { user_id } = req.params;
 
         await CheckRequest({ user_id });
@@ -33,4 +38,13 @@ export class UserMiddleware {
         if (!chu) throw new AppProcessError('Credencial adulterada', HTTPResponseCode.informationBlocked);
         return user;
     }
+
+    static AccessLvl = (level: number) => {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            if (!req.user) throw new AppProcessError('Nível de acesso não encontrado', HTTPResponseCode.informationNotFound);
+            const userLvl = UserType[req.user.type] as unknown as number;
+            if (userLvl > level) throw new AppProcessError('Nível de acesso incompatível', HTTPResponseCode.informationBlocked);
+            return next();
+        };
+    };
 }
