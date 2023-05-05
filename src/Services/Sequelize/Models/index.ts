@@ -1,6 +1,7 @@
 import { User } from './User';
 import { Attendant } from './Attendant';
 import { Chatbot } from './Chatbot';
+import { Workflow } from './Workflow';
 import { Client, ClientGroup, Contact } from './Clients';
 import { Connection, ConnectionProfiles } from './Connections';
 
@@ -32,5 +33,6 @@ export {
     Connection as ConnectionModel,
     ConnectionProfiles as ConnectionProfilesModel,
     Chatbot as ChatbotModel,
+    Workflow as WorkflowModel,
     Models
 };

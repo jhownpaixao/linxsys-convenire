@@ -22,6 +22,7 @@ import { Client } from './Clients';
 import { Connection, ConnectionProfiles } from './Connections';
 import { Contact } from './Clients';
 import { Chatbot } from './Chatbot';
+import { Workflow } from './Workflow';
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id?: CreationOptional<number>;
@@ -107,6 +108,18 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createProfile: HasManyCreateAssociationMixin<ConnectionProfiles, 'user_id'>;
     declare profiles?: NonAttribute<ConnectionProfiles[]>;
 
+    declare getWorkflows: HasManyGetAssociationsMixin<Workflow>; // Note the null assertions!
+    declare addWorkflow: HasManyAddAssociationMixin<Workflow, number>;
+    declare addWorkflows: HasManyAddAssociationsMixin<Workflow, number>;
+    declare setWorkflows: HasManySetAssociationsMixin<Workflow, number>;
+    declare removeWorkflow: HasManyRemoveAssociationMixin<Workflow, number>;
+    declare removeWorkflows: HasManyRemoveAssociationsMixin<Workflow, number>;
+    declare hasWorkflow: HasManyHasAssociationMixin<Workflow, number>;
+    declare hasWorkflows: HasManyHasAssociationsMixin<Workflow, number>;
+    declare countWorkflows: HasManyCountAssociationsMixin;
+    declare createWorkflow: HasManyCreateAssociationMixin<Workflow, 'user_id'>;
+    declare workflows?: NonAttribute<ConnectionProfiles[]>;
+
     static associate() {
         this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
         this.hasMany(Client, { foreignKey: 'user_id', as: 'clients' });
@@ -114,6 +127,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
         this.hasMany(ConnectionProfiles, { foreignKey: 'user_id', as: 'profiles' });
         this.hasMany(Contact, { foreignKey: 'user_id', as: 'contacts' });
         this.hasMany(Chatbot, { foreignKey: 'user_id', as: 'chatbots' });
+        this.hasMany(Workflow, { foreignKey: 'user_id', as: 'workflows' });
     }
 }
 

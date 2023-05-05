@@ -234,4 +234,33 @@ export class UserService {
         if (!profiles) throw new AppProcessError('O perfil de conexão não foi localizado', HTTPResponseCode.informationNotFound);
         return await user.hasProfile(profiles);
     }
+
+    static async listWorkflows(id: string | number) {
+        const list = await UserModel.findByPk(id, {
+            include: [
+                {
+                    association: UserModel.associations.workflows
+                    /* include: [ConnectionModel.associations.profile] */
+                }
+            ]
+        });
+
+        return list?.workflows || [];
+    }
+
+    static async getWorkflow(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+        const user = await UserModel.findByPk(id);
+        if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
+        const profiles = await user.getWorkflows({
+            where: params
+        });
+        return profiles;
+    }
+
+    static async hasWorkflow(user_id: string | number, workflow_id: string | number) {
+        const user = await this.get(user_id);
+        const workflow = await ConnectionProfilesModel.findByPk(workflow_id);
+        if (!workflow) throw new AppProcessError('O workflow não foi localizado', HTTPResponseCode.informationNotFound);
+        return await user.hasProfile(workflow);
+    }
 }

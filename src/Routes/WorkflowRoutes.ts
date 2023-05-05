@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { ThrowHTTPMethodNotAllowed } from '../Core';
-import { ChatbotController } from '../Controllers';
+import { WorkflowController } from '../Controllers/WorkflowController';
 
 const WorkflowRoutes = express.Router();
 
 WorkflowRoutes
     .route('/')
-    .post(ChatbotController.store)
-    .get(ChatbotController.list)
+    .post(WorkflowController.store)
+    .get(WorkflowController.list)
     .all(ThrowHTTPMethodNotAllowed);
 
 export default WorkflowRoutes;

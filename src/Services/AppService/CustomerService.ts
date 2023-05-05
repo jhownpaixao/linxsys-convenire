@@ -1,8 +1,8 @@
-import { MakeNullishOptional } from 'sequelize/types/utils';
+import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
-import { CustomerModel } from '../Sequelize/Models';
-import { InferCreationAttributes, Op } from 'sequelize';
+import { ContactModel, CustomerModel } from '../Sequelize/Models';
+import { InferCreationAttributes, Op, Optional } from 'sequelize';
 import { ContactService } from './ContactService';
 import { UserService } from './UserService';
 
@@ -49,7 +49,8 @@ export class CustomerService {
         }
 
         const contact = await ContactService.getWith({
-            value: data.contato
+            value: data.contato,
+            user_id: user_id
         });
         if (contact) throw new AppProcessError('Este contato está em uso', HTTPResponseCode.informationAlreadyExists);
 
@@ -100,9 +101,9 @@ export class CustomerService {
     }
 
     static async get(id: string | number) {
-        const user = await CustomerModel.findByPk(id);
-        if (!user) throw new AppProcessError('O cliente não foi localizado', HTTPResponseCode.informationNotFound);
-        return user;
+        const register = await CustomerModel.findByPk(id);
+        if (!register) throw new AppProcessError('O cliente não foi localizado', HTTPResponseCode.informationNotFound);
+        return register;
     }
 
     static async list() {
@@ -122,5 +123,41 @@ export class CustomerService {
         });
 
         return list?.contacts || [];
+    }
+    static async addContact(
+        id: string | number,
+        params: Omit<
+            Optional<
+                InferCreationAttributes<ContactModel, { omit: never }>,
+                NullishPropertiesOf<InferCreationAttributes<ContactModel, { omit: never }>>
+            >,
+            'client_id' | 'user_id'
+        >
+    ) {
+        const client = await this.get(id);
+        let contact = await ContactService.getWith({
+            value: params.value,
+            client_id: client.id
+        });
+        if (contact) throw new AppProcessError('O cliente já possuí este contato', HTTPResponseCode.informationAlreadyExists);
+
+        contact = await ContactService.getWith({
+            value: params.value,
+            user_id: client.user_id
+        });
+        if (contact) throw new AppProcessError('Este contato está em uso', HTTPResponseCode.informationAlreadyExists);
+
+        try {
+            const contatct = await client.createContact({
+                ...params,
+                user_id: client.user_id
+            });
+
+            return contatct;
+        } catch (error) {
+            const msg = 'Erro ao adicionar um contato';
+            logger.error({ error }, msg);
+            throw new Error(msg);
+        }
     }
 }

@@ -1,13 +1,11 @@
 import { SequelizeConnection } from '../Database';
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, ForeignKey } from 'sequelize';
 import { User } from './User';
-export class Chatbot extends Model<InferAttributes<Chatbot>, InferCreationAttributes<Chatbot>> {
+export class Workflow extends Model<InferAttributes<Workflow>, InferCreationAttributes<Workflow>> {
     declare id?: CreationOptional<number>;
     declare name: string;
-    declare queues: CreationOptional<object>;
     declare user_id: ForeignKey<User['id']>;
-    declare default_messages: object;
-    declare workflow: object;
+    declare data: CreationOptional<object>;
     declare comments: CreationOptional<string>;
     declare params: CreationOptional<object>;
 
@@ -16,17 +14,15 @@ export class Chatbot extends Model<InferAttributes<Chatbot>, InferCreationAttrib
     }
 }
 
-Chatbot.init(
+Workflow.init(
     {
         name: DataTypes.STRING,
-        queues: DataTypes.JSON,
+        data: DataTypes.JSON,
         user_id: DataTypes.INTEGER,
-        default_messages: DataTypes.JSON,
-        workflow: DataTypes.JSON,
         comments: DataTypes.STRING,
         params: DataTypes.JSON
     },
     { sequelize: SequelizeConnection }
 );
 
-//Chatbot.sync();
+//Workflow.sync();
