@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { ConnectionController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '../Core';
+import { ServerConfig, ThrowHTTPMethodNotAllowed } from '../Core';
 import { ConnectionMiddleware } from '../Middlewares';
 import ConnectionProfileRoutes from './ConnectionProfileRoutes';
 
@@ -9,7 +9,7 @@ const ConnectionRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });
 
 ConnectionRoutes.use('/:connection_id([0-9]{1,24})', ConnectionMiddleware.check, subRoutes);
-ConnectionRoutes.use('/profile', ConnectionProfileRoutes);
+ConnectionRoutes.use(ServerConfig.ROUTES.profile, ConnectionProfileRoutes);
 
 ConnectionRoutes
     .route('/')
@@ -18,7 +18,7 @@ ConnectionRoutes
     .all(ThrowHTTPMethodNotAllowed);
 
 subRoutes
-    .route('/profile')
+    .route(ServerConfig.ROUTES.profile)
     .post(ConnectionController.addProfile) //<-- Apenas usado para criar uma novo perfil sem vinculação
     .get(ConnectionController.getProfile)
     .put(ConnectionController.vinculeProfile)

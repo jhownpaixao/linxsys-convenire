@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
 import { WorkflowService, UserService } from '../Services/AppService';
 
 export class WorkflowController {
@@ -9,12 +9,20 @@ export class WorkflowController {
 
         await CheckRequest({ name });
 
-        const contact = await WorkflowService.create({
+        const workflow = await WorkflowService.create({
             ...req.body,
             user_id: user_id
         });
-
-        SendHTTPResponse({ message: 'workflow criado', type: 'success', status: true, data: contact, code: HTTPResponseCode.created }, res);
+        SendHTTPResponse(
+            {
+                message: 'Workflow criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.workflow}/${workflow.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 
     static list = async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { CustomerController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '../Core';
+import { ServerConfig, ThrowHTTPMethodNotAllowed } from '../Core';
 import { CustomerMiddleware } from '../Middlewares';
 
 const CustomerRoutes = express.Router();
@@ -14,7 +14,7 @@ CustomerRoutes.route('/')
     .get(CustomerController.list)
     .all(ThrowHTTPMethodNotAllowed);
 
-subRoutes.route('/contact')
+subRoutes.route(ServerConfig.ROUTES.contact)
     .post(CustomerController.addContact)
     .get(CustomerController.contacts)
     .all(ThrowHTTPMethodNotAllowed);

@@ -19,29 +19,28 @@ export const ExpressResponseOptions = (req: Request, res: Response, next: NextFu
  *
  *
  * */
-export const HTTPResponseCode = {
+export enum HTTPResponseCode {
     /* Success */
-    continue: 100,
-    accepted: 202,
-    created: 201,
-    successfullyProcessedInformation: 200,
-    informationNotFound: 203,
-    partiallyCompletedProcess: 206,
-    registeredInformation: 201,
-    redirectingForResponse: 303,
+    continue = 100,
+    accepted = 202,
+    created = 201,
+    successfullyProcessedInformation = 200,
+    informationNotFound = 404, //!203,
+    partiallyCompletedProcess = 206,
+    redirectingForResponse = 303,
 
     /* Warning */
-    incompleteRequest: 400,
-    routeNotFound: 404,
-    informationAlreadyExists: 409,
-    preconditionRequired: 428,
+    incompleteRequest = 400,
+    routeNotFound = 404,
+    informationAlreadyExists = 409,
+    preconditionRequired = 428,
 
     /* Error */
-    iternalErro: 500,
-    methodNotAllowed: 405,
-    informationNotTrue: 406,
-    preProcessNotInitialized: 424,
-    requestTimeOut: 408,
-    informationUnauthorized: 401,
-    informationBlocked: 403
-};
+    iternalErro = 500,
+    methodNotAllowed = 405,
+    informationNotTrue = 406,
+    preProcessNotInitialized = 424,
+    requestTimeOut = 408,
+    informationUnauthorized = 401,
+    informationBlocked = 403
+}

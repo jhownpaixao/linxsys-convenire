@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { CheckRequest, SendHTTPResponse, HTTPResponseCode } from '../Core';
+import { CheckRequest, SendHTTPResponse, HTTPResponseCode, ServerConfig } from '../Core';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import jwktopem from 'jwk-to-pem';
@@ -38,7 +38,8 @@ export class AuthController {
                 message: 'Confirmar autorização',
                 status: false,
                 type: 'warning',
-                data: { ekm: key, edc: encrypted, confirmation: `/auth/validate/${key}/${encrypted}` },
+                data: { ekm: key, edc: encrypted },
+                location: `/${ServerConfig.ROUTES.auth}/validate/${key}/${encrypted}`,
                 code: HTTPResponseCode.accepted
             },
             res

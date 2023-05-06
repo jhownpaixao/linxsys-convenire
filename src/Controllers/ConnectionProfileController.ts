@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
-import { ConnectionService, ConnectionProfileService, UserService } from '../Services/AppService';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
+import { ConnectionProfileService, UserService } from '../Services/AppService';
 export class ConnectionProfileController {
     static store = async (req: Request, res: Response) => {
         const { name } = req.body;
@@ -9,7 +9,16 @@ export class ConnectionProfileController {
 
         const profile = await ConnectionProfileService.create(req.body, req.user.id);
 
-        SendHTTPResponse({ message: 'perfil criado', type: 'success', status: true, data: profile, code: HTTPResponseCode.created }, res);
+        SendHTTPResponse(
+            {
+                message: 'Perfil criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${profile.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 
     static get = async (req: Request, res: Response) => {
@@ -34,12 +43,18 @@ export class ConnectionProfileController {
 
         await CheckRequest({ name });
 
-        const connection = await ConnectionProfileService.addChatbot(profile_id, {
+        const chatbot = await ConnectionProfileService.addChatbot(profile_id, {
             name
         });
 
         SendHTTPResponse(
-            { message: 'Chatbot criado e vinculado', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            {
+                message: 'Chatbot criado e vinculado',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${chatbot.id}`,
+                code: HTTPResponseCode.created
+            },
             res
         );
     };

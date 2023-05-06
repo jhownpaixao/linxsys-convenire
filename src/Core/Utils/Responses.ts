@@ -42,8 +42,12 @@ export function SendHTTPResponse(objResponse: HTTPResponse, res: Response, next?
     if (!objResponse.code) objResponse.code = HTTPResponseCode.successfullyProcessedInformation;
     res.status(objResponse.code);
 
-    let FormulatedResponse;
+    if (objResponse.location) {
+        res.location(objResponse.location);
+        delete objResponse.location;
+    }
 
+    let FormulatedResponse;
     switch (ResponseFormulation) {
         case 'direct':
             if (objResponse['data']) FormulatedResponse = objResponse.data;

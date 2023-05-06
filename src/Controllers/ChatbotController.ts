@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
 import { UserService, ChatbotService } from '../Services/AppService';
 
 export class ChatbotController {
@@ -9,12 +9,21 @@ export class ChatbotController {
 
         await CheckRequest({ name });
 
-        const contact = await ChatbotService.create({
+        const chatbot = await ChatbotService.create({
             ...req.body,
             user_id: user_id
         });
 
-        SendHTTPResponse({ message: 'chatbot criado', type: 'success', status: true, data: contact, code: HTTPResponseCode.created }, res);
+        SendHTTPResponse(
+            {
+                message: 'Chatbot criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.chatbot}/${chatbot.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 
     static list = async (req: Request, res: Response) => {
@@ -30,12 +39,18 @@ export class ChatbotController {
 
         await CheckRequest({ name });
 
-        const connection = await ChatbotService.addWorkflow(chatbot_id, {
+        const workflow = await ChatbotService.addWorkflow(chatbot_id, {
             name
         });
 
         SendHTTPResponse(
-            { message: 'Workflow criado e vinculado', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            {
+                message: 'Workflow criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.workflow}/${workflow.id}`,
+                code: HTTPResponseCode.created
+            },
             res
         );
     };

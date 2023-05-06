@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest } from '../Core';
+import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '../Core';
 import { ContactService, CustomerService } from '../Services/AppService';
 
 export class ContactController {
@@ -18,7 +18,16 @@ export class ContactController {
             user_id: user_id
         });
 
-        SendHTTPResponse({ message: 'contato criado', type: 'success', status: true, data: contact, code: 201 }, res);
+        SendHTTPResponse(
+            {
+                message: 'Contato criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.contact}/${contact.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 
     static list = async (req: Request, res: Response) => {

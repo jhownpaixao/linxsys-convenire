@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
 import { UserService, ConnectionService } from '../Services/AppService';
 export class ConnectionController {
     static store = async (req: Request, res: Response) => {
@@ -16,7 +16,13 @@ export class ConnectionController {
         });
 
         SendHTTPResponse(
-            { message: 'conexão criada', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            {
+                message: 'Conexão criada com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.connection}/${connection.id}`,
+                code: HTTPResponseCode.created
+            },
             res
         );
     };
@@ -34,12 +40,18 @@ export class ConnectionController {
 
         await CheckRequest({ name });
 
-        const connection = await ConnectionService.addProfile(connection_id, {
+        const profile = await ConnectionService.addProfile(connection_id, {
             name
         });
 
         SendHTTPResponse(
-            { message: 'Perfil criado e vinculado', type: 'success', status: true, data: connection, code: HTTPResponseCode.created },
+            {
+                message: 'Perfil criado e vinculado',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${profile.id}`,
+                code: HTTPResponseCode.created
+            },
             res
         );
     };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
 import { UserService } from '../Services/AppService';
 
 export class UserController {
@@ -22,8 +22,8 @@ export class UserController {
                 message: 'Usuário criado com sucesso',
                 type: 'success',
                 status: true,
-                data: user,
-                code: HTTPResponseCode.registeredInformation
+                location: `/${ServerConfig.ROUTES.contact}/${user.id}`,
+                code: HTTPResponseCode.created
             },
             res
         );

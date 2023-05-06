@@ -1,3 +1,4 @@
+import { Request } from 'express';
 /**
  * Tipos padrões para o tipo de response
  * @date 26/03/2023 - 21:45:23
@@ -15,6 +16,7 @@ export declare type HTTPResponse = {
     message: string;
     type: ResponseType;
     code?: number;
+    location?: string;
     timestamp?: number;
     data?: unknown;
 };

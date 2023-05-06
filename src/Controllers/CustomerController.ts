@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest } from '../Core';
+import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '../Core';
 import { UserService, CustomerService } from '../Services/AppService';
 
 export class CustomerController {
@@ -13,7 +13,16 @@ export class CustomerController {
             ...req.body,
             user_id
         });
-        return SendHTTPResponse({ message: 'cliente criado com sucesso', type: 'success', status: true, data: client }, res);
+        SendHTTPResponse(
+            {
+                message: 'Cliente criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.client}/${client.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 
     static list = async (req: Request, res: Response) => {
@@ -36,11 +45,20 @@ export class CustomerController {
 
         await CheckRequest({ contato });
 
-        const contacts = await CustomerService.addContact(client_id, {
+        const contact = await CustomerService.addContact(client_id, {
             value: contato,
             params,
             comments
         });
-        SendHTTPResponse({ message: 'Adicionado com sucesso', type: 'success', status: true, data: contacts }, res);
+        SendHTTPResponse(
+            {
+                message: 'Contato criado e vinculado',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.contact}/${contact.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 }

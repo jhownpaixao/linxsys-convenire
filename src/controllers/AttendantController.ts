@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
 import { UserService, AttendantService } from '../Services/AppService';
 
 export class AttendantController {
@@ -17,7 +17,16 @@ export class AttendantController {
             params,
             user_id: user_id
         });
-        SendHTTPResponse({ message: 'Atendente criado com sucesso', type: 'success', status: true, data: attendant }, res);
+        SendHTTPResponse(
+            {
+                message: 'Atendente criado com sucesso',
+                type: 'success',
+                status: true,
+                location: `/${ServerConfig.ROUTES.attendant}/${attendant.id}`,
+                code: HTTPResponseCode.created
+            },
+            res
+        );
     };
 
     static list = async (req: Request, res: Response) => {
