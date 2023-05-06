@@ -19,7 +19,7 @@ export class ChatbotController {
                 message: 'Chatbot criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.chatbot}/${chatbot.id}`,
+                location: `${ServerConfig.ROUTES.chatbot}/${chatbot.id}`,
                 code: HTTPResponseCode.created
             },
             res
@@ -48,7 +48,7 @@ export class ChatbotController {
                 message: 'Workflow criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.workflow}/${workflow.id}`,
+                location: `${ServerConfig.ROUTES.workflow}/${workflow.id}`,
                 code: HTTPResponseCode.created
             },
             res

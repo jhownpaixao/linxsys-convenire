@@ -39,7 +39,7 @@ export class AuthController {
                 status: false,
                 type: 'warning',
                 data: { ekm: key, edc: encrypted },
-                location: `/${ServerConfig.ROUTES.auth}/validate/${key}/${encrypted}`,
+                location: `${ServerConfig.ROUTES.auth}/validate/${key}/${encrypted}`,
                 code: HTTPResponseCode.accepted
             },
             res

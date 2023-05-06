@@ -22,7 +22,7 @@ export class UserController {
                 message: 'Usuário criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.contact}/${user.id}`,
+                location: `${ServerConfig.ROUTES.contact}/${user.id}`,
                 code: HTTPResponseCode.created
             },
             res

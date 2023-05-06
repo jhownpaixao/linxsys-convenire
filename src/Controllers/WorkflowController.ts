@@ -18,7 +18,7 @@ export class WorkflowController {
                 message: 'Workflow criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.workflow}/${workflow.id}`,
+                location: `${ServerConfig.ROUTES.workflow}/${workflow.id}`,
                 code: HTTPResponseCode.created
             },
             res

@@ -23,7 +23,7 @@ export class ContactController {
                 message: 'Contato criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.contact}/${contact.id}`,
+                location: `${ServerConfig.ROUTES.contact}/${contact.id}`,
                 code: HTTPResponseCode.created
             },
             res

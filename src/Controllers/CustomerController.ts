@@ -18,7 +18,7 @@ export class CustomerController {
                 message: 'Cliente criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.client}/${client.id}`,
+                location: `${ServerConfig.ROUTES.client}/${client.id}`,
                 code: HTTPResponseCode.created
             },
             res
@@ -55,7 +55,7 @@ export class CustomerController {
                 message: 'Contato criado e vinculado',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.contact}/${contact.id}`,
+                location: `${ServerConfig.ROUTES.contact}/${contact.id}`,
                 code: HTTPResponseCode.created
             },
             res

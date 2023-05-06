@@ -20,7 +20,7 @@ export class ConnectionController {
                 message: 'Conexão criada com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.connection}/${connection.id}`,
+                location: `${ServerConfig.ROUTES.connection}/${connection.id}`,
                 code: HTTPResponseCode.created
             },
             res
@@ -49,7 +49,7 @@ export class ConnectionController {
                 message: 'Perfil criado e vinculado',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${profile.id}`,
+                location: `${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${profile.id}`,
                 code: HTTPResponseCode.created
             },
             res

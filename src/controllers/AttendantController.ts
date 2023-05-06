@@ -22,7 +22,7 @@ export class AttendantController {
                 message: 'Atendente criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.attendant}/${attendant.id}`,
+                location: `${ServerConfig.ROUTES.attendant}/${attendant.id}`,
                 code: HTTPResponseCode.created
             },
             res

@@ -14,7 +14,7 @@ export class ConnectionProfileController {
                 message: 'Perfil criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${profile.id}`,
+                location: `${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${profile.id}`,
                 code: HTTPResponseCode.created
             },
             res
@@ -52,7 +52,7 @@ export class ConnectionProfileController {
                 message: 'Chatbot criado e vinculado',
                 type: 'success',
                 status: true,
-                location: `/${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${chatbot.id}`,
+                location: `${ServerConfig.ROUTES.connection}/${ServerConfig.ROUTES.profile}/${chatbot.id}`,
                 code: HTTPResponseCode.created
             },
             res
