@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { HTTPResponseCode, TimestampDifference, AppProcessError, Security } from '../../Core';
+import { HTTPResponseCode, TimestampDifference, AppProcessError, Security } from '@Core/index';
 import { UserModel } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
 import path from 'path';

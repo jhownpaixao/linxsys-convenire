@@ -1,5 +1,5 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
-import { AppProcessError, GenereateUniqKey, HTTPResponseCode } from '../../Core';
+import { AppProcessError, Security, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
 import { AttendantModel } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
@@ -17,7 +17,7 @@ export class AttendantService {
         try {
             const attendant = await AttendantModel.create({
                 ...data,
-                uniqkey: GenereateUniqKey(),
+                uniqkey: Security.uniqkey(),
                 pass: hash
             });
             return attendant;

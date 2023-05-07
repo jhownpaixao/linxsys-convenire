@@ -1,5 +1,5 @@
 import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
-import { AppProcessError, GenereateUniqKey, HTTPResponseCode } from '../../Core';
+import { AppProcessError, Security, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
 import { ConnectionModel, ConnectionProfilesModel } from '../Sequelize/Models';
 import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
@@ -16,7 +16,7 @@ export class ConnectionService {
         try {
             const register = await ConnectionModel.create({
                 ...data,
-                uniqkey: GenereateUniqKey()
+                uniqkey: Security.uniqkey()
             });
             return register;
         } catch (error) {

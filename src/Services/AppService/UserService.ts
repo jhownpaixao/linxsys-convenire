@@ -1,5 +1,5 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
-import { AppProcessError, GenereateUniqKey, HTTPResponseCode } from '../../Core';
+import { AppProcessError, Security, HTTPResponseCode } from '../../Core';
 import { logger } from '../Logger';
 import {
     AttendantModel,
@@ -25,7 +25,7 @@ export class UserService {
         try {
             const user = await UserModel.create({
                 name: data.name,
-                uniqkey: GenereateUniqKey(),
+                uniqkey: Security.uniqkey(),
                 email: data.email,
                 pass: hash,
                 type: data.type,
