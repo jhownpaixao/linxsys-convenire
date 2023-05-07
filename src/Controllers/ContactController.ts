@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '../Core';
+import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '@Core';
 import { ContactService, CustomerService } from '../Services/AppService';
 
 export class ContactController {

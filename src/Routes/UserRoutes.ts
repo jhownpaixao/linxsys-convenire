@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { UserController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '../Core';
+import { ThrowHTTPMethodNotAllowed } from '@Core';
 
 const UserRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });
@@ -13,8 +13,7 @@ UserRoutes.route('/')
     .get(UserController.list)
     .all(ThrowHTTPMethodNotAllowed);
 
-subRoutes
-    .route('/')
+subRoutes.route('/')
     .get(UserController.get)
     .patch(UserController.update)
     .delete(UserController.exclude)

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AppProcessError, CheckRequest, HTTPResponseCode } from '../Core';
+import { AppProcessError, CheckRequest, HTTPResponseCode } from '@Core';
 import { ConnectionProfileService, ConnectionService, UserService } from '../Services/AppService';
 
 export class ConnectionMiddleware {

@@ -1,9 +1,9 @@
 import { Response, Request } from 'express';
-import { CheckRequest, SendHTTPResponse, HTTPResponseCode, ServerConfig } from '../Core';
+import { CheckRequest, SendHTTPResponse, HTTPResponseCode, ServerConfig } from '@Core';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import jwktopem from 'jwk-to-pem';
-import { AuthConfig } from '../Core/Config/Auth';
+import { AuthConfig } from '@Core/Config/Auth';
 import { AuthService } from '../Services/AppService';
 
 export class AuthController {

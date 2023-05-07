@@ -1,4 +1,3 @@
-import { UserType } from '../Types/User';
 import { ServerConfig } from './Server';
 
 /**
@@ -41,6 +40,7 @@ enum CompanyAccessProfile {
     Attendant = AccessPermissions.none
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const RouteAccessProfiles: Record<string, any> = {
     [ServerConfig.ROUTES.attendant]: AttendantAccessProfile,
     [ServerConfig.ROUTES.chatbot]: CompanyAccessProfile,

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@Core';
 import { WorkflowService, UserService } from '../Services/AppService';
 
 export class WorkflowController {

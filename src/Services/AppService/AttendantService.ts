@@ -1,5 +1,5 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
-import { AppProcessError, Security, HTTPResponseCode } from '../../Core';
+import { AppProcessError, Security, HTTPResponseCode } from '@Core';
 import { logger } from '../Logger';
 import { AttendantModel } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';

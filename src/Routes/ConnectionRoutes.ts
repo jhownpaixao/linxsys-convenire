@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { ConnectionController } from '../Controllers';
-import { ServerConfig, ThrowHTTPMethodNotAllowed } from '../Core';
+import { ServerConfig, ThrowHTTPMethodNotAllowed } from '@Core';
 import { ConnectionMiddleware } from '../Middlewares';
 import ConnectionProfileRoutes from './ConnectionProfileRoutes';
 

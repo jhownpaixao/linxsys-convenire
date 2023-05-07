@@ -50,7 +50,7 @@ export interface IControllerBase<T extends Model> {
  * @implements {IControllerBase<T>}
  */
 export default abstract class Controller<T extends Model<InferAttributes<T>, InferCreationAttributes<T>>> implements IControllerBase<T> {
-    declare id: CreationOptional<number>;
+    id: CreationOptional<number>;
     /**
      * Model padrão usado para criar o Controller
      * @date 26/03/2023 - 18:22:05

@@ -1,14 +1,11 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import {  AttendantController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '../Core';
-
+import { AttendantController } from '../Controllers';
+import { ThrowHTTPMethodNotAllowed } from '@Core';
 
 const AttendantRoute = express.Router();
 
-
-AttendantRoute
-    .route('/')
+AttendantRoute.route('/')
     .post(AttendantController.store)
     .get(AttendantController.list)
     .all(ThrowHTTPMethodNotAllowed);

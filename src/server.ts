@@ -1,6 +1,6 @@
 import app from './Servers/app';
 import { logger } from './Services/Logger';
-import { ServerConfig } from './Core';
+import { ServerConfig } from '@Core';
 
 /* Iniciar Servidor */
 app.listen(ServerConfig.MAIN_PORT, () => {

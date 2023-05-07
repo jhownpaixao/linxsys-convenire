@@ -173,6 +173,7 @@ export const handleAuthorizationFailure = (err: Error, req: Request, res: Respon
     }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const handleProcessFailure = async (err: Error, req: Request, res: Response, _: NextFunction) => {
     if (err instanceof AppProcessError) {
         return SendHTTPResponse({ message: err.message, type: err.level, status: false, code: err.statusCode, data: err.data }, res);

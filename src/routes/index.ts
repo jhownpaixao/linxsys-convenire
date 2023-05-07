@@ -7,7 +7,7 @@ import CustomerRoutes from './CustomerRoutes';
 import AuthRoutes from './AuthRoutes';
 import { Router } from 'express';
 import { UserMiddleware, AuthMiddleware } from '../Middlewares';
-import { ServerConfig } from '../Core';
+import { ServerConfig } from '@Core';
 
 const routes = Router();
 

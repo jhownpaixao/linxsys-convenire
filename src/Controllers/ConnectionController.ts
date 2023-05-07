@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '../Core';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@Core';
 import { UserService, ConnectionService } from '../Services/AppService';
 export class ConnectionController {
     static store = async (req: Request, res: Response) => {

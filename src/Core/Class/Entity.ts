@@ -11,11 +11,13 @@ export abstract class Model<M extends SequelizeModel<InferAttributes<M>, InferCr
     private mainProps = ['mainProps', 'props', 'model', 'data'];
     public data: ObjectWithDynamicKey = {};
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(model: any) {
         this.model = model;
         this.init();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private async ManualSync(data: any) {
         for (const [key, prop] of Object.entries(data)) {
             if (!this.props.includes(key)) continue;

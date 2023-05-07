@@ -19,6 +19,9 @@
     "paths": {
       "@Core/*": [
         "./src/Core/*"
+      ],
+      "@Core": [
+        "./src/Core/index.ts"
       ]
     }
   }

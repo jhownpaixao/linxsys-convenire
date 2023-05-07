@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import path from 'path';
 import axios from 'axios';
 import { InferCreationAttributes } from 'sequelize';
-import { AuthConfig, SecurityConfig } from '../../Core/Config';
+import { AuthConfig, SecurityConfig } from '@Core/Config';
 import { UserService } from './UserService';
 
 declare interface SecurityPendingAuthOptions {
