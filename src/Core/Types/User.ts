@@ -12,10 +12,3 @@ export enum UserType {
     Company = 4,
     Attendant = 5
 }
-
-export enum ProcessAccessLevel {
-    readonly, // ['read'],
-    modify, // ['read', 'update'],
-    create, // ['create', 'read', 'update'],
-    all // ['create', 'read', 'update', 'delete']
-}

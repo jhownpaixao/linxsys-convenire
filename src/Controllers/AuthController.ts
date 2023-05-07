@@ -38,7 +38,7 @@ export class AuthController {
                 message: 'Confirmar autorização',
                 status: true,
                 type: 'success',
-                data: { ekm: key, edc: encrypted },
+                data: { ekm: key, edc: encrypted, confirmation: `${ServerConfig.ROUTES.auth}/validate/${key}/${encrypted}` },
                 location: `${ServerConfig.ROUTES.auth}/validate/${key}/${encrypted}`,
                 code: HTTPResponseCode.accepted
             },

@@ -1,11 +1,11 @@
 import * as crypto from 'crypto';
-import { SecurityOptions, SecurityDecrypt, SecurityEncrypt, HTTPResponseCode, TimestampDifference, AppProcessError } from '../../Core';
+import { HTTPResponseCode, TimestampDifference, AppProcessError, Security } from '../../Core';
 import { UserModel } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
 import path from 'path';
 import axios from 'axios';
 import { InferCreationAttributes } from 'sequelize';
-import { AuthConfig } from '../../Core/Config/Auth';
+import { AuthConfig, SecurityConfig } from '../../Core/Config';
 import { UserService } from './UserService';
 
 declare interface SecurityPendingAuthOptions {
@@ -13,8 +13,6 @@ declare interface SecurityPendingAuthOptions {
     timestamp: number;
     params?: object;
 }
-
-export const AuthActiveSessions = new Map<string, InferCreationAttributes<UserModel>>();
 
 type RequestLoginConfirmation = {
     ekm: string;
@@ -25,8 +23,10 @@ type RequestLogin = {
     email: string;
     pass: string;
 };
+
+export const AuthActiveSessions = new Map<string, InferCreationAttributes<UserModel>>();
+
 export class AuthService {
-    static GeneratedToken = '';
     static PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
     static PrivateKeyPath = path.join(__dirname, '../keys/private.key');
     static SecurityPendingAuth = new Map<string, SecurityPendingAuthOptions>();
@@ -38,15 +38,14 @@ export class AuthService {
 
     static createToken(data: string) {
         const Securitykey = crypto.randomBytes(32);
-        const initVector = crypto.randomBytes(SecurityOptions.initialVector);
-        const cipher = crypto.createCipheriv(SecurityOptions.AESMethod, Securitykey, initVector);
+        const initVector = crypto.randomBytes(SecurityConfig.initialVector);
+        const cipher = crypto.createCipheriv(SecurityConfig.AESMethod, Securitykey, initVector);
         let encryptedData = cipher.update(data, 'utf-8', 'hex');
         encryptedData += cipher.final('hex');
         return encryptedData;
     }
 
     static createLogin(uniqkey: string): [string, string] {
-        //const key = this.createToken(uniqkey); //? Talvez não haja necessidade desta key
         const spa = this.SecurityPendingAuth.get(uniqkey);
 
         if (spa && TimestampDifference(spa.timestamp, Date.now(), 's') < 10) {
@@ -58,7 +57,7 @@ export class AuthService {
             this.SecurityPendingAuth.delete(uniqkey);
         }
 
-        const [encrptKey, buffer] = SecurityEncrypt(uniqkey);
+        const [encrptKey, buffer] = Security.encrypt(uniqkey);
         this.SecurityPendingAuth.set(uniqkey, {
             buffer,
             timestamp: Date.now()
@@ -76,7 +75,7 @@ export class AuthService {
         if (TimestampDifference(AuthData.timestamp, Date.now(), 's') > 10)
             throw new AppProcessError('Tempo máximo atingido', HTTPResponseCode.informationBlocked);
 
-        const uniqkey = SecurityDecrypt(data.edc, AuthData.buffer);
+        const uniqkey = Security.decrypt(data.edc, AuthData.buffer);
         if (!uniqkey) throw new AppProcessError('Não foi possível realizar o login', HTTPResponseCode.informationNotTrue);
 
         const user = await UserService.getWithFullData({ uniqkey });
