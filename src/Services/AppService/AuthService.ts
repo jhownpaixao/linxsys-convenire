@@ -1,5 +1,4 @@
 import * as crypto from 'crypto';
-import { uuid } from 'uuidv4';
 import { SecurityOptions, SecurityDecrypt, SecurityEncrypt, HTTPResponseCode, TimestampDifference, AppProcessError } from '../../Core';
 import { UserModel } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
@@ -47,14 +46,24 @@ export class AuthService {
     }
 
     static createLogin(uniqkey: string): [string, string] {
+        //const key = this.createToken(uniqkey); //? Talvez não haja necessidade desta key
+        const spa = this.SecurityPendingAuth.get(uniqkey);
+
+        if (spa && TimestampDifference(spa.timestamp, Date.now(), 's') < 10) {
+            throw new AppProcessError(
+                'Este usuário já está realizando login, favor aguardar alguns segundos',
+                HTTPResponseCode.informationAlreadyExists
+            );
+        } else {
+            this.SecurityPendingAuth.delete(uniqkey);
+        }
+
         const [encrptKey, buffer] = SecurityEncrypt(uniqkey);
-        const key = this.createToken(uuid());
-        if (this.SecurityPendingAuth)
-            this.SecurityPendingAuth.set(key, {
-                buffer,
-                timestamp: Date.now()
-            });
-        return [key, encrptKey];
+        this.SecurityPendingAuth.set(uniqkey, {
+            buffer,
+            timestamp: Date.now()
+        });
+        return [uniqkey, encrptKey];
     }
 
     static async validateLogin(data: RequestLoginConfirmation) {
@@ -70,14 +79,13 @@ export class AuthService {
         const uniqkey = SecurityDecrypt(data.edc, AuthData.buffer);
         if (!uniqkey) throw new AppProcessError('Não foi possível realizar o login', HTTPResponseCode.informationNotTrue);
 
-        const user = await UserService.getWith({ uniqkey });
+        const user = await UserService.getWithFullData({ uniqkey });
         if (!uniqkey) throw new AppProcessError('Não foi possível realizar o login', HTTPResponseCode.informationNotTrue);
 
         if (AuthActiveSessions.get(user.uniqkey))
             throw new AppProcessError('Este usuário já está logado', HTTPResponseCode.informationBlocked);
 
-        const safe = UserService.generateSafeCopy(user);
-        const token = await this.signData({ user: safe });
+        const token = await this.signData({ user });
 
         if (!token) throw new AppProcessError('Não foi possível criar uma assinatura segura', HTTPResponseCode.iternalErro);
 
@@ -89,7 +97,7 @@ export class AuthService {
     }
 
     static async login(data: RequestLogin) {
-        const foundUser = await UserService.getWith({ email: data.email });
+        const foundUser = await UserService.getWithFullData({ email: data.email });
         if (!foundUser) throw new AppProcessError('Email incorreto', HTTPResponseCode.informationNotTrue);
 
         if (!bcrypt.compareSync(data.pass, foundUser.pass))

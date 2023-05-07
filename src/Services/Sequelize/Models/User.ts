@@ -143,7 +143,30 @@ User.init(
         date_venc: DataTypes.DATE,
         params: DataTypes.JSON
     },
-    { sequelize: SequelizeConnection }
+    {
+        sequelize: SequelizeConnection,
+        defaultScope: {
+            attributes: { exclude: ['pass', 'uniqkey', 'params'] }
+        },
+        scopes: {
+            fullData: {
+                attributes: [
+                    'id',
+                    'name',
+                    'pass',
+                    'email',
+                    'uniqkey',
+                    'type',
+                    'block_with_venc',
+                    'group_id',
+                    'date_venc',
+                    'params',
+                    'createdAt',
+                    'updatedAt'
+                ]
+            }
+        }
+    }
 );
 
 //User.sync();

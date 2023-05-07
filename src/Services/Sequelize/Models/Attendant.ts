@@ -52,7 +52,31 @@ Attendant.init(
         default_conn: DataTypes.INTEGER,
         params: DataTypes.JSON
     },
-    { sequelize: SequelizeConnection }
+    {
+        sequelize: SequelizeConnection,
+        defaultScope: {
+            attributes: { exclude: ['pass', 'uniqkey', 'params'] }
+        },
+        scopes: {
+            fullData: {
+                attributes: [
+                    'id',
+                    'name',
+                    'pass',
+                    'email',
+                    'uniqkey',
+                    'default_conn',
+                    'block_with_venc',
+                    'group_id',
+                    'date_venc',
+                    'params',
+                    'createdAt',
+                    'updatedAt',
+                    'user_id'
+                ]
+            }
+        }
+    }
 );
 
 // Attendant.sync();

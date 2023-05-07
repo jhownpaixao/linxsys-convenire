@@ -84,6 +84,11 @@ export class UserService {
         return register;
     }
 
+    static async getWithFullData(params: WhereOptions<InferAttributes<UserModel, { omit: never }>>) {
+        const register = await UserModel.scope('fullData').findOne({ where: params });
+        return register;
+    }
+
     static async list() {
         try {
             const list = await UserModel.findAll();
@@ -93,13 +98,6 @@ export class UserService {
             throw new Error('Erro ao buscar a lista de usuários');
         }
     }
-
-    static generateSafeCopy(user: MakeNullishOptional<InferCreationAttributes<UserModel>>) {
-        delete user.pass;
-        delete user.uniqkey;
-        return user;
-    }
-
     /* SubItens */
     static async listAttendants(id: string | number) {
         const list = await UserModel.findByPk(id, {
