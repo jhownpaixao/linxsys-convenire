@@ -1,4 +1,4 @@
-import { SequelizeConnection } from '../../Database';
+import { SequelizeConnection } from '../Database';
 import {
     Model,
     InferAttributes,
@@ -11,8 +11,8 @@ import {
     BelongsToSetAssociationMixin,
     BelongsToCreateAssociationMixin
 } from 'sequelize';
-import { Chatbot } from '../Chatbot';
-import { User } from '../User';
+import { Chatbot } from './Chatbot';
+import { User } from './User';
 export class ConnectionProfiles extends Model<InferAttributes<ConnectionProfiles>, InferCreationAttributes<ConnectionProfiles>> {
     declare id?: CreationOptional<number>;
     declare name: string;

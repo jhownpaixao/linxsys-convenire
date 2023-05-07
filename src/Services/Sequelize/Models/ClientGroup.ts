@@ -1,4 +1,4 @@
-import { SequelizeConnection } from '../../Database';
+import { SequelizeConnection } from '../Database';
 import {
     Model,
     InferAttributes,
@@ -9,7 +9,7 @@ import {
     BelongsToGetAssociationMixin,
     BelongsToSetAssociationMixin
 } from 'sequelize';
-import { User } from '../User';
+import { User } from './User';
 export class ClientGroup extends Model<InferAttributes<ClientGroup>, InferCreationAttributes<ClientGroup>> {
     declare id?: CreationOptional<number>;
     declare name: string;

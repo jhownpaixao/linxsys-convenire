@@ -2,10 +2,13 @@ import { User } from './User';
 import { Attendant } from './Attendant';
 import { Chatbot } from './Chatbot';
 import { Workflow } from './Workflow';
-import { Client, ClientGroup, Contact } from './Clients';
-import { Connection, ConnectionProfiles } from './Connections';
+import { Client } from './Client';
+import { ClientGroup } from './ClientGroup';
+import { Contact } from './Contact';
+import { Connection } from './Connection';
+import { ConnectionProfiles } from './ConnectionProfiles';
+import { Tag } from './Tags';
 
-/* const Models = SequelizeConnection.models; */
 const Models = {
     Attendant,
     User,
@@ -15,17 +18,11 @@ const Models = {
     Connection,
     ConnectionProfiles,
     Chatbot,
-    Workflow
+    Workflow,
+    Tag
 };
-Attendant.associate();
-User.associate();
-Client.associate();
-ClientGroup.associate();
-Contact.associate();
-Connection.associate();
-ConnectionProfiles.associate();
-Workflow.associate();
-Chatbot.associate();
+
+Object.values(Models).map((model) => model.associate());
 
 export {
     Attendant as AttendantModel,
@@ -37,5 +34,6 @@ export {
     ConnectionProfiles as ConnectionProfilesModel,
     Chatbot as ChatbotModel,
     Workflow as WorkflowModel,
+    Tag as TagModel,
     Models
 };

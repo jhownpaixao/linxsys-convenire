@@ -1,4 +1,4 @@
-import { SequelizeConnection } from '../../Database';
+import { SequelizeConnection } from '../Database';
 import {
     DataTypes,
     HasManyAddAssociationMixin,
@@ -19,7 +19,7 @@ import {
     ForeignKey
 } from 'sequelize';
 
-import { User } from '../User';
+import { User } from './User';
 import { ClientGroup } from './ClientGroup';
 import { Contact } from './Contact';
 

@@ -1,11 +1,11 @@
 import { SequelizeConnection } from '../Database';
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, ForeignKey } from 'sequelize';
 import { User } from './User';
-export class Workflow extends Model<InferAttributes<Workflow>, InferCreationAttributes<Workflow>> {
+export class Tag extends Model<InferAttributes<Tag>, InferCreationAttributes<Tag>> {
     declare id?: CreationOptional<number>;
-    declare name: string;
     declare user_id: ForeignKey<User['id']>;
-    declare data: CreationOptional<object>;
+    declare name: string;
+    declare color: string;
     declare comments: CreationOptional<string>;
     declare params: CreationOptional<object>;
 
@@ -14,10 +14,10 @@ export class Workflow extends Model<InferAttributes<Workflow>, InferCreationAttr
     }
 }
 
-Workflow.init(
+Tag.init(
     {
         name: DataTypes.STRING,
-        data: DataTypes.JSON,
+        color: DataTypes.STRING,
         user_id: DataTypes.INTEGER,
         comments: DataTypes.STRING,
         params: DataTypes.JSON
