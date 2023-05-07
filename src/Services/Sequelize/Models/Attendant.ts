@@ -13,7 +13,7 @@ import {
     HasOneGetAssociationMixin
 } from 'sequelize';
 import { User } from './User';
-import { Connection } from './Connections';
+import { Connection } from './Connection';
 
 export class Attendant extends Model<InferAttributes<Attendant>, InferCreationAttributes<Attendant>> {
     declare id?: CreationOptional<number>;

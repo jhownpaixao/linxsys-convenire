@@ -18,9 +18,10 @@ import {
     NonAttribute
 } from 'sequelize';
 import { Attendant } from './Attendant';
-import { Client } from './Clients';
-import { Connection, ConnectionProfiles } from './Connections';
-import { Contact } from './Clients';
+import { Client } from './Client';
+import { ConnectionProfiles } from './ConnectionProfiles';
+import { Connection } from './Connection';
+import { Contact } from './Contact';
 import { Chatbot } from './Chatbot';
 import { Workflow } from './Workflow';
 

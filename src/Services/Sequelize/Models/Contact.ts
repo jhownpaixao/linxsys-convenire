@@ -1,7 +1,7 @@
-import { SequelizeConnection } from '../../Database';
+import { SequelizeConnection } from '../Database';
 import { Model, InferAttributes, InferCreationAttributes, DataTypes, CreationOptional, ForeignKey } from 'sequelize';
-import { Client } from '../Client';
-import { User } from '../User';
+import { Client } from './Client';
+import { User } from './User';
 
 export class Contact extends Model<InferAttributes<Contact>, InferCreationAttributes<Contact>> {
     declare id?: CreationOptional<number>;
