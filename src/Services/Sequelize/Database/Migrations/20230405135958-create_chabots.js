@@ -37,7 +37,7 @@ module.exports = {
             workflow_id: {
                 type: Sequelize.INTEGER,
                 allowNull: true,
-                references: { model: 'workflows', key: 'id' },
+                references: { model: 'Workflows', key: 'id' },
                 onUpdate: 'CASCADE',
                 onDelete: 'SET NULL'
             },
