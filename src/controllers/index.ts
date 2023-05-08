@@ -7,3 +7,4 @@ export * from './CustomerController';
 export * from './AuthController';
 export * from './ChatbotController';
 export * from './ConnectionProfileController';
+export * from './AssessmentController';

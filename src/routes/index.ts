@@ -1,3 +1,6 @@
+import { ServerConfig } from '@Core';
+import { Router } from 'express';
+import { UserMiddleware, AuthMiddleware } from '../Middlewares';
 import UserRoutes from './UserRoutes';
 import ConnectionRoutes from './ConnectionRoutes';
 import ChatbotRoutes from './ChatbotRoutes';
@@ -5,9 +8,7 @@ import WorkflowRoutes from './WorkflowRoutes';
 import AttendantRoute from './AttendantRoutes';
 import CustomerRoutes from './CustomerRoutes';
 import AuthRoutes from './AuthRoutes';
-import { Router } from 'express';
-import { UserMiddleware, AuthMiddleware } from '../Middlewares';
-import { ServerConfig } from '@Core';
+import AssessmentRoutes from './AssessmentRoutes';
 
 const routes = Router();
 
@@ -18,5 +19,6 @@ routes.use(ServerConfig.ROUTES.chatbot, AuthMiddleware.Token, UserMiddleware.rec
 routes.use(ServerConfig.ROUTES.workflow, AuthMiddleware.Token, UserMiddleware.recover, WorkflowRoutes);
 routes.use(ServerConfig.ROUTES.attendant, AuthMiddleware.Token, UserMiddleware.recover, AttendantRoute);
 routes.use(ServerConfig.ROUTES.client, AuthMiddleware.Token, UserMiddleware.recover, CustomerRoutes);
+routes.use(ServerConfig.ROUTES.assessment, AuthMiddleware.Token, UserMiddleware.recover, AssessmentRoutes);
 
 export default routes;

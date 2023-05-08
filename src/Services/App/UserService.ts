@@ -2,13 +2,15 @@ import { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, Security, HTTPResponseCode } from '@Core';
 import { logger } from '../Logger';
 import {
+    AssessmentModel,
     AttendantModel,
     ChatbotModel,
     ConnectionModel,
     ConnectionProfilesModel,
     ContactModel,
     CustomerModel,
-    UserModel
+    UserModel,
+    WorkflowModel
 } from '../Sequelize/Models';
 import bcrypt from 'bcrypt';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
@@ -107,7 +109,7 @@ export class UserService {
         return list?.attendants || [];
     }
 
-    static async getAttendant(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+    static async getAttendant(id: string | number, params: WhereOptions<InferAttributes<AttendantModel, { omit: never }>>) {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         const attendant = await user.getAttendants({
@@ -136,7 +138,7 @@ export class UserService {
         return list?.clients || [];
     }
 
-    static async getCustomer(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+    static async getCustomer(id: string | number, params: WhereOptions<InferAttributes<CustomerModel, { omit: never }>>) {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         const client = await user.getClients({
@@ -165,7 +167,7 @@ export class UserService {
         return list?.connections || [];
     }
 
-    static async getConnection(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+    static async getConnection(id: string | number, params: WhereOptions<InferAttributes<ConnectionModel, { omit: never }>>) {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         const connections = await user.getConnections({
@@ -194,7 +196,7 @@ export class UserService {
         return list?.chatbots || [];
     }
 
-    static async getChatbot(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+    static async getChatbot(id: string | number, params: WhereOptions<InferAttributes<ChatbotModel, { omit: never }>>) {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         const chatbot = await user.getChatbots({
@@ -223,7 +225,7 @@ export class UserService {
         return list?.profiles || [];
     }
 
-    static async getProfile(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+    static async getProfile(id: string | number, params: WhereOptions<InferAttributes<ConnectionProfilesModel, { omit: never }>>) {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         const profiles = await user.getProfiles({
@@ -252,7 +254,7 @@ export class UserService {
         return list?.workflows || [];
     }
 
-    static async getWorkflow(id: string | number, params: WhereOptions<InferAttributes<ContactModel, { omit: never }>>) {
+    static async getWorkflow(id: string | number, params: WhereOptions<InferAttributes<WorkflowModel, { omit: never }>>) {
         const user = await UserModel.findByPk(id);
         if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
         const profiles = await user.getWorkflows({
@@ -266,5 +268,34 @@ export class UserService {
         const workflow = await ConnectionProfilesModel.findByPk(workflow_id);
         if (!workflow) throw new AppProcessError('O workflow não foi localizado', HTTPResponseCode.informationNotFound);
         return await user.hasProfile(workflow);
+    }
+
+    static async listAssessments(id: string | number) {
+        const list = await UserModel.findByPk(id, {
+            include: [
+                {
+                    association: UserModel.associations.assessments
+                    /* include: [ConnectionModel.associations.profile] */
+                }
+            ]
+        });
+
+        return list?.assessments || [];
+    }
+
+    static async getAssessment(id: string | number, params: WhereOptions<InferAttributes<AssessmentModel, { omit: never }>>) {
+        const user = await UserModel.findByPk(id);
+        if (!user) throw new AppProcessError('O usuário não foi localizado', HTTPResponseCode.informationNotFound);
+        const profiles = await user.getAssessments({
+            where: params
+        });
+        return profiles;
+    }
+
+    static async hasAssessment(user_id: string | number, assessment_id: string | number) {
+        const user = await this.get(user_id);
+        const assessment = await AssessmentModel.findByPk(assessment_id);
+        if (!assessment) throw new AppProcessError('A avalização não foi localizado', HTTPResponseCode.informationNotFound);
+        return await user.hasAssessment(assessment);
     }
 }

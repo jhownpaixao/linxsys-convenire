@@ -49,6 +49,7 @@ export const RouteAccessProfiles: Record<string, any> = {
     [ServerConfig.ROUTES.client]: AttendantAccessProfile,
     [ServerConfig.ROUTES.contact]: AttendantAccessProfile,
     [ServerConfig.ROUTES.workflow]: CompanyAccessProfile,
+    [ServerConfig.ROUTES.assessment]: AttendantAccessProfile,
     [ServerConfig.ROUTES.user]: {
         Administrator: AccessPermissions.all,
         Default: AccessPermissions.none,

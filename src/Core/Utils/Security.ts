@@ -4,6 +4,7 @@ import { UserAuthMiddlewareProps } from '../../Middlewares';
 import { AppProcessError } from './Responses';
 import { HTTPResponseCode, SecurityConfig } from '../Config';
 import { Request } from 'express';
+import { logger } from 'src/Services/Logger';
 
 export class Security {
     static encrypt(data: string | object): [string, Buffer] {
@@ -37,12 +38,17 @@ export class Security {
     }
 
     static requestAccessPermission(user: UserAuthMiddlewareProps, req: Request) {
-        const access_policy = RouteAccessProfiles[req.baseUrl];
-        const arrays_permissions = MethodsArr[access_policy[user.type]];
-        const method = req.method;
+        try {
+            const access_policy = RouteAccessProfiles[req.baseUrl];
+            const arrays_permissions = MethodsArr[access_policy[user.type]];
+            const method = req.method;
 
-        if (!arrays_permissions.includes(method))
-            throw new AppProcessError('Usuário sem permissão de acesso à este recurso', HTTPResponseCode.informationBlocked);
+            if (!arrays_permissions.includes(method))
+                throw new AppProcessError('Usuário sem permissão de acesso à este recurso', HTTPResponseCode.informationBlocked);
+        } catch (error) {
+            logger.error(error, 'Erro ao buscar as permissões de acesso');
+            throw Error('Erro ao buscar as permissões de acesso');
+        }
     }
 
     static uniqkey = crypto.randomUUID;

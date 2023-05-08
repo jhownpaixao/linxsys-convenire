@@ -1,5 +1,5 @@
 enum RoutesName {
-    assessment = '/assessment',
+    assessment = '/assessments',
     attendant = '/attendants',
     auth = '/auth',
     chat = '/chats',
