@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@Core';
-import { ConnectionProfileService, UserService } from '../Services/AppService';
+import { ConnectionProfileService, UserService } from '../Services/App';
 export class ConnectionProfileController {
     static store = async (req: Request, res: Response) => {
         const { name } = req.body;

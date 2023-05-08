@@ -24,6 +24,10 @@ module.exports = {
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE'
             },
+            uniqkey: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
             from: {
                 type: Sequelize.INTEGER,
                 allowNull: false

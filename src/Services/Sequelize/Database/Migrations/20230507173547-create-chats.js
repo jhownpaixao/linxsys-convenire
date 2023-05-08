@@ -17,12 +17,16 @@ module.exports = {
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE'
             },
-            title: {
+            owner_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
+            channel: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            owner_id: {
-                type: Sequelize.INTEGER,
+            title: {
+                type: Sequelize.STRING,
                 allowNull: false
             },
             type: {

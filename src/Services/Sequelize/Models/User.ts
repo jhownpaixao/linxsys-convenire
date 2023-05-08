@@ -19,11 +19,13 @@ import {
 } from 'sequelize';
 import { Attendant } from './Attendant';
 import { Client } from './Client';
-import { ConnectionProfiles } from './ConnectionProfiles';
+import { ConnectionProfiles } from './ConnectionProfile';
 import { Connection } from './Connection';
 import { Contact } from './Contact';
 import { Chatbot } from './Chatbot';
 import { Workflow } from './Workflow';
+import { Tag } from './Tag';
+import { Chat } from './Chat';
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id?: CreationOptional<number>;
@@ -119,7 +121,31 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare hasWorkflows: HasManyHasAssociationsMixin<Workflow, number>;
     declare countWorkflows: HasManyCountAssociationsMixin;
     declare createWorkflow: HasManyCreateAssociationMixin<Workflow, 'user_id'>;
-    declare workflows?: NonAttribute<ConnectionProfiles[]>;
+    declare workflows?: NonAttribute<Workflow[]>;
+
+    declare getTags: HasManyGetAssociationsMixin<Workflow>; // Note the null assertions!
+    declare addTag: HasManyAddAssociationMixin<Tag, number>;
+    declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+    declare setTags: HasManySetAssociationsMixin<Tag, number>;
+    declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+    declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+    declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+    declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+    declare countTags: HasManyCountAssociationsMixin;
+    declare createTag: HasManyCreateAssociationMixin<Tag, 'user_id'>;
+    declare tags?: NonAttribute<Tag[]>;
+
+    declare getChats: HasManyGetAssociationsMixin<Workflow>; // Note the null assertions!
+    declare addChat: HasManyAddAssociationMixin<Chat, number>;
+    declare addChats: HasManyAddAssociationsMixin<Chat, number>;
+    declare setChats: HasManySetAssociationsMixin<Chat, number>;
+    declare removeChat: HasManyRemoveAssociationMixin<Chat, number>;
+    declare removeChats: HasManyRemoveAssociationsMixin<Chat, number>;
+    declare hasChat: HasManyHasAssociationMixin<Chat, number>;
+    declare hasChats: HasManyHasAssociationsMixin<Chat, number>;
+    declare countChats: HasManyCountAssociationsMixin;
+    declare createChat: HasManyCreateAssociationMixin<Chat, 'user_id'>;
+    declare chats?: NonAttribute<Chat[]>;
 
     static associate() {
         this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
@@ -129,6 +155,8 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
         this.hasMany(Contact, { foreignKey: 'user_id', as: 'contacts' });
         this.hasMany(Chatbot, { foreignKey: 'user_id', as: 'chatbots' });
         this.hasMany(Workflow, { foreignKey: 'user_id', as: 'workflows' });
+        this.hasMany(Tag, { foreignKey: 'user_id', as: 'tags' });
+        this.hasMany(Chat, { foreignKey: 'user_id', as: 'chats' });
     }
 }
 

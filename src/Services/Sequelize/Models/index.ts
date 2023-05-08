@@ -6,8 +6,8 @@ import { Client } from './Client';
 import { ClientGroup } from './ClientGroup';
 import { Contact } from './Contact';
 import { Connection } from './Connection';
-import { ConnectionProfiles } from './ConnectionProfiles';
-import { Tag } from './Tags';
+import { ConnectionProfiles } from './ConnectionProfile';
+import { Tag } from './Tag';
 
 const Models = {
     Attendant,

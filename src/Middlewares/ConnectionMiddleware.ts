@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { AppProcessError, CheckRequest, HTTPResponseCode } from '@Core';
-import { ConnectionProfileService, ConnectionService, UserService } from '../Services/AppService';
+import { ConnectionProfileService, ConnectionService, UserService } from '../Services/App';
 
 export class ConnectionMiddleware {
     static check = async (req: Request, res: Response, next: NextFunction) => {

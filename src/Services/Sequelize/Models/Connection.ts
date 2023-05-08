@@ -11,7 +11,7 @@ import {
     BelongsToGetAssociationMixin,
     BelongsToSetAssociationMixin
 } from 'sequelize';
-import { ConnectionProfiles } from './ConnectionProfiles';
+import { ConnectionProfiles } from './ConnectionProfile';
 import { User } from './User';
 
 export class Connection extends Model<InferAttributes<Connection>, InferCreationAttributes<Connection>> {

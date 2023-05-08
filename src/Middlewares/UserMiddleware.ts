@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { AppProcessError, CheckRequest, HTTPResponseCode } from '@Core';
-import { UserService } from '../Services/AppService/UserService';
+import { UserService } from '../Services/App/UserService';
 import { AuthMiddlewareProps } from './AuthMiddleware';
 import { Security } from '@Core';
 export class UserMiddleware {

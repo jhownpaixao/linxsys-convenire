@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { AppProcessError, CheckRequest, HTTPResponseCode } from '@Core';
-import { ChatbotService, UserService } from '../Services/AppService';
+import { ChatbotService, UserService } from '../Services/App';
 
 export class ChatbotMiddleware {
     static check = async (req: Request, res: Response, next: NextFunction) => {

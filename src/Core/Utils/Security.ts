@@ -46,4 +46,22 @@ export class Security {
     }
 
     static uniqkey = crypto.randomUUID;
+
+    private static randomString(length: number, chars: string) {
+        const charsLength = chars.length;
+        const randomBytes = crypto.randomBytes(length);
+        const result = new Array(length);
+
+        let cursor = 0;
+        for (let i = 0; i < length; i++) {
+            cursor += randomBytes[i];
+            result[i] = chars[cursor % charsLength];
+        }
+
+        return result.join('');
+    }
+
+    static uniqtoken(length = 20) {
+        return this.randomString(length, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+    }
 }

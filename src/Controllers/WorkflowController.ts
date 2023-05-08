@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@Core';
-import { WorkflowService, UserService } from '../Services/AppService';
+import { WorkflowService, UserService } from '../Services/App';
 
 export class WorkflowController {
     static store = async (req: Request, res: Response) => {

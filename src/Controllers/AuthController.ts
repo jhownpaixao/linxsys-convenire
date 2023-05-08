@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import jwktopem from 'jwk-to-pem';
 import { AuthConfig } from '@Core/Config/Auth';
-import { AuthService } from '../Services/AppService';
+import { AuthService } from '../Services/App';
 
 export class AuthController {
     public static validadeLogin = async (req: Request, res: Response) => {
