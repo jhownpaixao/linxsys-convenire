@@ -8,3 +8,4 @@ export * from './AuthService';
 export * from './AttendantService';
 export * from './WorkflowService';
 export * from './AssessmentService';
+export * from './ChatMessageService';

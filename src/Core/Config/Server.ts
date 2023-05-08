@@ -3,7 +3,6 @@ enum RoutesName {
     attendant = '/attendants',
     auth = '/auth',
     chat = '/chats',
-    message = '/messages',
     client = '/customers',
     chatbot = '/chatbots',
     profile = '/profiles',
