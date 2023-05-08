@@ -6,9 +6,8 @@ export class Queue extends Model<InferAttributes<Queue>, InferCreationAttributes
     declare id?: CreationOptional<number>;
     declare user_id: ForeignKey<User['id']>;
     declare name: string;
-    declare color: string;
-    declare comments: CreationOptional<string>;
     declare params: CreationOptional<object>;
+    declare comments: CreationOptional<string>;
 
     static associate() {
         this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
@@ -18,7 +17,6 @@ export class Queue extends Model<InferAttributes<Queue>, InferCreationAttributes
 Queue.init(
     {
         name: DataTypes.STRING,
-        color: DataTypes.STRING,
         user_id: DataTypes.INTEGER,
         comments: DataTypes.STRING,
         params: DataTypes.JSON

@@ -26,6 +26,7 @@ import { Chatbot } from './Chatbot';
 import { Workflow } from './Workflow';
 import { Tag } from './Tag';
 import { Chat } from './Chat';
+import { Queue } from './Queue';
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id?: CreationOptional<number>;
@@ -147,6 +148,18 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare createChat: HasManyCreateAssociationMixin<Chat, 'user_id'>;
     declare chats?: NonAttribute<Chat[]>;
 
+    declare getQueues: HasManyGetAssociationsMixin<Workflow>; // Note the null assertions!
+    declare addQueue: HasManyAddAssociationMixin<Queue, number>;
+    declare addQueues: HasManyAddAssociationsMixin<Queue, number>;
+    declare setQueues: HasManySetAssociationsMixin<Queue, number>;
+    declare removeQueue: HasManyRemoveAssociationMixin<Queue, number>;
+    declare removeQueues: HasManyRemoveAssociationsMixin<Queue, number>;
+    declare hasQueue: HasManyHasAssociationMixin<Queue, number>;
+    declare hasQueues: HasManyHasAssociationsMixin<Queue, number>;
+    declare countQueues: HasManyCountAssociationsMixin;
+    declare createQueue: HasManyCreateAssociationMixin<Queue, 'user_id'>;
+    declare queues?: NonAttribute<Queue[]>;
+
     static associate() {
         this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
         this.hasMany(Client, { foreignKey: 'user_id', as: 'clients' });
@@ -156,6 +169,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
         this.hasMany(Chatbot, { foreignKey: 'user_id', as: 'chatbots' });
         this.hasMany(Workflow, { foreignKey: 'user_id', as: 'workflows' });
         this.hasMany(Tag, { foreignKey: 'user_id', as: 'tags' });
+        this.hasMany(Queue, { foreignKey: 'user_id', as: 'queues' });
         this.hasMany(Chat, { foreignKey: 'user_id', as: 'chats' });
     }
 }
