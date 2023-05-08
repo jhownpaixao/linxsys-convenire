@@ -8,6 +8,11 @@ import { Contact } from './Contact';
 import { Connection } from './Connection';
 import { ConnectionProfiles } from './ConnectionProfile';
 import { Tag } from './Tag';
+import { Chat } from './Chat';
+import { ChatMessage } from './ChatMessage';
+import { Queue } from './Queue';
+import { Ticket } from './Ticket';
+import { Assessment } from './Assessment';
 
 const Models = {
     Attendant,
@@ -19,7 +24,12 @@ const Models = {
     ConnectionProfiles,
     Chatbot,
     Workflow,
-    Tag
+    Tag,
+    Chat,
+    ChatMessage,
+    Queue,
+    Ticket,
+    Assessment
 };
 
 Object.values(Models).map((model) => model.associate());
@@ -35,5 +45,10 @@ export {
     Chatbot as ChatbotModel,
     Workflow as WorkflowModel,
     Tag as TagModel,
+    Chat as ChatModel,
+    ChatMessage as ChatMessageModel,
+    Queue as QueueModel,
+    Ticket as TicketModel,
+    Assessment as AssessmentModel,
     Models
 };
