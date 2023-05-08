@@ -7,3 +7,4 @@ export * from './ChatbotService';
 export * from './AuthService';
 export * from './AttendantService';
 export * from './WorkflowService';
+export * from './AssessmentService';

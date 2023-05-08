@@ -1,6 +1,9 @@
 enum RoutesName {
+    assessment = '/assessment',
     attendant = '/attendants',
     auth = '/auth',
+    chat = '/chats',
+    message = '/messages',
     client = '/customers',
     chatbot = '/chatbots',
     profile = '/profiles',
@@ -8,6 +11,7 @@ enum RoutesName {
     contact = '/contacs',
     workflow = '/workflows',
     user = '/users',
+    queue = '/queues',
     tags = '/tags',
     ticket = '/tickets'
 }
