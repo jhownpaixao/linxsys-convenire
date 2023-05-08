@@ -25,6 +25,12 @@ $ yarn install
 - Execute as migrations com: 
 ```
 $ yarn sequelize db:migrate
+$ yarn sequelize db:seed:all
+```
+
+- Inicie o projeto com: 
+```
+$ yarn dev
 ```
 
 Os recursos são limitados enquanto durar a fase BETA
