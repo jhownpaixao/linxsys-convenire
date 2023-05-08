@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { ConnectionController } from '../Controllers';
-import { ServerConfig, ThrowHTTPMethodNotAllowed } from '@Core';
-import { ConnectionMiddleware } from '../Middlewares';
+import { ConnectionController } from '../controllers';
+import { ServerConfig, ThrowHTTPMethodNotAllowed } from '@core';
+import { ConnectionMiddleware } from '../middlewares';
 import ConnectionProfileRoutes from './ConnectionProfileRoutes';
 
 const ConnectionRoutes = express.Router();

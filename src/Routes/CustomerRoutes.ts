@@ -1,7 +1,7 @@
 import express from 'express';
-import { CustomerController } from '../Controllers';
-import { ServerConfig, ThrowHTTPMethodNotAllowed } from '@Core';
-import { CustomerMiddleware } from '../Middlewares';
+import { CustomerController } from '../controllers';
+import { ServerConfig, ThrowHTTPMethodNotAllowed } from '@core';
+import { CustomerMiddleware } from '../middlewares';
 
 const CustomerRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });

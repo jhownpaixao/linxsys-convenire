@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { ThrowHTTPMethodNotAllowed } from '@Core';
-import { WorkflowController } from '../Controllers/WorkflowController';
+import { ThrowHTTPMethodNotAllowed } from '@core';
+import { WorkflowController } from '../controllers/WorkflowController';
 
 const WorkflowRoutes = express.Router();
 

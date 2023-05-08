@@ -1,10 +1,10 @@
 import { Response, Request } from 'express';
-import { CheckRequest, SendHTTPResponse, HTTPResponseCode, ServerConfig } from '@Core';
+import { CheckRequest, SendHTTPResponse, HTTPResponseCode, ServerConfig } from '@core';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import jwktopem from 'jwk-to-pem';
-import { AuthConfig } from '@Core/Config/Auth';
-import { AuthService } from '../Services/App';
+import { AuthConfig } from '@core/config/Auth';
+import { AuthService } from '../services/app';
 
 export class AuthController {
     public static validadeLogin = async (req: Request, res: Response) => {

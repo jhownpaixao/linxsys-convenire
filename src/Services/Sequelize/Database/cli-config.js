@@ -10,5 +10,5 @@ module.exports = {
         timestamps: true,
         underscored: true
     },
-    models: ['../../Models'] // or [Player, Team],
+    models: ['../../models'] // or [Player, Team],
 };

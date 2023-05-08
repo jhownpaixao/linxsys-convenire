@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-unused-vars */
 import { uuid } from 'uuidv4';
-import { logger } from '../../Services/Logger';
+import { logger } from '../../services/logger';
 import { SendLocalResponse } from './Responses';
 
 /**

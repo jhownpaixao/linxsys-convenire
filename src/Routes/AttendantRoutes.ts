@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { AttendantController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '@Core';
+import { AttendantController } from '../controllers';
+import { ThrowHTTPMethodNotAllowed } from '@core';
 
 const AttendantRoute = express.Router();
 

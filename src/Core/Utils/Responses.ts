@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { logger } from '../../Services/Logger';
-import { HTTPResponse, ResponseType } from '../Types';
-import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../Config';
+import { logger } from '../../services/logger';
+import { HTTPResponse, ResponseType } from '../types';
+import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../config';
 import * as core from 'express-serve-static-core';
 
 /**

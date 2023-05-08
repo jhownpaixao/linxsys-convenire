@@ -1,10 +1,9 @@
 import * as crypto from 'crypto';
-import { MethodsArr, RouteAccessProfiles } from '../Config/Access';
-import { UserAuthMiddlewareProps } from '../../Middlewares';
+import { MethodsArr, RouteAccessProfiles } from '../config/Access';
+import { UserAuthMiddlewareProps } from '../../middlewares';
 import { AppProcessError } from './Responses';
-import { HTTPResponseCode, SecurityConfig } from '../Config';
+import { HTTPResponseCode, SecurityConfig } from '../config';
 import { Request } from 'express';
-import { logger } from 'src/Services/Logger';
 
 export class Security {
     static encrypt(data: string | object): [string, Buffer] {

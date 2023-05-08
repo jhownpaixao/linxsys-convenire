@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { AuthController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '@Core';
-import { AuthMiddleware } from '../Middlewares';
+import { AuthController } from '../controllers';
+import { ThrowHTTPMethodNotAllowed } from '@core';
+import { AuthMiddleware } from '../middlewares';
 const AuthRoutes = express.Router();
 
 /* Main AuthRoute */

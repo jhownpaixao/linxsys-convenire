@@ -15,7 +15,7 @@ module.exports = {
             'module-resolver',
             {
                 alias: {
-                    '@Core': './src/Core'
+                    '@core': './src/core'
                 }
             }
         ]

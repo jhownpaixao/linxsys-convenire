@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { UserController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '@Core';
+import { UserController } from '../controllers';
+import { ThrowHTTPMethodNotAllowed } from '@core';
 
 const UserRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });

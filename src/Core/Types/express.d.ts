@@ -1,4 +1,4 @@
-import { AuthMiddlewareProps, UserAuthMiddlewareProps } from '../../Middlewares/AuthMiddleware';
+import { AuthMiddlewareProps, UserAuthMiddlewareProps } from '../../middlewares/AuthMiddleware';
 declare global {
     namespace Express {
         export interface Request {

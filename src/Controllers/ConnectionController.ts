@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@Core';
-import { UserService, ConnectionService } from '../Services/App';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
+import { UserService, ConnectionService } from '../services/app';
 export class ConnectionController {
     static store = async (req: Request, res: Response) => {
         const user_id = req.user.id;

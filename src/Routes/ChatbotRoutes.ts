@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { ThrowHTTPMethodNotAllowed } from '@Core';
-import { ChatbotController } from '../Controllers';
-import { ChatbotMiddleware } from '../Middlewares';
+import { ThrowHTTPMethodNotAllowed } from '@core';
+import { ChatbotController } from '../controllers';
+import { ChatbotMiddleware } from '../middlewares';
 
 const ChatbotRoutes = express.Router();
 const subRoutes = express.Router({ mergeParams: true });

@@ -1,6 +1,6 @@
-import { ServerConfig } from '@Core';
+import { ServerConfig } from '@core';
 import { Router } from 'express';
-import { UserMiddleware, AuthMiddleware } from '../Middlewares';
+import { UserMiddleware, AuthMiddleware } from '../middlewares';
 import UserRoutes from './UserRoutes';
 import ConnectionRoutes from './ConnectionRoutes';
 import ChatbotRoutes from './ChatbotRoutes';

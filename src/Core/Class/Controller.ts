@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { InferCreationAttributes, InferAttributes, Model, CreationOptional } from 'sequelize';
-import { ModelType } from '../Types';
+import { ModelType } from '../types';
 import { MakeNullishOptional } from 'sequelize/types/utils';
 
 /**

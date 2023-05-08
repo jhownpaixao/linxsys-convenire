@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
-import { ContactController } from '../Controllers';
-import { ThrowHTTPMethodNotAllowed } from '@Core';
-import { CustomerMiddleware } from '../Middlewares/CustomerMiddleware';
+import { ContactController } from '../controllers';
+import { ThrowHTTPMethodNotAllowed } from '@core';
+import { CustomerMiddleware } from '../middlewares/CustomerMiddleware';
 
 const ContactRoutes = express.Router();
 

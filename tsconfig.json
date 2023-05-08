@@ -17,11 +17,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@Core/*": [
-        "./src/Core/*"
+      "@core/*": [
+        "./src/core/*"
       ],
-      "@Core": [
-        "./src/Core/index.ts"
+      "@core": [
+        "./src/core/index.ts"
       ]
     }
   }

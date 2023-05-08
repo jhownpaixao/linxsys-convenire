@@ -12,7 +12,9 @@
         "dev": "npm-run-all -p dev:*",
         "dev:server": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/server.ts",
         "dev:jwks": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/Servers/jwks.ts",
-        "start": "node build/server.js && node build/Servers/jwks.js",
+        "start:server": "node build/server.js",
+        "start:jwks": "node build/servers/jwks.js",
+        "start": "npm-run-all -p start:*",
         "lint": "eslint src/**/*.ts"
     },
     "dependencies": {

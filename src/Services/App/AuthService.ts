@@ -1,11 +1,11 @@
 import * as crypto from 'crypto';
-import { HTTPResponseCode, TimestampDifference, AppProcessError, Security } from '@Core/index';
-import { UserModel } from '../Sequelize/Models';
+import { HTTPResponseCode, TimestampDifference, AppProcessError, Security } from '@core/index';
+import { UserModel } from '../sequelize/models';
 import bcrypt from 'bcrypt';
 import path from 'path';
 import axios from 'axios';
 import { InferCreationAttributes } from 'sequelize';
-import { AuthConfig, SecurityConfig } from '@Core/Config';
+import { AuthConfig, SecurityConfig } from '@core/config';
 import { UserService } from './UserService';
 
 declare interface SecurityPendingAuthOptions {

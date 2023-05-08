@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@Core';
-import { AssessmentService, UserService } from '../Services/App';
+import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
+import { AssessmentService, UserService } from '../services/app';
 
 export class AssessmentController {
     static store = async (req: Request, res: Response) => {

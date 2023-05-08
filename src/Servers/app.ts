@@ -2,7 +2,7 @@ import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 import PinoHttp from 'pino-http';
-import routes from '../Routes';
+import routes from '../routes';
 import 'dotenv/config';
 import {
     CORSPolicyOptions,
@@ -11,8 +11,8 @@ import {
     handleAuthorizationFailure,
     handleProcessFailure,
     handleRouteNotFound
-} from '@Core';
-import { logger } from '../Services/Logger';
+} from '@core';
+import { logger } from '../services/logger';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });

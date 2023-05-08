@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { AppProcessError, CheckRequest, HTTPResponseCode } from '@Core';
-import { UserService } from '../Services/App/UserService';
+import { AppProcessError, CheckRequest, HTTPResponseCode } from '@core';
+import { UserService } from '../services/app/UserService';
 import { AuthMiddlewareProps } from './AuthMiddleware';
-import { Security } from '@Core';
+import { Security } from '@core';
 export class UserMiddleware {
     static recover = async (req: Request, res: Response, next: NextFunction) => {
         const user = await this.extractUserFromRequest(req.auth);

@@ -1,7 +1,7 @@
 import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
-import { AppProcessError, Security, HTTPResponseCode } from '@Core';
-import { logger } from '../Logger';
-import { ConnectionModel, ConnectionProfilesModel } from '../Sequelize/Models';
+import { AppProcessError, Security, HTTPResponseCode } from '@core';
+import { logger } from '../logger';
+import { ConnectionModel, ConnectionProfilesModel } from '../sequelize/models';
 import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
 import { ConnectionProfileService } from './ConnectionProfileService';
 import { UserService } from './UserService';

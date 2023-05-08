@@ -1,5 +1,5 @@
 import { InferCreationAttributes, InferAttributes, Model as SequelizeModel, WhereOptions, Attributes } from 'sequelize';
-import { ModelType, ObjectWithDynamicKey } from '../Types';
+import { ModelType, ObjectWithDynamicKey } from '../types';
 import { MakeNullishOptional } from 'sequelize/types/utils';
 
 /* Integrated with Sequelize */

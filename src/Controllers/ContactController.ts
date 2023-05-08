@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '@Core';
-import { ContactService, CustomerService } from '../Services/App';
+import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '@core';
+import { ContactService, CustomerService } from '../services/app';
 
 export class ContactController {
     static store = async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { multistream, Streams } from 'pino-multi-stream';
 import pino from 'pino';
-import { LoggerConfig } from '@Core/Config/Logger';
+import { LoggerConfig } from '@core/config/Logger';
 
 fs.mkdirSync(LoggerConfig.path, { recursive: true });
 /**
