@@ -13,21 +13,21 @@ module.exports = {
             user_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                references: { model: 'users', key: 'id' },
+                references: { model: 'Users', key: 'id' },
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE'
             },
             client_id: {
                 type: Sequelize.INTEGER,
                 allowNull: true,
-                references: { model: 'clients', key: 'id' },
+                references: { model: 'Clients', key: 'id' },
                 onUpdate: 'CASCADE',
                 onDelete: 'SET NULL'
             },
             contact_id: {
                 type: Sequelize.INTEGER,
                 allowNull: true,
-                references: { model: 'contacts', key: 'id' },
+                references: { model: 'Contacts', key: 'id' },
                 onUpdate: 'CASCADE',
                 onDelete: 'SET NULL'
             },
