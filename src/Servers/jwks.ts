@@ -12,6 +12,7 @@ const host = process.env.BACKEND_URL || 'http://localhost';
 const AuthIssuer = `${host}:${port}/LinxSys-EarlyAuth?&version=1.0`;
 const KeyPath = path.resolve(__dirname, '../Keys');
 const KeyStoreFile = path.join(KeyPath, 'keys.json');
+!fs.existsSync(KeyStoreFile) && fs.mkdirSync(KeyPath, { recursive: true });
 
 const app = express();
 app.use(express.json());
