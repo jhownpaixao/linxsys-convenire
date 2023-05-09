@@ -13,7 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "noImplicitAny": true,
-    "strictPropertyInitialization": false,
+    /*     "strictPropertyInitialization": false, */
     "skipLibCheck": true,
     "paths": {
       "@core/*": [

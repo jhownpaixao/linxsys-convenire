@@ -4,6 +4,7 @@ import { UserAuthMiddlewareProps } from '../../middlewares';
 import { AppProcessError } from './Responses';
 import { HTTPResponseCode, SecurityConfig } from '../config';
 import { Request } from 'express';
+import { logger } from '../../services/logger';
 
 export class Security {
     static encrypt(data: string | object): [string, Buffer] {

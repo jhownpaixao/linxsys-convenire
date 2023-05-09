@@ -20,5 +20,6 @@ routes.use(ServerConfig.ROUTES.workflow, AuthMiddleware.Token, UserMiddleware.re
 routes.use(ServerConfig.ROUTES.attendant, AuthMiddleware.Token, UserMiddleware.recover, AttendantRoute);
 routes.use(ServerConfig.ROUTES.client, AuthMiddleware.Token, UserMiddleware.recover, CustomerRoutes);
 routes.use(ServerConfig.ROUTES.assessment, AuthMiddleware.Token, UserMiddleware.recover, AssessmentRoutes);
+routes.use(ServerConfig.ROUTES.chat, AuthMiddleware.Token, UserMiddleware.recover, ChatbotRoutes);
 
 export default routes;

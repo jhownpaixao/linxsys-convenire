@@ -9,3 +9,4 @@ export * from './AttendantService';
 export * from './WorkflowService';
 export * from './AssessmentService';
 export * from './ChatMessageService';
+export * from './ChatService';

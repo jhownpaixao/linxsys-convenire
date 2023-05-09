@@ -7,11 +7,10 @@ import {
     ChatbotModel,
     ConnectionModel,
     ConnectionProfilesModel,
-    ContactModel,
     CustomerModel,
     UserModel,
     WorkflowModel
-} from '../sequelize/models';
+} from '../sequelize/Models';
 import bcrypt from 'bcrypt';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 

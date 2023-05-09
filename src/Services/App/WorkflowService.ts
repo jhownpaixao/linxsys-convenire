@@ -1,7 +1,7 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
 import { logger } from '../logger';
-import { WorkflowModel } from '../sequelize/models';
+import { WorkflowModel } from '../sequelize/Models';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 
 export class WorkflowService {

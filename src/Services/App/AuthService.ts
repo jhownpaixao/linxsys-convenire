@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import { HTTPResponseCode, TimestampDifference, AppProcessError, Security } from '@core/index';
-import { UserModel } from '../sequelize/models';
+import { UserModel } from '../sequelize/Models';
 import bcrypt from 'bcrypt';
 import path from 'path';
 import axios from 'axios';

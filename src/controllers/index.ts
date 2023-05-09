@@ -8,3 +8,4 @@ export * from './AuthController';
 export * from './ChatbotController';
 export * from './ConnectionProfileController';
 export * from './AssessmentController';
+export * from './ChatController';

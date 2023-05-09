@@ -1,7 +1,7 @@
 import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
 import { logger } from '../logger';
-import { ChatMessageModel, ChatModel } from '../sequelize/models';
+import { ChatMessageModel, ChatModel } from '../sequelize/Models';
 import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
 
 export class ChatService {

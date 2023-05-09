@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import express from 'express';
 import { ThrowHTTPMethodNotAllowed } from '@core';
-import { ChatController } from '../controllers/ChatController';
+import { ChatController } from '../controllers';
 
 const ChatRoutes = express.Router();
 

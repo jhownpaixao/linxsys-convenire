@@ -1,24 +1,24 @@
 import { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { WorkflowService, UserService } from '../services/app';
+import { ChatService, UserService } from '../services/app';
 
 export class ChatController {
     static store = async (req: Request, res: Response) => {
         const user_id = req.user.id;
-        const { name } = req.body;
+        const { owner_id, type } = req.body;
 
-        await CheckRequest({ name });
+        await CheckRequest({ owner_id, type });
 
-        const chat = await WorkflowService.create({
+        const chat = await ChatService.create({
             ...req.body,
             user_id: user_id
         });
         SendHTTPResponse(
             {
-                message: 'Workflow criado com sucesso',
+                message: 'Chat criado com sucesso',
                 type: 'success',
                 status: true,
-                location: `${ServerConfig.ROUTES.workflow}/${chat.id}`,
+                location: `${ServerConfig.ROUTES.chat}/${chat.id}`,
                 code: HTTPResponseCode.created
             },
             res
