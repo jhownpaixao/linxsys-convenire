@@ -1,6 +1,6 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, Security, HTTPResponseCode } from '@core';
-import { logger } from '../Logger';
+import { logger } from '../logger';
 import {
     AssessmentModel,
     AttendantModel,

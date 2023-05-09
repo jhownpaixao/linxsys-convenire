@@ -1,6 +1,6 @@
 import { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../Logger';
+import { logger } from '../logger';
 import { ChatbotModel, WorkflowModel } from '../sequelize/models';
 import { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
 import { WorkflowService } from './WorkflowService';

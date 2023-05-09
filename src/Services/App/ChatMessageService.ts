@@ -1,6 +1,6 @@
 import { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../Logger';
+import { logger } from '../logger';
 import { ChatMessageModel } from '../sequelize/models';
 import { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 

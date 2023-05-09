@@ -98,5 +98,10 @@
         "ts-node-dev": "^2.0.0",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.0.4"
+    },
+    "pkg": {
+        "assets": [
+            "logs/**"
+        ]
     }
 }
