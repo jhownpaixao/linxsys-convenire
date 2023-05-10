@@ -11,17 +11,17 @@ export declare type ResponseType = 'error' | 'success' | 'warning';
  *
  */
 export declare type HTTPResponse = {
-    status: boolean;
-    message: string;
-    type: ResponseType;
-    code?: number;
-    location?: string;
-    timestamp?: number;
-    data?: unknown;
+  status: boolean;
+  message: string;
+  type: ResponseType;
+  code?: number;
+  location?: string;
+  timestamp?: number;
+  data?: unknown;
 };
 
 export declare interface HTTPResponseError {
-    message: string;
-    code: number;
-    data?: object;
+  message: string;
+  code: number;
+  data?: object;
 }

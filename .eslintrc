@@ -5,56 +5,42 @@
     "es2021": true,
     "node": true
   },
+  "parser": "@typescript-eslint/parser",
   "extends": [
-    // By extending from a plugin config, we can get recommended rules without having to add them manually.
     "eslint:recommended",
-    /*         "plugin:import/recommended", */
     "plugin:@typescript-eslint/recommended",
-    // This disables the formatting rules in ESLint that Prettier is going to be responsible for handling.
-    // Make sure it"s always the last config, so it gets the chance to override other configs.
-    "eslint-config-prettier"
+    "eslint-config-prettier",
+    "prettier"
   ],
   "settings": {
     "react": {
-      // Tells eslint-plugin-react to automatically detect the version of React to use.
       "version": "detect"
     },
-    // Tells eslint how to resolve imports
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".ts"
-        ]
+        "paths": ["src"],
+        "extensions": [".js", ".ts"]
       }
     }
   },
-  "plugins": [
-    "prettier"
-  ],
+  "plugins": ["prettier", "@typescript-eslint"],
   "rules": {
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "no-param-reassign": 0,
     "import/order": 0,
     "no-console": 0,
     "prefer-destructuring": 0,
     "no-shadow": 0,
-    /* "no-unused-vars": [
-      1,
-      {
-        "ignoreRestSiblings": false
-      }
-    ], */
     "prettier/prettier": [
       2,
       {
         "bracketSpacing": true,
-        "printWidth": 140,
+        "printWidth": 100,
         "singleQuote": true,
         "trailingComma": "none",
-        "tabWidth": 4,
+        "tabWidth": 2,
         "useTabs": false,
         "endOfLine": "auto"
       }

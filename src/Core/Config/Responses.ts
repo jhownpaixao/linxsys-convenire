@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 /**
  * Função de configuração do Express
@@ -9,8 +9,8 @@ import { Request, Response, NextFunction } from 'express';
  * @param {NextFunction} next
  */
 export const ExpressResponseOptions = (req: Request, res: Response, next: NextFunction) => {
-    res.contentType('application/json');
-    next();
+  res.contentType('application/json');
+  next();
 };
 
 /**
@@ -20,27 +20,27 @@ export const ExpressResponseOptions = (req: Request, res: Response, next: NextFu
  *
  * */
 export enum HTTPResponseCode {
-    /* Success */
-    continue = 100,
-    accepted = 202,
-    created = 201,
-    successfullyProcessedInformation = 200,
-    informationNotFound = 404, //!203,
-    partiallyCompletedProcess = 206,
-    redirectingForResponse = 303,
+  /* Success */
+  continue = 100,
+  accepted = 202,
+  created = 201,
+  successfullyProcessedInformation = 200,
+  informationNotFound = 404, //!203,
+  partiallyCompletedProcess = 206,
+  redirectingForResponse = 303,
 
-    /* Warning */
-    incompleteRequest = 400,
-    routeNotFound = 404,
-    informationAlreadyExists = 409,
-    preconditionRequired = 428,
+  /* Warning */
+  incompleteRequest = 400,
+  routeNotFound = 404,
+  informationAlreadyExists = 409,
+  preconditionRequired = 428,
 
-    /* Error */
-    iternalErro = 500,
-    methodNotAllowed = 405,
-    informationNotTrue = 406,
-    preProcessNotInitialized = 424,
-    requestTimeOut = 408,
-    informationUnauthorized = 401,
-    informationBlocked = 403
+  /* Error */
+  iternalErro = 500,
+  methodNotAllowed = 405,
+  informationNotTrue = 406,
+  preProcessNotInitialized = 424,
+  requestTimeOut = 408,
+  informationUnauthorized = 401,
+  informationBlocked = 403
 }

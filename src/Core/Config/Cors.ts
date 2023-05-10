@@ -1,4 +1,4 @@
-import { CorsOptions } from 'cors';
+import type { CorsOptions } from 'cors';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,7 +15,7 @@ const Origins = String(process.env.FRONTENDS_URL).split(',') || ['http://localho
  *
  */
 export const CORSPolicyOptions: CorsOptions = {
-    origin: Origins,
-    allowedHeaders: ['X-Requested-With', 'content-type', 'Authorization'],
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']
+  origin: Origins,
+  allowedHeaders: ['X-Requested-With', 'content-type', 'Authorization'],
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']
 };

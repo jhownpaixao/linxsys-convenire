@@ -6,9 +6,9 @@
  * @enum {number}
  */
 export enum UserType {
-    Administrator = 1,
-    Default = 2,
-    Operator = 3,
-    Company = 4,
-    Attendant = 5
+  Administrator = 1,
+  Default = 2,
+  Operator = 3,
+  Company = 4,
+  Attendant = 5
 }

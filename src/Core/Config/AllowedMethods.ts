@@ -9,5 +9,5 @@
  *
  */
 export const AllowedMethods = {
-    '/user': 'POST,GET'
+  '/user': 'POST,GET'
 };

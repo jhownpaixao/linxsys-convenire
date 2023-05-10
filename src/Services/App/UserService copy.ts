@@ -1,11 +1,11 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
+import type { ModelType } from '@core';
 import { AppProcessError, Security, HTTPResponseCode } from '@core';
 import { logger } from '../logger';
 import type { WorkflowModel } from '../sequelize/Models';
 import {
   AssessmentModel,
   AttendantModel,
-  ChatModel,
   ChatbotModel,
   ConnectionModel,
   ConnectionProfilesModel,
@@ -14,18 +14,9 @@ import {
 } from '../sequelize/Models';
 import bcrypt from 'bcrypt';
 import type { InferAttributes, InferCreationAttributes, Model, WhereOptions } from 'sequelize';
-import { Entity } from '@core/class/Entity';
+import { Model as TypeModel } from 'sequelize-typescript';
 
-type WhereParams<M extends Model> = WhereOptions<InferAttributes<M, { omit: never }>>;
-
-export class UserService extends Entity {
-  // !Static Props
-  model = UserModel;
-
-  /**
-   * !Static Methods
-   * ?Basic Methods
-   */
+export class UserService {
   static async create(
     data: Omit<MakeNullishOptional<InferCreationAttributes<UserModel>>, 'uniqkey'>
   ) {
@@ -127,48 +118,125 @@ export class UserService extends Entity {
       throw new Error('Erro ao buscar a lista de usuários');
     }
   }
+  /* SubItens */
+  static async listAttendants(id: string | number) {
+    const list = await UserModel.findByPk(id, {
+      include: [UserModel.associations.attendants]
+    });
 
-  // ?Advanced Methods
+    return list?.attendants || [];
+  }
 
-  /**
-   * TODO: Attendants
-   */
-  static listAttendants = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'attendants');
+  static async getAttendant(
+    id: string | number,
+    params: WhereOptions<InferAttributes<AttendantModel, { omit: never }>>
+  ) {
+    const user = await UserModel.findByPk(id);
+    if (!user)
+      throw new AppProcessError(
+        'O usuário não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    const attendant = await user.getAttendants({
+      where: params
+    });
+    return attendant;
+  }
 
-  static getAttendant = (user_id: string | number, params: WhereParams<ChatModel>) =>
-    this.handleGet(UserModel, user_id, 'Attendants', params);
+  static async hasAttendant(user_id: string | number, attendant_id: string | number) {
+    const user = await this.get(user_id);
+    const attendant = await AttendantModel.findByPk(attendant_id);
+    if (!attendant)
+      throw new AppProcessError(
+        'O atendente não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    return await user.hasAttendant(attendant);
+  }
 
-  static hasAttendant = (user_id: string | number, attendant_id: string | number) =>
-    this.handleHas(UserModel, user_id, AttendantModel, attendant_id, 'Attendant');
+  /* static async listCustomers(id: string | number) {
+        const list = await UserModel.findByPk(id, {
+            include: [
+                {
+                    association: UserModel.associations.clients,
+                    include: [CustomerModel.associations.contacts]
+                }
+            ]
+        });
 
-  /**
-   * TODO: Customers
-   */
+        return list?.clients || [];
+    } */
+
   static listCustomers = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'clients', [CustomerModel, 'contacts']);
+    ModelHandleList(UserModel, user_id, 'clients', [CustomerModel, 'contacts']);
 
-  static getCustomer = (user_id: string | number, params: WhereParams<CustomerModel>) =>
-    this.handleGet(UserModel, user_id, 'Clients', params);
+  static async getCustomer(
+    id: string | number,
+    params: WhereOptions<InferAttributes<CustomerModel, { omit: never }>>
+  ) {
+    const user = await UserModel.findByPk(id);
+    if (!user)
+      throw new AppProcessError(
+        'O usuário não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    const client = await user.getClients({
+      where: params
+    });
+    return client;
+  }
 
-  static hasCustomer = (user_id: string | number, client_id: string | number) =>
-    this.handleHas(UserModel, user_id, CustomerModel, client_id, 'Client');
+  static async hasCustomer(user_id: string | number, client_id: string | number) {
+    const user = await this.get(user_id);
+    const client = await CustomerModel.findByPk(client_id);
+    if (!client)
+      throw new AppProcessError(
+        'O cliente não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    return await user.hasClient(client);
+  }
 
-  /**
-   * TODO: Connections
-   */
-  static listConnections = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'connections', [ConnectionProfilesModel, 'profiles']);
+  static async listConnections(id: string | number) {
+    const list = await UserModel.findByPk(id, {
+      include: [
+        {
+          association: UserModel.associations.connections,
+          include: [ConnectionModel.associations.profile]
+        }
+      ]
+    });
 
-  static getConnection = (user_id: string | number, params: WhereParams<ConnectionModel>) =>
-    this.handleGet(UserModel, user_id, 'Connection', params);
+    return list?.connections || [];
+  }
 
-  static hasConnection = (user_id: string | number, conn_id: string | number) =>
-    this.handleHas(UserModel, user_id, ConnectionModel, conn_id, 'Connection');
+  static async getConnection(
+    id: string | number,
+    params: WhereOptions<InferAttributes<ConnectionModel, { omit: never }>>
+  ) {
+    const user = await UserModel.findByPk(id);
+    if (!user)
+      throw new AppProcessError(
+        'O usuário não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    const connections = await user.getConnections({
+      where: params
+    });
+    return connections;
+  }
 
-  /**
-   * TODO: Robots
-   */
+  static async hasConnection(user_id: string | number, conn_id: string | number) {
+    const user = await this.get(user_id);
+    const connection = await ConnectionModel.findByPk(conn_id);
+    if (!connection)
+      throw new AppProcessError(
+        'O cliente não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    return await user.hasConnection(connection);
+  }
+
   static async listChatbots(id: string | number) {
     const list = await UserModel.findByPk(id, {
       include: [
@@ -209,9 +277,6 @@ export class UserService extends Entity {
     return await user.hasChatbot(chatbot);
   }
 
-  /**
-   * TODO: Connections Profiles
-   */
   static async listProfiles(id: string | number) {
     const list = await UserModel.findByPk(id, {
       include: [
@@ -252,9 +317,6 @@ export class UserService extends Entity {
     return await user.hasProfile(profiles);
   }
 
-  /**
-   * TODO: Robot Workflows
-   */
   static async listWorkflows(id: string | number) {
     const list = await UserModel.findByPk(id, {
       include: [
@@ -295,9 +357,6 @@ export class UserService extends Entity {
     return await user.hasProfile(workflow);
   }
 
-  /**
-   * TODO: Assessments
-   */
   static async listAssessments(id: string | number) {
     const list = await UserModel.findByPk(id, {
       include: [
@@ -338,14 +397,88 @@ export class UserService extends Entity {
     return await user.hasAssessment(assessment);
   }
 
-  /**
-   * TODO: Chat
-   */
-  static hasChat = (user_id: string | number, chat_id: string | number) =>
-    this.handleHas(UserModel, user_id, ChatModel, chat_id, 'Chat');
+  static async listChats(id: string | number) {
+    const list = await UserModel.findByPk(id, {
+      include: [
+        {
+          association: UserModel.associations.assessments
+          /* include: [ConnectionModel.associations.profile] */
+        }
+      ]
+    });
 
-  static getChat = (user_id: string | number, params: WhereParams<ChatModel>) =>
-    this.handleGet(UserModel, user_id, 'Chat', params);
+    return list?.assessments || [];
+  }
 
-  static listChats = (user_id: string | number) => this.handleList(UserModel, user_id, 'chats');
+  static async getChat(
+    id: string | number,
+    params: WhereOptions<InferAttributes<AssessmentModel, { omit: never }>>
+  ) {
+    const user = await UserModel.findByPk(id);
+    if (!user)
+      throw new AppProcessError(
+        'O usuário não foi localizado',
+        HTTPResponseCode.informationNotFound
+      );
+    const profiles = await user.getAssessments({
+      where: params
+    });
+    return profiles;
+  }
+
+  /* static async hasChat(user_id: string | number, assessment_id: string | number) {
+        const user = await this.get(user_id);
+        const assessment = await AssessmentModel.findByPk(assessment_id);
+        if (!assessment) throw new AppProcessError('A avalização não foi localizado', HTTPResponseCode.informationNotFound);
+        return await user.hasAssessment(assessment);
+    } */
+
+  static listChat = (user_id: string | number) => ModelHandleList(UserModel, user_id, 'chats');
+  static hasChat = (user_id: string | number, assessment_id: string | number) =>
+    ModelHandleHas<AssessmentModel>(AssessmentModel, 'Assessment', user_id, assessment_id);
+}
+
+interface ModelHandleHas<M> {
+  (user_id: string | number, assessment_id: string | number): Promise<M>;
+}
+interface ModelHandleGet<M> {
+  (user_id: string | number, assessment_id: string | number): Promise<M>;
+}
+interface ModelHandleList<M> {
+  (user_id: string | number, assessment_id: string | number): Promise<M>;
+}
+
+async function ModelHandleList<M extends Model<InferAttributes<M>, InferCreationAttributes<M>>>(
+  model: ModelType<M> | any,
+  id: string | number,
+  association: string,
+  sub_association?: [ModelType<M> | any, string]
+) {
+  const associations = {
+    association: model.associations[association]
+  };
+  if (sub_association)
+    Object.assign(associations, { include: [sub_association[0].associations[sub_association[1]]] });
+
+  const list = await model.findByPk(id, {
+    include: [associations]
+  });
+
+  return list[association] || [];
+}
+
+async function ModelHandleHas<M extends Model<InferAttributes<M>, InferCreationAttributes<M>>>(
+  associatedModel: ModelType<M> | any,
+  association: string,
+  user_id: string | number,
+  assoc_id: string | number
+) {
+  const user = await this.get(user_id);
+  const assoc = await associatedModel.findByPk(assoc_id);
+  if (!assoc)
+    throw new AppProcessError(
+      'O registro não foi localizado',
+      HTTPResponseCode.informationNotFound
+    );
+  return await user[`has${association}`](assoc);
 }

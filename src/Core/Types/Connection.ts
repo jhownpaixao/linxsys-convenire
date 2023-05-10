@@ -7,8 +7,8 @@
  * @enum {number}
  */
 export declare enum ConnectionTypes {
-    whatsapp = 1,
-    telegram = 2,
-    facebook = 3,
-    instagram = 4
+  whatsapp = 1,
+  telegram = 2,
+  facebook = 3,
+  instagram = 4
 }

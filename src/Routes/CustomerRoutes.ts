@@ -15,6 +15,11 @@ CustomerRoutes
     .all(ThrowHTTPMethodNotAllowed);
 
 subRoutes
+    .route('/')
+    .get(CustomerController.get)
+    .all(ThrowHTTPMethodNotAllowed);
+
+subRoutes
     .route(ServerConfig.ROUTES.contact)
     .post(CustomerController.addContact)
     .get(CustomerController.contacts)

@@ -5,12 +5,12 @@ import PinoHttp from 'pino-http';
 import routes from '../routes';
 import 'dotenv/config';
 import {
-    CORSPolicyOptions,
-    ExpressResponseOptions,
-    SetAllowedMethods,
-    handleAuthorizationFailure,
-    handleProcessFailure,
-    handleRouteNotFound
+  CORSPolicyOptions,
+  ExpressResponseOptions,
+  SetAllowedMethods,
+  handleAuthorizationFailure,
+  handleProcessFailure,
+  handleRouteNotFound
 } from '@core';
 import { logger } from '../services/logger';
 
