@@ -1,7 +1,7 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, Security, HTTPResponseCode } from '@core';
 import { logger } from '../logger';
-import type { WorkflowModel } from '../sequelize/Models';
+import { WorkflowModel } from '../sequelize/Models';
 import {
   AssessmentModel,
   AttendantModel,
@@ -20,7 +20,7 @@ type WhereParams<M extends Model> = WhereOptions<InferAttributes<M, { omit: neve
 
 export class UserService extends Entity {
   // !Static Props
-  model = UserModel;
+  protected model = UserModel;
 
   /**
    * !Static Methods
@@ -106,14 +106,14 @@ export class UserService extends Entity {
     return user;
   }
 
-  static async getWith(params: WhereOptions<InferAttributes<UserModel, { omit: never }>>) {
+  static async getWith(params: WhereParams<UserModel>) {
     const register = await UserModel.findOne({
       where: params
     });
     return register;
   }
 
-  static async getWithFullData(params: WhereOptions<InferAttributes<UserModel, { omit: never }>>) {
+  static async getWithFullData(params: WhereParams<UserModel>) {
     const register = await UserModel.scope('fullData').findOne({ where: params });
     return register;
   }
@@ -158,10 +158,10 @@ export class UserService extends Entity {
    * TODO: Connections
    */
   static listConnections = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'connections', [ConnectionProfilesModel, 'profiles']);
+    this.handleList(UserModel, user_id, 'connections', [ConnectionModel, 'profile']);
 
   static getConnection = (user_id: string | number, params: WhereParams<ConnectionModel>) =>
-    this.handleGet(UserModel, user_id, 'Connection', params);
+    this.handleGet(UserModel, user_id, 'Connections', params);
 
   static hasConnection = (user_id: string | number, conn_id: string | number) =>
     this.handleHas(UserModel, user_id, ConnectionModel, conn_id, 'Connection');
@@ -169,183 +169,59 @@ export class UserService extends Entity {
   /**
    * TODO: Robots
    */
-  static async listChatbots(id: string | number) {
-    const list = await UserModel.findByPk(id, {
-      include: [
-        {
-          association: UserModel.associations.chatbots
-          /* include: [ConnectionModel.associations.profile] */
-        }
-      ]
-    });
+  static listChatbots = (user_id: string | number) =>
+    this.handleList(UserModel, user_id, 'chatbots', [ChatbotModel, 'workflow']);
 
-    return list?.chatbots || [];
-  }
+  static getChatbot = (user_id: string | number, params: WhereParams<ChatbotModel>) =>
+    this.handleGet(UserModel, user_id, 'Chatbots', params);
 
-  static async getChatbot(
-    id: string | number,
-    params: WhereOptions<InferAttributes<ChatbotModel, { omit: never }>>
-  ) {
-    const user = await UserModel.findByPk(id);
-    if (!user)
-      throw new AppProcessError(
-        'O usuário não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    const chatbot = await user.getChatbots({
-      where: params
-    });
-    return chatbot;
-  }
-
-  static async hasChatbot(user_id: string | number, conn_id: string | number) {
-    const user = await this.get(user_id);
-    const chatbot = await ChatbotModel.findByPk(conn_id);
-    if (!chatbot)
-      throw new AppProcessError(
-        'O chatbot não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    return await user.hasChatbot(chatbot);
-  }
+  static hasChatbot = (user_id: string | number, chatbot_id: string | number) =>
+    this.handleHas(UserModel, user_id, ChatbotModel, chatbot_id, 'Chatbot');
 
   /**
    * TODO: Connections Profiles
    */
-  static async listProfiles(id: string | number) {
-    const list = await UserModel.findByPk(id, {
-      include: [
-        {
-          association: UserModel.associations.profiles
-          /* include: [ConnectionModel.associations.profile] */
-        }
-      ]
-    });
+  static listProfiles = (user_id: string | number) =>
+    this.handleList(UserModel, user_id, 'profiles', [ConnectionProfilesModel, 'chatbot']);
 
-    return list?.profiles || [];
-  }
+  static getProfile = (user_id: string | number, params: WhereParams<ConnectionProfilesModel>) =>
+    this.handleGet(UserModel, user_id, 'Profiles', params);
 
-  static async getProfile(
-    id: string | number,
-    params: WhereOptions<InferAttributes<ConnectionProfilesModel, { omit: never }>>
-  ) {
-    const user = await UserModel.findByPk(id);
-    if (!user)
-      throw new AppProcessError(
-        'O usuário não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    const profiles = await user.getProfiles({
-      where: params
-    });
-    return profiles;
-  }
-
-  static async hasProfile(user_id: string | number, conn_id: string | number) {
-    const user = await this.get(user_id);
-    const profiles = await ConnectionProfilesModel.findByPk(conn_id);
-    if (!profiles)
-      throw new AppProcessError(
-        'O perfil de conexão não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    return await user.hasProfile(profiles);
-  }
+  static hasProfile = (user_id: string | number, profile_id: string | number) =>
+    this.handleHas(UserModel, user_id, ConnectionProfilesModel, profile_id, 'Profile');
 
   /**
    * TODO: Robot Workflows
    */
-  static async listWorkflows(id: string | number) {
-    const list = await UserModel.findByPk(id, {
-      include: [
-        {
-          association: UserModel.associations.workflows
-          /* include: [ConnectionModel.associations.profile] */
-        }
-      ]
-    });
+  static listWorkflows = (user_id: string | number) =>
+    this.handleList(UserModel, user_id, 'workflows');
 
-    return list?.workflows || [];
-  }
+  static getWorkflow = (user_id: string | number, params: WhereParams<WorkflowModel>) =>
+    this.handleGet(UserModel, user_id, 'Workflows', params);
 
-  static async getWorkflow(
-    id: string | number,
-    params: WhereOptions<InferAttributes<WorkflowModel, { omit: never }>>
-  ) {
-    const user = await UserModel.findByPk(id);
-    if (!user)
-      throw new AppProcessError(
-        'O usuário não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    const profiles = await user.getWorkflows({
-      where: params
-    });
-    return profiles;
-  }
-
-  static async hasWorkflow(user_id: string | number, workflow_id: string | number) {
-    const user = await this.get(user_id);
-    const workflow = await ConnectionProfilesModel.findByPk(workflow_id);
-    if (!workflow)
-      throw new AppProcessError(
-        'O workflow não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    return await user.hasProfile(workflow);
-  }
+  static hasWorkflow = (user_id: string | number, flow_id: string | number) =>
+    this.handleHas(UserModel, user_id, WorkflowModel, flow_id, 'Workflow');
 
   /**
    * TODO: Assessments
    */
-  static async listAssessments(id: string | number) {
-    const list = await UserModel.findByPk(id, {
-      include: [
-        {
-          association: UserModel.associations.assessments
-          /* include: [ConnectionModel.associations.profile] */
-        }
-      ]
-    });
+  static listAssessments = (user_id: string | number) =>
+    this.handleList(UserModel, user_id, 'assessments');
 
-    return list?.assessments || [];
-  }
+  static getAssessment = (user_id: string | number, params: WhereParams<AssessmentModel>) =>
+    this.handleGet(UserModel, user_id, 'Assessments', params);
 
-  static async getAssessment(
-    id: string | number,
-    params: WhereOptions<InferAttributes<AssessmentModel, { omit: never }>>
-  ) {
-    const user = await UserModel.findByPk(id);
-    if (!user)
-      throw new AppProcessError(
-        'O usuário não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    const profiles = await user.getAssessments({
-      where: params
-    });
-    return profiles;
-  }
-
-  static async hasAssessment(user_id: string | number, assessment_id: string | number) {
-    const user = await this.get(user_id);
-    const assessment = await AssessmentModel.findByPk(assessment_id);
-    if (!assessment)
-      throw new AppProcessError(
-        'A avalização não foi localizado',
-        HTTPResponseCode.informationNotFound
-      );
-    return await user.hasAssessment(assessment);
-  }
+  static hasAssessment = (user_id: string | number, flow_id: string | number) =>
+    this.handleHas(UserModel, user_id, AssessmentModel, flow_id, 'Assessment');
 
   /**
    * TODO: Chat
    */
-  static hasChat = (user_id: string | number, chat_id: string | number) =>
-    this.handleHas(UserModel, user_id, ChatModel, chat_id, 'Chat');
+  static listChats = (user_id: string | number) => this.handleList(UserModel, user_id, 'chats');
 
   static getChat = (user_id: string | number, params: WhereParams<ChatModel>) =>
-    this.handleGet(UserModel, user_id, 'Chat', params);
+    this.handleGet(UserModel, user_id, 'Chats', params);
 
-  static listChats = (user_id: string | number) => this.handleList(UserModel, user_id, 'chats');
+  static hasChat = (user_id: string | number, chat_id: string | number) =>
+    this.handleHas(UserModel, user_id, ChatModel, chat_id, 'Chat');
 }
