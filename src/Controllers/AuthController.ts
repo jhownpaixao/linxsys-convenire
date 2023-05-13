@@ -14,16 +14,6 @@ export class AuthController {
     await CheckRequest({ ekm, edc });
     const { user, token } = await AuthService.validateLogin({ edc, ekm });
 
-    /* For an optional cached token implementation */
-    /* const options: CookieOptions = {
-            maxAge: 1000 * 60 * 60 * 24, // 24hour
-            httpOnly: true, // The cookie only accessible by the web server
-            signed: true, // Indicates if the cookie should be signed
-            secure: true,
-            sameSite: 'strict'
-        };
-        res.cookie('SIGNED_EDC', 'PASSED_ONLY', options); */
-
     return SendHTTPResponse(
       { message: 'logado com sucesso', status: true, data: { token, user }, type: 'success' },
       res
@@ -35,7 +25,7 @@ export class AuthController {
 
     await CheckRequest({ email, pass });
 
-    const [key, encrypted] = await AuthService.login({ email, pass });
+    const [key, encrypted, isLogedIn] = await AuthService.login({ email, pass });
     return SendHTTPResponse(
       {
         message: 'Confirmar autorização',
@@ -43,6 +33,7 @@ export class AuthController {
         type: 'success',
         data: {
           ekm: key,
+          isLogedIn,
           edc: encrypted,
           confirmation: `${ServerConfig.ROUTES.auth}/validate/${key}/${encrypted}`
         },

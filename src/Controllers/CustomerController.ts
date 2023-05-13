@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '@core';
 import { UserService, CustomerService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class CustomerController {
   static store = async (req: Request, res: Response) => {
@@ -13,6 +14,13 @@ export class CustomerController {
       ...req.body,
       user_id
     });
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.customer,
+      EventLogMethod.created,
+      client.id
+    );
     SendHTTPResponse(
       {
         message: 'Cliente criado com sucesso',
@@ -66,6 +74,14 @@ export class CustomerController {
       params,
       comments
     });
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.contact,
+      EventLogMethod.created,
+      contact.id
+    );
+
     SendHTTPResponse(
       {
         message: 'Contato criado e vinculado',

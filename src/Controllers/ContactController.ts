@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '@core';
 import { ContactService, CustomerService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class ContactController {
   static store = async (req: Request, res: Response) => {
@@ -17,6 +18,13 @@ export class ContactController {
       client_id: parseInt(client_id),
       user_id: user_id
     });
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.contact,
+      EventLogMethod.created,
+      contact.id
+    );
 
     SendHTTPResponse(
       {

@@ -13,6 +13,8 @@ import { ChatMessage } from './ChatMessage';
 import { Queue } from './Queue';
 import { Ticket } from './Ticket';
 import { Assessment } from './Assessment';
+import { Event } from './Event';
+import { Resource } from './Resource';
 
 const Models = {
   Attendant,
@@ -29,7 +31,9 @@ const Models = {
   ChatMessage,
   Queue,
   Ticket,
-  Assessment
+  Assessment,
+  Event,
+  Resource
 };
 
 Object.values(Models).map((model) => model.associate());
@@ -50,5 +54,7 @@ export {
   Queue as QueueModel,
   Ticket as TicketModel,
   Assessment as AssessmentModel,
+  Event as EventModel,
+  Resource as ResourceModel,
   Models
 };

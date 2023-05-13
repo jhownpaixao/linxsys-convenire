@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { ChatService, UserService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class ChatController {
   static store = async (req: Request, res: Response) => {
@@ -13,6 +14,10 @@ export class ChatController {
       ...req.body,
       user_id: user_id
     });
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(EventLogTarget.chatbot, EventLogMethod.created, chat.id);
+
     SendHTTPResponse(
       {
         message: 'Chat criado com sucesso',
@@ -28,7 +33,7 @@ export class ChatController {
   static list = async (req: Request, res: Response) => {
     const user_id = req.user.id;
 
-    const list = await UserService.listChat(user_id);
+    const list = await UserService.listChats(user_id);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res

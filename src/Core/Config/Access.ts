@@ -24,7 +24,8 @@ export const MethodsArr = [
   ['GET', 'PUT', 'PATH', 'POST'],
   ['GET', 'PUT', 'PATH', 'POST', 'DELETE']
 ];
-enum AttendantAccessProfile {
+
+enum AccessProfile_Attendant {
   Administrator = AccessPermissions.all,
   Default = AccessPermissions.none,
   Company = AccessPermissions.all,
@@ -32,7 +33,7 @@ enum AttendantAccessProfile {
   Attendant = AccessPermissions.modify
 }
 
-enum CompanyAccessProfile {
+enum AccessProfile_Company {
   Administrator = AccessPermissions.all,
   Default = AccessPermissions.none,
   Company = AccessPermissions.all,
@@ -40,24 +41,27 @@ enum CompanyAccessProfile {
   Attendant = AccessPermissions.none
 }
 
+enum AccessProfile_Admin {
+  Administrator = AccessPermissions.all,
+  Default = AccessPermissions.none,
+  Company = AccessPermissions.none,
+  Operator = AccessPermissions.none,
+  Attendant = AccessPermissions.none
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const RouteAccessProfiles: Record<string, any> = {
-  [ServerConfig.ROUTES.attendant]: AttendantAccessProfile,
-  [ServerConfig.ROUTES.chatbot]: CompanyAccessProfile,
-  [ServerConfig.ROUTES.connection]: CompanyAccessProfile,
-  [ServerConfig.ROUTES.profile]: CompanyAccessProfile,
-  [ServerConfig.ROUTES.client]: AttendantAccessProfile,
-  [ServerConfig.ROUTES.contact]: AttendantAccessProfile,
-  [ServerConfig.ROUTES.workflow]: CompanyAccessProfile,
-  [ServerConfig.ROUTES.assessment]: AttendantAccessProfile,
-  [ServerConfig.ROUTES.chat]: AttendantAccessProfile,
-  [ServerConfig.ROUTES.user]: {
-    Administrator: AccessPermissions.all,
-    Default: AccessPermissions.none,
-    Company: AccessPermissions.none,
-    Operator: AccessPermissions.none,
-    Attendant: AccessPermissions.none
-  },
+  [ServerConfig.ROUTES.attendant]: AccessProfile_Attendant,
+  [ServerConfig.ROUTES.chatbot]: AccessProfile_Company,
+  [ServerConfig.ROUTES.connection]: AccessProfile_Company,
+  [ServerConfig.ROUTES.profile]: AccessProfile_Company,
+  [ServerConfig.ROUTES.client]: AccessProfile_Attendant,
+  [ServerConfig.ROUTES.contact]: AccessProfile_Attendant,
+  [ServerConfig.ROUTES.workflow]: AccessProfile_Company,
+  [ServerConfig.ROUTES.assessment]: AccessProfile_Attendant,
+  [ServerConfig.ROUTES.chat]: AccessProfile_Attendant,
+  [ServerConfig.ROUTES.user]: AccessProfile_Admin,
+  [ServerConfig.ROUTES.core]: AccessProfile_Admin,
   [ServerConfig.ROUTES.auth]: {
     Administrator: AccessPermissions.all,
     Default: AccessPermissions.readonly,

@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { ConnectionProfileService, UserService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 export class ConnectionProfileController {
   static store = async (req: Request, res: Response) => {
     const { name } = req.body;
@@ -8,6 +9,13 @@ export class ConnectionProfileController {
     await CheckRequest({ name });
 
     const profile = await ConnectionProfileService.create(req.body, req.user.id);
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.connection_profile,
+      EventLogMethod.created,
+      profile.id
+    );
 
     SendHTTPResponse(
       {
@@ -53,6 +61,13 @@ export class ConnectionProfileController {
       name
     });
 
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.chatbot,
+      EventLogMethod.created,
+      chatbot.id
+    );
+
     SendHTTPResponse(
       {
         message: 'Chatbot criado e vinculado',
@@ -81,13 +96,19 @@ export class ConnectionProfileController {
     );
   };
 
-  static vinculeChatbot = async (req: Request, res: Response) => {
+  static linkChatbot = async (req: Request, res: Response) => {
     const { profile_id } = req.params;
     const { chatbot_id } = req.body;
 
     await CheckRequest({ chatbot_id });
 
     await ConnectionProfileService.setChatbot(req.user.id, profile_id, chatbot_id);
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(EventLogTarget.chatbot, EventLogMethod.created, {
+      profile_id,
+      chatbot_id
+    });
 
     SendHTTPResponse(
       { message: 'chatbot vínculado com sucesso', type: 'success', status: true },

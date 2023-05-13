@@ -18,7 +18,7 @@ subRoutes
     .route('/chatbot')
     .post(ConnectionProfileController.addChatbot)
     .get(ConnectionProfileController.getChatbot)
-    .put(ConnectionProfileController.vinculeChatbot)
+    .put(ConnectionProfileController.linkChatbot)
     .all(ThrowHTTPMethodNotAllowed);
 
 export default ConnectionProfileRoutes;

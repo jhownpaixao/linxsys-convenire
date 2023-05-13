@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { UserService, ChatbotService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class ChatbotController {
   static store = async (req: Request, res: Response) => {
@@ -13,6 +14,9 @@ export class ChatbotController {
       ...req.body,
       user_id: user_id
     });
+
+    // ?Registrar o evento
+    EventLog.create(user_id).register(EventLogTarget.attendant, EventLogMethod.created, chatbot.id);
 
     SendHTTPResponse(
       {
@@ -46,6 +50,12 @@ export class ChatbotController {
       name
     });
 
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.workflow,
+      EventLogMethod.created,
+      workflow.id
+    );
     SendHTTPResponse(
       {
         message: 'Workflow criado com sucesso',
@@ -74,13 +84,19 @@ export class ChatbotController {
     );
   };
 
-  static vinculeWorkflow = async (req: Request, res: Response) => {
+  static linkWorkflow = async (req: Request, res: Response) => {
     const { chatbot_id } = req.params;
     const { workflow_id } = req.body;
 
     await CheckRequest({ workflow_id });
 
     await ChatbotService.setWorkflow(req.user.id, chatbot_id, workflow_id);
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(EventLogTarget.workflow, EventLogMethod.linked, {
+      chatbot_id,
+      workflow_id
+    });
 
     SendHTTPResponse(
       { message: 'Workflow vínculado com sucesso', type: 'success', status: true },

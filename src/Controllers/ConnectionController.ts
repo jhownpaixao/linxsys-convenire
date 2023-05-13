@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { UserService, ConnectionService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 export class ConnectionController {
   static store = async (req: Request, res: Response) => {
     const user_id = req.user.id;
@@ -15,6 +16,9 @@ export class ConnectionController {
       user_id: user_id
     });
 
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(EventLogTarget.connection, EventLogMethod.created);
+
     SendHTTPResponse(
       {
         message: 'Conexão criada com sucesso',
@@ -23,6 +27,16 @@ export class ConnectionController {
         location: `${ServerConfig.ROUTES.connection}/${connection.id}`,
         code: HTTPResponseCode.created
       },
+      res
+    );
+  };
+
+  static get = async (req: Request, res: Response) => {
+    const { connection_id } = req.params;
+
+    const connection = await ConnectionService.get(connection_id);
+    SendHTTPResponse(
+      { message: 'Carregado com sucesso', type: 'success', status: true, data: connection },
       res
     );
   };
@@ -46,6 +60,13 @@ export class ConnectionController {
     const profile = await ConnectionService.addProfile(connection_id, {
       name
     });
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.connection_profile,
+      EventLogMethod.created,
+      profile.id
+    );
 
     SendHTTPResponse(
       {
@@ -75,11 +96,18 @@ export class ConnectionController {
     );
   };
 
-  static vinculeProfile = async (req: Request, res: Response) => {
+  static linkProfile = async (req: Request, res: Response) => {
     const { connection_id } = req.params;
     const { profile_id } = req.body;
 
     await ConnectionService.setProfile(req.user.id, connection_id, profile_id);
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.connection_profile,
+      EventLogMethod.linked,
+      { connection_id, profile_id }
+    );
 
     SendHTTPResponse(
       { message: 'perfil vínculado com sucesso', type: 'success', status: true },

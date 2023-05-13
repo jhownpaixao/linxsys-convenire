@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { WorkflowService, UserService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class WorkflowController {
   static store = async (req: Request, res: Response) => {
@@ -13,6 +14,14 @@ export class WorkflowController {
       ...req.body,
       user_id: user_id
     });
+
+    // ?Registrar o evento
+    EventLog.create(req.user.id).register(
+      EventLogTarget.workflow,
+      EventLogMethod.deleted,
+      workflow.id
+    );
+
     SendHTTPResponse(
       {
         message: 'Workflow criado com sucesso',

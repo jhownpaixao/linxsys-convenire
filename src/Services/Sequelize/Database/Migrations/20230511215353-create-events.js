@@ -3,16 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Contacts', {
+    return queryInterface.createTable('Events', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
-      },
-      value: {
-        type: Sequelize.STRING,
-        allowNull: false
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -21,20 +17,29 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      client_id: {
+      owner_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'Clients', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        allowNull: false
       },
-      comments: {
+      description: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      params: {
+      target: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      method: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      data: {
         type: Sequelize.JSON,
         allowNull: true
+      },
+      triggered_at: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
       created_at: {
         type: Sequelize.DATE,
@@ -48,6 +53,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Contacts');
+    return queryInterface.dropTable('Events');
   }
 };

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { UserService, AttendantService } from '../services/app';
-
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 export class AttendantController {
   static store = async (req: Request, res: Response) => {
     const user_id = req.user.id;
@@ -17,6 +17,13 @@ export class AttendantController {
       params,
       user_id: user_id
     });
+
+    EventLog.create(user_id).register(
+      EventLogTarget.attendant,
+      EventLogMethod.created,
+      attendant.id
+    );
+
     SendHTTPResponse(
       {
         message: 'Atendente criado com sucesso',

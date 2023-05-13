@@ -18,15 +18,22 @@
     },
     "import/resolver": {
       "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".ts"]
+        "paths": [
+          "src"
+        ],
+        "extensions": [
+          ".js",
+          ".ts"
+        ]
       }
     }
   },
-  "plugins": ["prettier", "@typescript-eslint"],
+  "plugins": [
+    "prettier",
+    "@typescript-eslint"
+  ],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-non-null-assertion": "off",
     "no-param-reassign": 0,
     "import/order": 0,

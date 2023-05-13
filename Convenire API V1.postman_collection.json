@@ -1,944 +1,1227 @@
 {
-  "info": {
-    "_postman_id": "f73d9422-6a05-4000-b0e2-734f7c855a39",
-    "name": "Convenire API V1",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Usuarios",
-      "item": [
-        {
-          "name": "Listar",
-          "protocolProfileBehavior": {
-            "followAuthorizationHeader": false
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/users",
-              "host": ["{{base_url}}"],
-              "path": ["users"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Jhonnata Paixão\",\r\n    \"email\": \"jhonnata.pay@gmail.com\",\r\n    \"pass\": \"2209\",\r\n    \"type\": \"Attendant\",\r\n    \"block_with_venc\": \"No\",\r\n    \"date_venc\": \"2031-07-31\",\r\n    \"data\": {},\r\n    \"params\": {}\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/users",
-              "host": ["{{base_url}}"],
-              "path": ["users"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Ler",
-          "protocolProfileBehavior": {
-            "followAuthorizationHeader": false
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/users/:user_id",
-              "host": ["{{base_url}}"],
-              "path": ["users", ":user_id"],
-              "variable": [
-                {
-                  "key": "user_id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Editar",
-          "protocolProfileBehavior": {
-            "followAuthorizationHeader": false
-          },
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Administrador\",\r\n    \"pass\": \"admin\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/users/:user_id",
-              "host": ["{{base_url}}"],
-              "path": ["users", ":user_id"],
-              "variable": [
-                {
-                  "key": "user_id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Excluír",
-          "protocolProfileBehavior": {
-            "followAuthorizationHeader": false
-          },
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "A",
-                "value": "",
-                "type": "default",
-                "disabled": true
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/users/:user_id",
-              "host": ["{{base_url}}"],
-              "path": ["users", ":user_id"],
-              "variable": [
-                {
-                  "key": "user_id",
-                  "value": "3"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Autorização",
-      "item": [
-        {
-          "name": "login",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"pass\":\"admin\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth",
-              "host": ["{{base_url}}"],
-              "path": ["auth"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Validar login",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/validate/:ekm/:edc",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "validate", ":ekm", ":edc"],
-              "variable": [
-                {
-                  "key": "ekm",
-                  "value": "a156451e3434a16f550266dd49762f55f95e1b4cb75943219ed6778886d09b36920d87b2b99dd712ecff630ea5dd5e96"
-                },
-                {
-                  "key": "edc",
-                  "value": "52477551979a3b0c4862f9e8c699cdcf"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Testar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/teste",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "teste"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Criar Keys",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/create",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "create"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Assinar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/auth/sign",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "sign"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Verificar JWT",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjMyNTY2MDI5In0.eyJkYXRhIjoidGVzdGUiLCJpYXQiOjE2ODEzMTg2OTIsImV4cCI6MTY4MTQwNTA5MiwiaXNzIjoiTGlueFN5cyAtIFBKQ3wxLjAifQ.Ys6png0QQ3GWtQLpl5_-9DAUuHkfCu-SkVNKJTnoCwz5Dni4wtpj9OkDr5s-IneoTjqGl850oolVNGafVp9g4MktmkGgDVuzYYSpsMU6pkJqwOytJ-rlhiJcsfpBvn3sA8cpkGGFERtBRV8P2G_9pKHJUMevl5BN7GEh3cUiI_MYhQcHXGedAWmiTdB60iYfd7ELoRZ8S_sGPBXUT-slAF_CceD7icT-wn0kaUaKchHYAxnXG23XNAjNbYqyt6OZHuzS5xgikAEf7kGP-dW_KrHRKSMPfH6kxzAuHlQ6JFDhRvo7tzsF3lQSOlnN0auGLNkmJH8yKpuL_d_GyaIKYaiM6MrgVBXiSnWjoISD58F2pdXOHfLBQyTH4PRnW8hSsmhrDgHdnYOzn7rY6U9Z02hYrz-PdeJSzzEKFE59QhGs3JI0hVrymBrcOYR21vQLCmBELNO5brFhftkQoJ0moiDLsI5ZIadtSng2k8nHBQmfO_rhuwGG17kqIxZ85jJ4iUTE8sOUAfDXWiYBk3DwcwcgQzxcgKEvIZVlOvyypghnSSrwdJqRvRs9DZBFlovj5X1oEtGf7HB63QlUjqnV7yo4ED7Er7lTCeg2FRny5f8eVFL-oANTCX9iVPqJwNCLkxdISDdDyMVkqPS1OQTnZ5VoVJFheHCn2Oksg1jbi7I\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/verify",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "verify"]
-            }
-          },
-          "response": []
-        }
-      ],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Conexões",
-      "item": [
-        {
-          "name": "Perfil",
-          "item": [
-            {
-              "name": "Criar",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\":\"Perfil 1\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/connections/:connection_id/profile",
-                  "host": ["{{base_url}}"],
-                  "path": ["connections", ":connection_id", "profile"],
-                  "variable": [
-                    {
-                      "key": "connection_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Pegar",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{base_url}}/connections/:connection_id/profile",
-                  "host": ["{{base_url}}"],
-                  "path": ["connections", ":connection_id", "profile"],
-                  "variable": [
-                    {
-                      "key": "connection_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Trocar",
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n\t\"profile_id\": 1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/connections/:connection_id/profile",
-                  "host": ["{{base_url}}"],
-                  "path": ["connections", ":connection_id", "profile"],
-                  "variable": [
-                    {
-                      "key": "connection_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/connections",
-              "host": ["{{base_url}}"],
-              "path": ["connections"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n\t\"name\": \"Conexão 1\",\r\n    \"type\": 1\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/connections",
-              "host": ["{{base_url}}"],
-              "path": ["connections"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Atendentes",
-      "item": [
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/attendants",
-              "host": ["{{base_url}}"],
-              "path": ["attendants"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Atnd Luis\",\r\n    \"email\": \"luis@linxsys.com\",\r\n    \"pass\": \"233369\",\r\n    \"block_with_venc\": \"Yes\",\r\n    \"data\": {}\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/attendants",
-              "host": ["{{base_url}}"],
-              "path": ["attendants"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Clientes",
-      "item": [
-        {
-          "name": "Contatos",
-          "item": [
-            {
-              "name": "Listar",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{base_url}}/customers/:client_id/contact",
-                  "host": ["{{base_url}}"],
-                  "path": ["customers", ":client_id", "contact"],
-                  "variable": [
-                    {
-                      "key": "client_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Adicionar",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"contato\": \"4199614101\",\r\n    \"params\": \"\",\r\n    \"comments\": \"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/customers/:client_id/contact",
-                  "host": ["{{base_url}}"],
-                  "path": ["customers", ":client_id", "contact"],
-                  "variable": [
-                    {
-                      "key": "client_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/customers",
-              "host": ["{{base_url}}"],
-              "path": ["customers"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n\t\"nome\": \"Ruti\",\r\n    \"contato\":\"41999614101\"\r\n\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/customers",
-              "host": ["{{base_url}}"],
-              "path": ["customers"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Chatbots",
-      "item": [
-        {
-          "name": "Workflows",
-          "item": [
-            {
-              "name": "Listar",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                    "type": "default"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/chatbots/:chatbot_id/workflow",
-                  "host": ["{{base_url}}"],
-                  "path": ["chatbots", ":chatbot_id", "workflow"],
-                  "variable": [
-                    {
-                      "key": "chatbot_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Adicionar",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                    "type": "default"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"Workflow 1 de teste\"\r\n\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/chatbots/:chatbot_id/workflow",
-                  "host": ["{{base_url}}"],
-                  "path": ["chatbots", ":chatbot_id", "workflow"],
-                  "variable": [
-                    {
-                      "key": "chatbot_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Trocar",
-              "request": {
-                "method": "PATCH",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                    "type": "default"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"workflow_id\": 2\r\n\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/chatbots/:chatbot_id/workflow",
-                  "host": ["{{base_url}}"],
-                  "path": ["chatbots", ":chatbot_id", "workflow"],
-                  "variable": [
-                    {
-                      "key": "chatbot_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                "type": "default"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/chatbots",
-              "host": ["{{base_url}}"],
-              "path": ["chatbots"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                "type": "default"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Chatbot 1\"\r\n\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/chatbots",
-              "host": ["{{base_url}}"],
-              "path": ["chatbots"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Workflows",
-      "item": [
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                "type": "default"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/workflows",
-              "host": ["{{base_url}}"],
-              "path": ["workflows"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                "type": "default"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Workflow 1\"\r\n\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/workflows",
-              "host": ["{{base_url}}"],
-              "path": ["workflows"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Perfis de Conexão",
-      "item": [
-        {
-          "name": "Chatbots",
-          "item": [
-            {
-              "name": "Pegar",
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                    "type": "default"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/connections/profiles/:profile_id/chatbot",
-                  "host": ["{{base_url}}"],
-                  "path": ["connections", "profiles", ":profile_id", "chatbot"],
-                  "variable": [
-                    {
-                      "key": "profile_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Criar",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                    "type": "default"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"Chatbot Teste\"\r\n\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/connections/profiles/:profile_id/chatbot",
-                  "host": ["{{base_url}}"],
-                  "path": ["connections", "profiles", ":profile_id", "chatbot"],
-                  "variable": [
-                    {
-                      "key": "profile_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Trocar",
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n\t\"chatbot_id\": 1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/connections/profiles/:profile_id/chatbot",
-                  "host": ["{{base_url}}"],
-                  "path": ["connections", "profiles", ":profile_id", "chatbot"],
-                  "variable": [
-                    {
-                      "key": "profile_id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/connections/profile",
-              "host": ["{{base_url}}"],
-              "path": ["connections", "profile"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\":\"Perfil 3\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/connections/profile",
-              "host": ["{{base_url}}"],
-              "path": ["connections", "profile"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Avaliações",
-      "item": [
-        {
-          "name": "Listar",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                "type": "default"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/assessments",
-              "host": ["{{base_url}}"],
-              "path": ["assessments"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Adicionar",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
-                "type": "default"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Workflow 1\"\r\n\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/assessments",
-              "host": ["{{base_url}}"],
-              "path": ["assessments"]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ],
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ikh3SEF6eVFRZHpNR2N5eXJzMVhYeGdHYS15MVZlTkRRR1lVQmpyS3ZwdEkifQ.eyJleHAiOjE2ODM2NDIxMzEsImlhdCI6MTY4MzU1NTczMSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIiwicGFzcyI6IiQyYiQxMCQwdU8vcUtJRThOQ3M0SXoxWFF1djB1MEpaRUF4TWVKWThYWW5YQURaUnp5LlRVcHVxczd3UyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwidW5pcWtleSI6IjA4ODkzOWVlLTI5ZTQtNGQ4ZS04YTFmLWU4ZDUwMjc3ZDc2NyIsInR5cGUiOiJBZG1pbmlzdHJhdG9yIiwiYmxvY2tfd2l0aF92ZW5jIjoiTm8iLCJncm91cF9pZCI6bnVsbCwiZGF0ZV92ZW5jIjoiMjAzMS0wNy0zMVQwMDowMDowMC4wMDBaIiwicGFyYW1zIjpudWxsLCJjcmVhdGVkQXQiOiIyMDIzLTA1LTAzVDAxOjQyOjE5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA1LTAzVDAxOjQyOjE5LjAwMFoifX0.MDX5cGiL-aZGjFm390WpJlMQtZ7rnmIP2SIPrQgyVT9GZdW9RMm5xVgAKnsG7clOB3yWX4fzKOtk6Ela_JpqzNq9CRzLhfKMV7ZQM21CRQbps79p2asr_CRq3CCL7CvehkWM48gGv-16xKp3ky_Cqdb7dvTW7eYS5w0mpfXpn3DXxI6B0aUPkAe9n5RBngANzHa7hczoL8_jVFH-LA0J_oQiR786Ghy2iA_0mhwMHhdvbrr8wVPzaSxn9BBaBWR-A1SW8CZoER9Eks71Yh7nP-rSikahbH3JHgphkm0AzaEI3P5QhLMHsH9VdP_jnmvTY1Tn3IzqCfLucpNmy3wZFw",
-        "type": "string"
-      }
-    ]
-  },
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ]
+	"info": {
+		"_postman_id": "f73d9422-6a05-4000-b0e2-734f7c855a39",
+		"name": "Convenire API V1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Listar",
+					"protocolProfileBehavior": {
+						"followAuthorizationHeader": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Jhonnata Paixão\",\r\n    \"email\": \"jhonnata.pay@gmail.com\",\r\n    \"pass\": \"2209\",\r\n    \"type\": \"Attendant\",\r\n    \"block_with_venc\": \"No\",\r\n    \"date_venc\": \"2031-07-31\",\r\n    \"data\": {},\r\n    \"params\": {}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ler",
+					"protocolProfileBehavior": {
+						"followAuthorizationHeader": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/:user_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar",
+					"protocolProfileBehavior": {
+						"followAuthorizationHeader": false
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Administrador\",\r\n    \"pass\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/:user_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluír",
+					"protocolProfileBehavior": {
+						"followAuthorizationHeader": false
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "A",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/:user_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Autorização",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"pass\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/validate/:ekm/:edc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"validate",
+								":ekm",
+								":edc"
+							],
+							"variable": [
+								{
+									"key": "ekm",
+									"value": "a156451e3434a16f550266dd49762f55f95e1b4cb75943219ed6778886d09b36920d87b2b99dd712ecff630ea5dd5e96"
+								},
+								{
+									"key": "edc",
+									"value": "52477551979a3b0c4862f9e8c699cdcf"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Testar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/teste",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"teste"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Keys",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assinar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/sign",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"sign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar JWT",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjMyNTY2MDI5In0.eyJkYXRhIjoidGVzdGUiLCJpYXQiOjE2ODEzMTg2OTIsImV4cCI6MTY4MTQwNTA5MiwiaXNzIjoiTGlueFN5cyAtIFBKQ3wxLjAifQ.Ys6png0QQ3GWtQLpl5_-9DAUuHkfCu-SkVNKJTnoCwz5Dni4wtpj9OkDr5s-IneoTjqGl850oolVNGafVp9g4MktmkGgDVuzYYSpsMU6pkJqwOytJ-rlhiJcsfpBvn3sA8cpkGGFERtBRV8P2G_9pKHJUMevl5BN7GEh3cUiI_MYhQcHXGedAWmiTdB60iYfd7ELoRZ8S_sGPBXUT-slAF_CceD7icT-wn0kaUaKchHYAxnXG23XNAjNbYqyt6OZHuzS5xgikAEf7kGP-dW_KrHRKSMPfH6kxzAuHlQ6JFDhRvo7tzsF3lQSOlnN0auGLNkmJH8yKpuL_d_GyaIKYaiM6MrgVBXiSnWjoISD58F2pdXOHfLBQyTH4PRnW8hSsmhrDgHdnYOzn7rY6U9Z02hYrz-PdeJSzzEKFE59QhGs3JI0hVrymBrcOYR21vQLCmBELNO5brFhftkQoJ0moiDLsI5ZIadtSng2k8nHBQmfO_rhuwGG17kqIxZ85jJ4iUTE8sOUAfDXWiYBk3DwcwcgQzxcgKEvIZVlOvyypghnSSrwdJqRvRs9DZBFlovj5X1oEtGf7HB63QlUjqnV7yo4ED7Er7lTCeg2FRny5f8eVFL-oANTCX9iVPqJwNCLkxdISDdDyMVkqPS1OQTnZ5VoVJFheHCn2Oksg1jbi7I\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/verify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Conexões",
+			"item": [
+				{
+					"name": "Perfil",
+					"item": [
+						{
+							"name": "Criar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Perfil 1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/connections/:connection_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"connections",
+										":connection_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "connection_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pegar",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/connections/:connection_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"connections",
+										":connection_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "connection_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Trocar",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"profile_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/connections/:connection_id/profile",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"connections",
+										":connection_id",
+										"profile"
+									],
+									"variable": [
+										{
+											"key": "connection_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/connections",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"connections"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"Conexão 1\",\r\n    \"type\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/connections",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"connections"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Atendentes",
+			"item": [
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/attendants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Atnd Luis\",\r\n    \"email\": \"luis@linxsys.com\",\r\n    \"pass\": \"233369\",\r\n    \"block_with_venc\": \"Yes\",\r\n    \"data\": {}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/attendants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"attendants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Contatos",
+					"item": [
+						{
+							"name": "Listar",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/customers/:client_id/contact",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"customers",
+										":client_id",
+										"contact"
+									],
+									"variable": [
+										{
+											"key": "client_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Adicionar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"contato\": \"4199614101\",\r\n    \"params\": \"\",\r\n    \"comments\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/customers/:client_id/contact",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"customers",
+										":client_id",
+										"contact"
+									],
+									"variable": [
+										{
+											"key": "client_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"nome\": \"Jhonnata\",\r\n    \"contato\":\"41987092101\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ler",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"nome\": \"Jhonnata\",\r\n    \"contato\":\"41987092101\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/customers/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chatbots",
+			"item": [
+				{
+					"name": "Workflows",
+					"item": [
+						{
+							"name": "Listar",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/chatbots/:chatbot_id/workflow",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"chatbots",
+										":chatbot_id",
+										"workflow"
+									],
+									"variable": [
+										{
+											"key": "chatbot_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Adicionar",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Workflow 1 de teste\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/chatbots/:chatbot_id/workflow",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"chatbots",
+										":chatbot_id",
+										"workflow"
+									],
+									"variable": [
+										{
+											"key": "chatbot_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Trocar",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"workflow_id\": 2\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/chatbots/:chatbot_id/workflow",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"chatbots",
+										":chatbot_id",
+										"workflow"
+									],
+									"variable": [
+										{
+											"key": "chatbot_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chatbots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chatbots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Chatbot 1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/chatbots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chatbots"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workflows",
+			"item": [
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/workflows",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"workflows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Workflow 1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/workflows",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"workflows"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Perfis de Conexão",
+			"item": [
+				{
+					"name": "Chatbots",
+					"item": [
+						{
+							"name": "Pegar",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/connections/profiles/:profile_id/chatbot",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"connections",
+										"profiles",
+										":profile_id",
+										"chatbot"
+									],
+									"variable": [
+										{
+											"key": "profile_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Criar",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Chatbot Teste\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/connections/profiles/:profile_id/chatbot",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"connections",
+										"profiles",
+										":profile_id",
+										"chatbot"
+									],
+									"variable": [
+										{
+											"key": "profile_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Trocar",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"chatbot_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/connections/profiles/:profile_id/chatbot",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"connections",
+										"profiles",
+										":profile_id",
+										"chatbot"
+									],
+									"variable": [
+										{
+											"key": "profile_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/connections/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"connections",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Perfil 3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/connections/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"connections",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Avaliações",
+			"item": [
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/assessments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"assessments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Workflow 1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/assessments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"assessments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chats",
+			"item": [
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/chats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6InFlbTVtaFVkc185blhjWjJKT1A1UUFEUlY4c3ZHNEJoOVdNZXZaTjVDREkifQ.eyJleHAiOjE2ODMxMzMyMTUsImlhdCI6MTY4MzA0NjgxNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJKaG9ubmF0YSBQYWl4w6NvIiwiZW1haWwiOiJqaG9ubmF0YS5wYXlAZ21haWwuY29tIiwidW5pcWtleSI6Ijk5ZGZkNGQ5LTI5NDMtNDExZC05MzA3LWMyYzIzM2EyZTFmMyIsInR5cGUiOiJDb21wYW55IiwiZ3JvdXBfaWQiOm51bGwsImRhdGVfdmVuYyI6IjIwMjMtMDctMzFUMDA6MDA6MDAuMDAwWiIsInBhcmFtcyI6bnVsbH19.FKVQHGurq6ZmiTQWeq4leBnYWOPPTBT1Xrse41LOy6al6npJ6hgmCJGNdR-juCRaZfALpqDM9Egr2BXY_91gLhCjiyDoQwigS5gRi5rSLbMFl6WYRHurz0FB11RdQz2hDAjd6qv-JcMFUD_xHSGJ0BBcd1mX7WBP5dNzCsu5ZVTCE0t9ZGxTaSOIxkLBr85hvAo38hLy6I_vi5ndCmIoMMwUpjQhB1Rhja_6oEbaHoBX82VHZhlT4ZDbHwhOS0FwuTIqMn-s2E4DcSSBiwdox2lZFXv8Abbgvgsb86uAZDel8J-EFmkJaWJp0yd7mopggbgfLAl-xcpHfvHPoCdsJQ",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Workflow 1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/chats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"chats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im1kQWRTdkVRclJNaEFhSEtJY1NzZkh3dG12Rlh4ZG9Sb2ZaZ3U5S0txanMifQ.eyJleHAiOjE2ODM4MjU4NDcsImlhdCI6MTY4MzczOTQ0NywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0MDAxL0xpbnhTeXMtRWFybHlBdXRoPyZ2ZXJzaW9uPTEuMCIsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIiwicGFzcyI6IiQyYiQxMCQwdU8vcUtJRThOQ3M0SXoxWFF1djB1MEpaRUF4TWVKWThYWW5YQURaUnp5LlRVcHVxczd3UyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwidW5pcWtleSI6IjA4ODkzOWVlLTI5ZTQtNGQ4ZS04YTFmLWU4ZDUwMjc3ZDc2NyIsInR5cGUiOiJBZG1pbmlzdHJhdG9yIiwiYmxvY2tfd2l0aF92ZW5jIjoiTm8iLCJncm91cF9pZCI6bnVsbCwiZGF0ZV92ZW5jIjoiMjAzMS0wNy0zMVQwMDowMDowMC4wMDBaIiwicGFyYW1zIjpudWxsLCJjcmVhdGVkQXQiOiIyMDIzLTA1LTAzVDAxOjQyOjE5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA1LTAzVDAxOjQyOjE5LjAwMFoifX0.GB0Lgjzd2FjrmxbV7m5xgon5ua5lPnr0p7J9Nos57Hh0lmZx_KDuYBnEYMDnEF6E1ELsePjUQCq6TUIwIG9WIOdoR1e5ueypw0PjCwzNHFq5JS8iUmLyUVaP2APjUw9EZ65h_vobdNmWTe9Uc4CrB7jBgx8T8u3Sf5yqiMd_IE1wk3one-8NLmG8-_ae0ul1ufWyqd0Ck4Ff4R8RbDV6mx0gC5ZlYP5k1i1W0oFsXb9aVy3dK-KK2UtgaRjt5NPUQrg6x252jgWUg1gaP1FzfMiyooCM25UguOlAqlUTQKlyrIhd8i3S05V1VBy98KcF3KJB1mPqocrcYvb-3AEBoQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
 }

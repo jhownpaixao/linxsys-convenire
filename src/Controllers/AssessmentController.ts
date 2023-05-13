@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { AssessmentService, UserService } from '../services/app';
+import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class AssessmentController {
   static store = async (req: Request, res: Response) => {
@@ -13,6 +14,13 @@ export class AssessmentController {
       ...req.body,
       user_id: user_id
     });
+
+    EventLog.create(user_id).register(
+      EventLogTarget.assessment,
+      EventLogMethod.created,
+      assessment
+    );
+
     SendHTTPResponse(
       {
         message: 'Avaliação criada com sucesso',

@@ -27,6 +27,7 @@ import { Tag } from './Tag';
 import { Chat } from './Chat';
 import { Queue } from './Queue';
 import { Assessment } from './Assessment';
+import { Resource } from './Resource';
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id?: CreationOptional<number>;
@@ -172,6 +173,18 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
   declare createAssessment: HasManyCreateAssociationMixin<Assessment, 'user_id'>;
   declare assessments?: NonAttribute<Assessment[]>;
 
+  declare getResources: HasManyGetAssociationsMixin<Assessment>; // Note the null assertions!
+  declare addResource: HasManyAddAssociationMixin<Resource, number>;
+  declare addResources: HasManyAddAssociationsMixin<Resource, number>;
+  declare setResources: HasManySetAssociationsMixin<Resource, number>;
+  declare removeResource: HasManyRemoveAssociationMixin<Resource, number>;
+  declare removeResources: HasManyRemoveAssociationsMixin<Resource, number>;
+  declare hasResource: HasManyHasAssociationMixin<Resource, number>;
+  declare hasResources: HasManyHasAssociationsMixin<Resource, number>;
+  declare countResources: HasManyCountAssociationsMixin;
+  declare createResource: HasManyCreateAssociationMixin<Resource, 'user_id'>;
+  declare resources?: NonAttribute<Resource[]>;
+
   static associate() {
     this.hasMany(Attendant, { foreignKey: 'user_id', as: 'attendants' });
     this.hasMany(Client, { foreignKey: 'user_id', as: 'clients' });
@@ -184,6 +197,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     this.hasMany(Queue, { foreignKey: 'user_id', as: 'queues' });
     this.hasMany(Chat, { foreignKey: 'user_id', as: 'chats' });
     this.hasMany(Assessment, { foreignKey: 'user_id', as: 'assessments' });
+    this.hasMany(Resource, { foreignKey: 'user_id', as: 'resources' });
   }
 }
 

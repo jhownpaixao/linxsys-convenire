@@ -15,7 +15,7 @@ UserRoutes.route('/')
 
 subRoutes.route('/')
     .get(UserController.get)
-    .patch(UserController.update)
+    .put(UserController.update)
     .delete(UserController.exclude)
     .all(ThrowHTTPMethodNotAllowed);
 

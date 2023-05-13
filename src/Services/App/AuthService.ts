@@ -45,7 +45,7 @@ export class AuthService {
     return encryptedData;
   }
 
-  static createLogin(uniqkey: string): [string, string] {
+  static createLogin(uniqkey: string): [string, string, boolean] {
     const spa = this.SecurityPendingAuth.get(uniqkey);
 
     if (spa && TimestampDifference(spa.timestamp, Date.now(), 's') < 10) {
@@ -62,7 +62,13 @@ export class AuthService {
       buffer,
       timestamp: Date.now()
     });
-    return [uniqkey, encrptKey];
+    const isLoged = !!AuthActiveSessions.get(uniqkey);
+    return [uniqkey, encrptKey, isLoged];
+  }
+
+  static deleteLogin(uniqkey: string) {
+    this.SecurityPendingAuth.delete(uniqkey);
+    AuthActiveSessions.delete(uniqkey);
   }
 
   static async validateLogin(data: RequestLoginConfirmation) {
@@ -92,8 +98,10 @@ export class AuthService {
         HTTPResponseCode.informationNotTrue
       );
 
-    if (AuthActiveSessions.get(user.uniqkey))
-      throw new AppProcessError('Este usuário já está logado', HTTPResponseCode.informationBlocked);
+    if (AuthActiveSessions.get(user.uniqkey)) {
+      this.deleteLogin(user.uniqkey);
+      throw new AppProcessError('Usuário derrubado', HTTPResponseCode.informationBlocked);
+    }
 
     const token = await this.signData({ user });
 

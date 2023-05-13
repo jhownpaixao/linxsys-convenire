@@ -1,13 +1,17 @@
 import * as crypto from 'crypto';
-import { MethodsArr, RouteAccessProfiles } from '../config';
+import { MethodsArr, RouteAccessProfiles } from '@core/config/Access';
 import type { UserAuthMiddlewareProps } from '../../middlewares';
-import { AppProcessError } from './Responses';
-import { HTTPResponseCode, SecurityConfig } from '../config';
+import { AppProcessError } from '@core/utils';
+import { HTTPResponseCode, SecurityConfig } from '@core/config';
 import type { Request } from 'express';
 import { logger } from '../../services/logger';
 
-export class Security {
-  // !Static Methodos
+/**
+ * Servico de segurança e controle de acesso à recursos e níveis
+ * @service
+ */
+export class SecurityService {
+  // !Static Methods
   static encrypt(data: string | object): [string, Buffer] {
     if (process.versions.openssl <= '1.0.1f') {
       throw new Error('OpenSSL Version too old, vulnerability to Heartbleed');
@@ -34,9 +38,17 @@ export class Security {
 
       return decrypted.toString();
     } catch (error) {
-      logger.error(error, 'Erro durante a descriptografia de dados');
-      throw new Error('Erro durante a descriptografia de dados');
+      return false;
     }
+  }
+
+  static uniqkey = crypto.randomUUID;
+
+  static uniqtoken(length = 20) {
+    return this.randomString(
+      length,
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    );
   }
 
   static requestAccessPermission(user: UserAuthMiddlewareProps, req: Request) {
@@ -56,16 +68,13 @@ export class Security {
     }
   }
 
-  static uniqkey = crypto.randomUUID;
+  // ?Getters
+  static getAccessRoute() {}
+  static getAccessLevel() {}
+  static getAccessResource() {}
+  static getAccessPermissions() {}
 
-  static uniqtoken(length = 20) {
-    return this.randomString(
-      length,
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    );
-  }
-
-  // !Private Static Methodos
+  // !Private Subroutines
   private static randomString(length: number, chars: string) {
     const charsLength = chars.length;
     const randomBytes = crypto.randomBytes(length);

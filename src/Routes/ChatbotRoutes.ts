@@ -18,7 +18,7 @@ subRoutes
     .route('/workflow')
     .post(ChatbotController.addWorkflow)
     .get(ChatbotController.getWorkflow)
-    .put(ChatbotController.vinculeWorkflow)
+    .put(ChatbotController.linkWorkflow)
     .all(ThrowHTTPMethodNotAllowed);
 
 export default ChatbotRoutes;
