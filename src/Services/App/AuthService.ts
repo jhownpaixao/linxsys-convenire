@@ -7,6 +7,7 @@ import axios from 'axios';
 import type { InferCreationAttributes } from 'sequelize';
 import { AuthConfig, SecurityConfig } from '@core/config';
 import { UserService } from './UserService';
+import type { UserAuthMiddlewareProps } from '../../middlewares';
 
 declare interface SecurityPendingAuthOptions {
   buffer: Buffer;
@@ -24,7 +25,10 @@ type RequestLogin = {
   pass: string;
 };
 
-export const AuthActiveSessions = new Map<string, InferCreationAttributes<UserModel>>();
+type Session = {
+  token: string;
+};
+export const AuthActiveSessions = new Map<string, InferCreationAttributes<UserModel> & Session>();
 
 export class AuthService {
   static PublicKeyPath = path.join(__dirname, '../keys/public.key.pem');
@@ -32,7 +36,7 @@ export class AuthService {
   static SecurityPendingAuth = new Map<string, SecurityPendingAuthOptions>();
 
   static async signData(payload: unknown) {
-    const { data } = await axios.post(AuthConfig.AuthJWKSURI + '/sign', payload);
+    const { data } = await axios.post(AuthConfig.AuthJWKSURI + '/auth/sign', payload);
     return data.token;
   }
 
@@ -91,7 +95,7 @@ export class AuthService {
         HTTPResponseCode.informationNotTrue
       );
 
-    const user = await UserService.getWithFullData({ uniqkey });
+    const user = await UserService.getWith({ uniqkey });
     if (!uniqkey)
       throw new AppProcessError(
         'Não foi possível realizar o login',
@@ -103,15 +107,20 @@ export class AuthService {
       throw new AppProcessError('Usuário derrubado', HTTPResponseCode.informationBlocked);
     }
 
-    const token = await this.signData({ user });
+    const token = (await this.signData({ user })) as string;
 
     if (!token)
       throw new AppProcessError(
         'Não foi possível criar uma assinatura segura',
         HTTPResponseCode.iternalErro
       );
+    const session = Object.assign(user, { token });
+    AuthActiveSessions.set(user.uniqkey, session);
+    UserService.update(user.id, {
+      loged_at: new Date(),
+      auth_token: token
+    });
 
-    AuthActiveSessions.set(user.uniqkey, user);
     return {
       user,
       token
@@ -127,5 +136,45 @@ export class AuthService {
       throw new AppProcessError('Senha incorreta', HTTPResponseCode.informationNotTrue);
 
     return this.createLogin(foundUser.uniqkey);
+  }
+
+  static async validate(data: UserAuthMiddlewareProps, token: string) {
+    const user = await UserService.getWithFullData({
+      email: data.email,
+      uniqkey: data.uniqkey
+    });
+    const activeSession = AuthActiveSessions.get(user.uniqkey);
+    if (!activeSession)
+      throw new AppProcessError('Deslogado', HTTPResponseCode.informationUnauthorized);
+
+    if (activeSession.token != token)
+      throw new AppProcessError(
+        'Token não é válido para esta sessão',
+        HTTPResponseCode.informationUnauthorized
+      );
+
+    return {
+      name: user.name,
+      email: user.email,
+      uniqkey: user.uniqkey,
+      picture: user.picture,
+      loged_at: user.loged_at,
+      env_id: user.env_id,
+      block_with_venc: user.block_with_venc,
+      date_venc: user.date_venc,
+      params: user.params,
+      type: user.type
+    };
+  }
+
+  static async validatePassword(user_id: string | number, password: string) {
+    const user = await UserService.getWithFullData({ id: user_id });
+    if (!user)
+      throw new AppProcessError('Usuário não encontrado', HTTPResponseCode.informationNotTrue);
+
+    if (!bcrypt.compareSync(password, user.pass))
+      throw new AppProcessError('Senha incorreta', HTTPResponseCode.informationNotTrue);
+
+    return true;
   }
 }

@@ -1,6 +1,7 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
+import type { WhereParams } from '@core';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import { ChatMessageModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 
@@ -60,6 +61,16 @@ export class ChatMessageService {
       const msg = 'Erro ao buscar a lista da mensagens';
       logger.error({ error }, msg);
       throw new Error(msg);
+    }
+  }
+
+  static async listWith(params: WhereParams<ChatMessageModel>) {
+    try {
+      const list = await ChatMessageModel.findAll({ where: params });
+      return list;
+    } catch (error) {
+      logger.error({ error }, 'Erro ao buscar a lista de mensagens');
+      throw new Error('Erro ao buscar a lista de mensagens');
     }
   }
 }

@@ -1,16 +1,17 @@
 import type { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
+import type { WhereParams } from '@core';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import type { WorkflowModel } from '../sequelize/Models';
 import { ChatbotModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
 import { WorkflowService } from './WorkflowService';
-import { UserService } from './UserService';
+import { EnvironmentService } from './EnvironmentService';
 
 export class ChatbotService {
   static async create(data: MakeNullishOptional<InferCreationAttributes<ChatbotModel>>) {
     const register = await ChatbotModel.findOne({
-      where: { name: data.name, user_id: data.user_id }
+      where: { name: data.name, env_id: data.env_id }
     });
     if (register)
       throw new AppProcessError(
@@ -76,6 +77,16 @@ export class ChatbotService {
     }
   }
 
+  static async listWith(params: WhereParams<ChatbotModel>) {
+    try {
+      const list = await ChatbotModel.findAll({ where: params });
+      return list;
+    } catch (error) {
+      logger.error({ error }, 'Erro ao buscar a lista de chatbots');
+      throw new Error('Erro ao buscar a lista de chatbots');
+    }
+  }
+
   static async getWorkflow(id: string | number) {
     const chatbot = await this.get(id);
     const workflow = await chatbot.getWorkflow();
@@ -100,7 +111,7 @@ export class ChatbotService {
     try {
       const workflow = await chatbot.createWorkflow({
         ...params,
-        user_id: chatbot.user_id
+        env_id: chatbot.env_id
       });
 
       return workflow;
@@ -126,9 +137,9 @@ export class ChatbotService {
         'warning'
       );
 
-    if (!(await UserService.hasWorkflow(user_id, workflow_id)))
+    if (!(await EnvironmentService.hasWorkflow(user_id, workflow_id)))
       throw new AppProcessError(
-        'O workflow não pertence à este usuário',
+        'O workflow não pertence à este ambiente',
         HTTPResponseCode.informationBlocked
       );
 

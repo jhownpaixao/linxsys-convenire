@@ -1,22 +1,25 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { UserService, ChatbotService } from '../services/app';
+import { EnvironmentService, ChatbotService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class ChatbotController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { name } = req.body;
 
     await CheckRequest({ name });
 
     const chatbot = await ChatbotService.create({
       ...req.body,
-      user_id: user_id
+      env_id: req.env
     });
 
     // ?Registrar o evento
-    EventLog.create(user_id).register(EventLogTarget.attendant, EventLogMethod.created, chatbot.id);
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.attendant,
+      EventLogMethod.created,
+      chatbot.id
+    );
 
     SendHTTPResponse(
       {
@@ -31,9 +34,7 @@ export class ChatbotController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    const list = await UserService.listChatbots(user_id);
+    const list = await EnvironmentService.listChatbots(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res
@@ -51,7 +52,7 @@ export class ChatbotController {
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.workflow,
       EventLogMethod.created,
       workflow.id
@@ -93,10 +94,14 @@ export class ChatbotController {
     await ChatbotService.setWorkflow(req.user.id, chatbot_id, workflow_id);
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(EventLogTarget.workflow, EventLogMethod.linked, {
-      chatbot_id,
-      workflow_id
-    });
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.workflow,
+      EventLogMethod.linked,
+      {
+        chatbot_id,
+        workflow_id
+      }
+    );
 
     SendHTTPResponse(
       { message: 'Workflow vínculado com sucesso', type: 'success', status: true },

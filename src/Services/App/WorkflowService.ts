@@ -1,13 +1,13 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import { WorkflowModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 
 export class WorkflowService {
   static async create(data: MakeNullishOptional<InferCreationAttributes<WorkflowModel>>) {
     const register = await WorkflowModel.findOne({
-      where: { name: data.name, user_id: data.user_id }
+      where: { name: data.name, env_id: data.env_id }
     });
     if (register)
       throw new AppProcessError(

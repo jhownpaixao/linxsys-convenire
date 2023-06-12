@@ -26,25 +26,25 @@ export const MethodsArr = [
 ];
 
 enum AccessProfile_Attendant {
-  Administrator = AccessPermissions.all,
+  SuperAdmin = AccessPermissions.all,
   Default = AccessPermissions.none,
-  Company = AccessPermissions.all,
+  Administrator = AccessPermissions.all,
   Operator = AccessPermissions.modify,
   Attendant = AccessPermissions.modify
 }
 
-enum AccessProfile_Company {
-  Administrator = AccessPermissions.all,
+enum AccessProfile_Administrator {
+  SuperAdmin = AccessPermissions.all,
   Default = AccessPermissions.none,
-  Company = AccessPermissions.all,
+  Administrator = AccessPermissions.all,
   Operator = AccessPermissions.modify,
   Attendant = AccessPermissions.none
 }
 
-enum AccessProfile_Admin {
-  Administrator = AccessPermissions.all,
+enum AccessProfile_SuperAdmin {
+  SuperAdmin = AccessPermissions.all,
   Default = AccessPermissions.none,
-  Company = AccessPermissions.none,
+  Administrator = AccessPermissions.none,
   Operator = AccessPermissions.none,
   Attendant = AccessPermissions.none
 }
@@ -52,20 +52,21 @@ enum AccessProfile_Admin {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const RouteAccessProfiles: Record<string, any> = {
   [ServerConfig.ROUTES.attendant]: AccessProfile_Attendant,
-  [ServerConfig.ROUTES.chatbot]: AccessProfile_Company,
-  [ServerConfig.ROUTES.connection]: AccessProfile_Company,
-  [ServerConfig.ROUTES.profile]: AccessProfile_Company,
+  [ServerConfig.ROUTES.chatbot]: AccessProfile_Administrator,
+  [ServerConfig.ROUTES.connection]: AccessProfile_Administrator,
+  [ServerConfig.ROUTES.profile]: AccessProfile_Administrator,
   [ServerConfig.ROUTES.client]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.contact]: AccessProfile_Attendant,
-  [ServerConfig.ROUTES.workflow]: AccessProfile_Company,
+  [ServerConfig.ROUTES.workflow]: AccessProfile_Administrator,
   [ServerConfig.ROUTES.assessment]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.chat]: AccessProfile_Attendant,
-  [ServerConfig.ROUTES.user]: AccessProfile_Admin,
-  [ServerConfig.ROUTES.core]: AccessProfile_Admin,
+  [ServerConfig.ROUTES.user]: AccessProfile_SuperAdmin,
+  [ServerConfig.ROUTES.core]: AccessProfile_SuperAdmin,
+  [ServerConfig.ROUTES.environment]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.auth]: {
-    Administrator: AccessPermissions.all,
+    SuperAdmin: AccessPermissions.all,
     Default: AccessPermissions.readonly,
-    Company: AccessPermissions.readonly,
+    Administrator: AccessPermissions.readonly,
     Operator: AccessPermissions.readonly,
     Attendant: AccessPermissions.readonly
   }

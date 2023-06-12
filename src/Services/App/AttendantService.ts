@@ -1,6 +1,8 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
+import type { WhereParams } from '@core';
 import { AppProcessError, Security, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
+import type { AssessmentModel } from '../sequelize/Models';
 import { AttendantModel } from '../sequelize/Models';
 import bcrypt from 'bcrypt';
 import type { InferCreationAttributes } from 'sequelize';
@@ -10,7 +12,7 @@ export class AttendantService {
     data: Omit<MakeNullishOptional<InferCreationAttributes<AttendantModel>>, 'uniqkey'>
   ) {
     const attendant = await AttendantModel.findOne({
-      where: { email: data.email }
+      where: { email: data.email, env_id: data.env_id }
     });
     if (attendant)
       throw new AppProcessError(
@@ -72,6 +74,16 @@ export class AttendantService {
       const msg = 'Erro ao buscar a lista de atendentes';
       logger.error({ error }, msg);
       throw new Error(msg);
+    }
+  }
+
+  static async listWith(params: WhereParams<AssessmentModel>) {
+    try {
+      const list = await AttendantModel.findAll({ where: params });
+      return list;
+    } catch (error) {
+      logger.error({ error }, 'Erro ao buscar a lista de atendentes');
+      throw new Error('Erro ao buscar a lista de atendentes');
     }
   }
 }

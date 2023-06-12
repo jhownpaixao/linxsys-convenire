@@ -11,7 +11,7 @@ import type {
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
 import { ConnectionProfiles } from './ConnectionProfile';
-import { User } from './User';
+import { Environment } from './Environment';
 
 export class Connection extends Model<
   InferAttributes<Connection>,
@@ -21,7 +21,7 @@ export class Connection extends Model<
   declare name: string;
   declare connected_id?: CreationOptional<string>;
   declare uniqkey: string;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare config_id: ForeignKey<ConnectionProfiles['id']>;
   declare type: number;
   declare params: CreationOptional<object>;
@@ -36,7 +36,7 @@ export class Connection extends Model<
   declare profile?: NonAttribute<ConnectionProfiles>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.belongsTo(ConnectionProfiles, { foreignKey: 'config_id', as: 'profile' });
   }
 }
@@ -45,7 +45,7 @@ Connection.init(
   {
     name: DataTypes.STRING,
     uniqkey: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     type: DataTypes.INTEGER,
     config_id: DataTypes.INTEGER,
     params: DataTypes.JSON,

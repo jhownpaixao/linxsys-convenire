@@ -1,6 +1,6 @@
 import type { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import type { ContactModel } from '../sequelize/Models';
 import { CustomerModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
@@ -13,6 +13,7 @@ export type CustomerCreationProps = {
   nascimento: string;
   email: string;
   cpf: string;
+  env_id: number;
   contato: string;
   rg: string;
   cep: string;
@@ -23,12 +24,11 @@ export type CustomerCreationProps = {
   uf: string;
   group_id: string;
   params: object;
-  user_id: string;
 };
 export class CustomerService {
   static async create(data: CustomerCreationProps) {
-    const { rg, cpf, email, user_id } = data;
-    const user = await UserService.get(user_id);
+    const { rg, cpf, email, env_id } = data;
+    const user = await UserService.get(env_id);
     if (!user)
       throw new AppProcessError(
         'O usuário não foi localizado',
@@ -43,7 +43,7 @@ export class CustomerService {
       const client = await user.getClients({
         where: {
           [Op.and]: [
-            { user_id },
+            { env_id },
             {
               [Op.or]: conditions
             }
@@ -60,7 +60,7 @@ export class CustomerService {
 
     const contact = await ContactService.getWith({
       value: data.contato,
-      user_id: user_id
+      env_id: env_id
     });
     if (contact)
       throw new AppProcessError(
@@ -71,13 +71,13 @@ export class CustomerService {
     try {
       const client = await CustomerModel.create({
         ...data,
-        user_id: parseInt(data.user_id),
+        env_id: env_id,
         group_id: parseInt(data.group_id)
       });
 
       await ContactService.create({
         value: data.contato,
-        user_id: parseInt(data.user_id),
+        env_id: env_id,
         client_id: client.id
       });
       return client;
@@ -175,7 +175,7 @@ export class CustomerService {
 
     contact = await ContactService.getWith({
       value: params.value,
-      user_id: client.user_id
+      env_id: client.env_id
     });
     if (contact)
       throw new AppProcessError(
@@ -186,7 +186,7 @@ export class CustomerService {
     try {
       const contatct = await client.createContact({
         ...params,
-        user_id: client.user_id
+        env_id: client.env_id
       });
 
       return contatct;

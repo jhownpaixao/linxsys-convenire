@@ -7,7 +7,7 @@ import type {
   EnumDataType
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 import { Client } from './Client';
 import { Contact } from './Contact';
 import { Chat } from './Chat';
@@ -15,7 +15,7 @@ import { Queue } from './Queue';
 import { Assessment } from './Assessment';
 export class Ticket extends Model<InferAttributes<Ticket>, InferCreationAttributes<Ticket>> {
   declare id?: CreationOptional<number>;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare client_id: ForeignKey<Client['id']>;
   declare contact_id: ForeignKey<Contact['id']>;
   declare chat_id: ForeignKey<Chat['id']>;
@@ -27,7 +27,7 @@ export class Ticket extends Model<InferAttributes<Ticket>, InferCreationAttribut
   declare params: CreationOptional<object>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
     this.belongsTo(Contact, { foreignKey: 'contact_id', as: 'contact' });
     this.belongsTo(Chat, { foreignKey: 'chat_id', as: 'chat' });
@@ -38,7 +38,7 @@ export class Ticket extends Model<InferAttributes<Ticket>, InferCreationAttribut
 
 Ticket.init(
   {
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     client_id: DataTypes.INTEGER,
     contact_id: DataTypes.INTEGER,
     chat_id: DataTypes.INTEGER,

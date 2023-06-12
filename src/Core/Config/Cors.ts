@@ -16,6 +16,6 @@ const Origins = String(process.env.FRONTENDS_URL).split(',') || ['http://localho
  */
 export const CORSPolicyOptions: CorsOptions = {
   origin: Origins,
-  allowedHeaders: ['X-Requested-With', 'content-type', 'Authorization'],
+  allowedHeaders: ['X-Requested-With', 'content-type', 'Authorization', 'Environment'],
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']
 };

@@ -1,10 +1,9 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { UserService, ConnectionService } from '../services/app';
+import { EnvironmentService, ConnectionService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 export class ConnectionController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { client_id } = req.params;
     const { name, type } = req.body;
 
@@ -13,11 +12,14 @@ export class ConnectionController {
     const connection = await ConnectionService.create({
       ...req.body,
       client_id: parseInt(client_id),
-      user_id: user_id
+      env_id: req.env
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(EventLogTarget.connection, EventLogMethod.created);
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.connection,
+      EventLogMethod.created
+    );
 
     SendHTTPResponse(
       {
@@ -42,9 +44,7 @@ export class ConnectionController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    const list = await UserService.listConnections(user_id);
+    const list = await EnvironmentService.listConnections(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res
@@ -62,7 +62,7 @@ export class ConnectionController {
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.connection_profile,
       EventLogMethod.created,
       profile.id
@@ -103,7 +103,7 @@ export class ConnectionController {
     await ConnectionService.setProfile(req.user.id, connection_id, profile_id);
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.connection_profile,
       EventLogMethod.linked,
       { connection_id, profile_id }

@@ -5,7 +5,6 @@ import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event'
 
 export class ContactController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { client_id } = req.params;
     const { value, comments, params } = req.body;
 
@@ -16,11 +15,11 @@ export class ContactController {
       comments,
       params,
       client_id: parseInt(client_id),
-      user_id: user_id
+      env_id: req.env
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.contact,
       EventLogMethod.created,
       contact.id

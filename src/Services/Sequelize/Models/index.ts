@@ -15,6 +15,7 @@ import { Ticket } from './Ticket';
 import { Assessment } from './Assessment';
 import { Event } from './Event';
 import { Resource } from './Resource';
+import { Environment } from './Environment';
 
 const Models = {
   Attendant,
@@ -33,7 +34,8 @@ const Models = {
   Ticket,
   Assessment,
   Event,
-  Resource
+  Resource,
+  Environment
 };
 
 Object.values(Models).map((model) => model.associate());
@@ -56,5 +58,6 @@ export {
   Assessment as AssessmentModel,
   Event as EventModel,
   Resource as ResourceModel,
+  Environment as EnvironmentModel,
   Models
 };

@@ -1,21 +1,20 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { AssessmentService, UserService } from '../services/app';
+import { AssessmentService, EnvironmentService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class AssessmentController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { client_id, contact_id, for_id } = req.body;
 
     await CheckRequest({ client_id, contact_id, for_id });
 
     const assessment = await AssessmentService.create({
       ...req.body,
-      user_id: user_id
+      env_id: req.env
     });
 
-    EventLog.create(user_id).register(
+    EventLog.create(req.user.uniqkey).register(
       EventLogTarget.assessment,
       EventLogMethod.created,
       assessment
@@ -34,9 +33,7 @@ export class AssessmentController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    const list = await UserService.listAssessments(user_id);
+    const list = await EnvironmentService.listAssessments(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res

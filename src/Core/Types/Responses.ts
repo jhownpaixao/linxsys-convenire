@@ -10,18 +10,18 @@ export declare type ResponseType = 'error' | 'success' | 'warning';
  * @date 26/03/2023 - 21:45:23
  *
  */
-export declare type HTTPResponse = {
+export declare type HTTPResponse<D = unknown> = {
   status: boolean;
   message: string;
   type: ResponseType;
   code?: number;
   location?: string;
   timestamp?: number;
-  data?: unknown;
+  data?: D;
 };
 
-export declare interface HTTPResponseError {
+export declare interface HTTPResponseError<D = unknown> {
   message: string;
   code: number;
-  data?: object;
+  data?: D;
 }

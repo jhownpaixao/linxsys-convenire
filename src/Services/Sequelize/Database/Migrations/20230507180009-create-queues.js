@@ -10,10 +10,10 @@ module.exports = {
         allowNull: false,
         primaryKey: true
       },
-      user_id: {
+      env_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Users', key: 'id' },
+        references: { model: 'Environments', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },

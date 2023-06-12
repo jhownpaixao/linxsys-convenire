@@ -1,6 +1,6 @@
 import type { MakeNullishOptional, NullishPropertiesOf } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import type { ChatbotModel } from '../sequelize/Models';
 import { ConnectionProfilesModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, Optional, WhereOptions } from 'sequelize';
@@ -106,7 +106,7 @@ export class ConnectionProfileService {
     try {
       const chatbot = await profile.createChatbot({
         ...params,
-        user_id: profile.user_id
+        env_id: profile.user_id
       });
 
       return chatbot;

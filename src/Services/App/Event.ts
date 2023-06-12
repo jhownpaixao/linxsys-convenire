@@ -1,6 +1,6 @@
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 import { EventModel } from '../sequelize/Models';
-import { logger } from '../logger/Logger';
+import { logger } from '../Logger/Logger';
 import type { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError } from '@core/utils';
 import { HTTPResponseCode } from '@core/config';
@@ -8,8 +8,8 @@ import { HTTPResponseCode } from '@core/config';
 interface IEventLog {
   description?: string;
   data?: any;
-  owner_id: number;
-  user_id: number;
+  owner_id: string;
+  env_id: number;
   target: number;
   method: number;
   triggered_at: Date;
@@ -36,18 +36,21 @@ export enum EventLogTarget {
   queued,
   tag,
   ticket,
-  workflow
+  workflow,
+  environment
 }
 
 export class EventLog {
-  public owner: number;
+  public owner: string;
+  public env: number;
 
-  private constructor(owner: number) {
-    this.owner = owner;
+  private constructor(uniqkey: string, env_id?: number) {
+    this.owner = uniqkey;
+    this.env = env_id;
   }
 
-  public static create(owner: number) {
-    return new this(owner);
+  public static create(uniqkey: string, env_id?: number) {
+    return new this(uniqkey, env_id);
   }
 
   public register(
@@ -56,17 +59,27 @@ export class EventLog {
     data?: any,
     description?: string
   ) {
-    const d = typeof data === typeof Object ? JSON.parse(data) : data;
+    let d;
+    switch (typeof data) {
+      case 'object':
+        d = JSON.parse(data);
+        break;
+      case 'number':
+        d = String(data);
+        break;
+      case 'string':
+        d = data;
+        break;
+    }
     const logEvent: IEventLog = {
       description,
       data: d,
       target,
       method,
-      user_id: this.owner,
+      env_id: this.env,
       owner_id: this.owner,
       triggered_at: new Date()
     };
-
     try {
       EventModel.create(logEvent);
     } catch (error) {

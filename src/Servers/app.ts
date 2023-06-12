@@ -7,12 +7,15 @@ import 'dotenv/config';
 import {
   CORSPolicyOptions,
   ExpressResponseOptions,
+  Security,
   SetAllowedMethods,
   handleAuthorizationFailure,
   handleProcessFailure,
   handleRouteNotFound
 } from '@core';
-import { logger } from '../services/logger';
+import { logger } from '../services/Logger';
+import path from 'path';
+import { FileService } from '../services/app/FileService';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });
@@ -28,8 +31,13 @@ app.use(cors(CORSPolicyOptions));
 
 /* Rotas */
 app.use(routes);
+
+app.use('/public', express.static(path.join(__dirname, '..', '..', 'public')));
 app.use(handleAuthorizationFailure);
 app.use(handleRouteNotFound);
 app.use(handleProcessFailure);
+
+// #Start Functions
+FileService.init();
 
 export default app;

@@ -1,6 +1,6 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import { ContactModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 

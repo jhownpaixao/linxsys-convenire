@@ -11,7 +11,7 @@ import type {
   HasOneGetAssociationMixin
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 import { Connection } from './Connection';
 
 export class Attendant extends Model<
@@ -19,9 +19,10 @@ export class Attendant extends Model<
   InferCreationAttributes<Attendant>
 > {
   declare id?: CreationOptional<number>;
-  declare user_id: ForeignKey<User['id']>;
-  declare user?: NonAttribute<User>;
+  declare env_id: ForeignKey<Environment['id']>;
+  declare user?: NonAttribute<Environment>;
   declare name: string;
+  declare picture: string;
   declare pass: string;
   declare email: string;
   declare uniqkey: string;
@@ -30,22 +31,23 @@ export class Attendant extends Model<
   declare default_conn: CreationOptional<ForeignKey<Connection['id']>>;
   declare params: CreationOptional<object>;
 
-  declare getUser: BelongsToGetAssociationMixin<User>; // Note the null assertions!
-  declare setUser: BelongsToSetAssociationMixin<User, number>;
+  declare getEnvironment: BelongsToGetAssociationMixin<Environment>; // Note the null assertions!
+  declare setEnvironment: BelongsToSetAssociationMixin<Environment, number>;
 
   declare getConnection: HasOneGetAssociationMixin<Connection>; // Note the null assertions!
   declare setConnection: HasOneSetAssociationMixin<Connection, number>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'user_id', as: 'environment' });
     this.hasOne(Connection, { foreignKey: 'id', as: 'connection' });
   }
 }
 
 Attendant.init(
   {
-    user_id: DataTypes.INTEGER.UNSIGNED,
+    env_id: DataTypes.INTEGER.UNSIGNED,
     name: DataTypes.STRING,
+    picture: DataTypes.STRING,
     pass: DataTypes.STRING,
     email: DataTypes.STRING,
     uniqkey: DataTypes.STRING,

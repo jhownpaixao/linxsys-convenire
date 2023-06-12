@@ -47,7 +47,7 @@ app.get('/keys', async (req, res) => {
   res.send(keyStore.toJSON());
 });
 
-app.post('/sign', async (req, res) => {
+app.post('/auth/sign', async (req, res) => {
   const ks = fs.readFileSync(KeyStoreFile);
   const keyStore = await jose.JWK.asKeyStore(ks.toString());
   const [key] = keyStore.all({ use: 'sig' });

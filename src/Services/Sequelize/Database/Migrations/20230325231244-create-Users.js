@@ -10,9 +10,21 @@ module.exports = {
         allowNull: false,
         primaryKey: true
       },
+      env_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'Environments', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      picture: {
+        unique: true,
+        type: Sequelize.STRING,
+        allowNull: true
       },
       pass: {
         type: Sequelize.STRING,
@@ -29,7 +41,7 @@ module.exports = {
         allowNull: false
       },
       type: {
-        type: Sequelize.ENUM('Administrator', 'Default', 'Attendant', 'Operator', 'Company'),
+        type: Sequelize.ENUM('Administrator', 'Default', 'SuperAdmin', 'Operator'),
         defaultValue: 'Default',
         allowNull: false
       },
@@ -56,7 +68,11 @@ module.exports = {
         allowNull: true
       },
       auth_token: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
+      loged_at: {
+        type: Sequelize.DATE,
         allowNull: true
       },
       created_at: {

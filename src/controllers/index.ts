@@ -9,3 +9,4 @@ export * from './ChatbotController';
 export * from './ConnectionProfileController';
 export * from './AssessmentController';
 export * from './ChatController';
+export * from './EnvironmentController';

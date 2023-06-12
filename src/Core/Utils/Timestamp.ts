@@ -1,36 +1,32 @@
-export function DateDifference(date1: Date, date2: Date, type = 'd') {
-  let difference = date1.getTime() - date2.getTime();
+import moment from 'moment';
 
-  const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-  difference -= daysDifference * 1000 * 60 * 60 * 24;
-
-  const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
-  difference -= hoursDifference * 1000 * 60 * 60;
-
-  const minutesDifference = Math.floor(difference / 1000 / 60);
-  difference -= minutesDifference * 1000 * 60;
-
-  const secondsDifference = Math.floor(difference / 1000);
+export function DateDifference(date1: Date, date2: Date, type?: 'd' | 'h' | 'm' | 's' | 'ms') {
+  const a = moment(date1);
+  const b = moment(date2);
 
   switch (type) {
     case 'd':
-      return daysDifference;
+      return a.diff(b, 'days');
       break;
 
     case 'h':
-      return hoursDifference;
+      return a.diff(b, 'hours');
       break;
 
     case 'm':
-      return minutesDifference;
+      return a.diff(b, 'minutes');
       break;
 
     case 's':
-      return secondsDifference;
+      return a.diff(b, 'seconds');
+      break;
+
+    case 'ms':
+      return a.diff(b, 'milliseconds');
       break;
 
     default:
-      return daysDifference;
+      return a.diff(b, 'days');
       break;
   }
 }

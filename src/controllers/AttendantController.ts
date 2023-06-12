@@ -1,24 +1,22 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { UserService, AttendantService } from '../services/app';
+import { EnvironmentService, AttendantService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 export class AttendantController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { name, email, pass, block_with_venc, params } = req.body;
 
     await CheckRequest({ name, pass });
-
     const attendant = await AttendantService.create({
       name,
       email,
       pass,
       block_with_venc,
       params,
-      user_id: user_id
+      env_id: req.env
     });
 
-    EventLog.create(user_id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.attendant,
       EventLogMethod.created,
       attendant.id
@@ -37,11 +35,7 @@ export class AttendantController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    await CheckRequest({ user_id });
-
-    const list = await UserService.listAttendants(user_id);
+    const list = await EnvironmentService.listAttendants(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res

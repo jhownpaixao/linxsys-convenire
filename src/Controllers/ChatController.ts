@@ -1,22 +1,25 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { ChatService, UserService } from '../services/app';
+import { ChatService, EnvironmentService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class ChatController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { owner_id, type } = req.body;
 
     await CheckRequest({ owner_id, type });
 
     const chat = await ChatService.create({
       ...req.body,
-      user_id: user_id
+      env_id: req.env
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(EventLogTarget.chatbot, EventLogMethod.created, chat.id);
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.chatbot,
+      EventLogMethod.created,
+      chat.id
+    );
 
     SendHTTPResponse(
       {
@@ -31,9 +34,7 @@ export class ChatController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    const list = await UserService.listChats(user_id);
+    const list = await EnvironmentService.listChats(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res

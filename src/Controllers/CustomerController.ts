@@ -1,22 +1,21 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, ServerConfig, HTTPResponseCode } from '@core';
-import { UserService, CustomerService } from '../services/app';
+import { EnvironmentService, CustomerService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class CustomerController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { nome, contato } = req.body;
 
     await CheckRequest({ contato, nome });
 
     const client = await CustomerService.create({
       ...req.body,
-      user_id
+      env_id: req.env
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.customer,
       EventLogMethod.created,
       client.id
@@ -44,9 +43,7 @@ export class CustomerController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    const list = await UserService.listCustomers(user_id);
+    const list = await EnvironmentService.listCustomers(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res
@@ -76,7 +73,7 @@ export class CustomerController {
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.contact,
       EventLogMethod.created,
       contact.id

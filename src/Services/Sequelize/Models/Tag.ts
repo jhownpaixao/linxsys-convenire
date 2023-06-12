@@ -6,17 +6,17 @@ import type {
   ForeignKey
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 export class Tag extends Model<InferAttributes<Tag>, InferCreationAttributes<Tag>> {
   declare id?: CreationOptional<number>;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare name: string;
   declare color: string;
   declare comments: CreationOptional<string>;
   declare params: CreationOptional<object>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
   }
 }
 
@@ -24,7 +24,7 @@ Tag.init(
   {
     name: DataTypes.STRING,
     color: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     comments: DataTypes.STRING,
     params: DataTypes.JSON
   },

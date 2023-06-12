@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { logger } from '../../services/logger';
+import { logger } from '../../services/Logger';
 import type { HTTPResponse, ResponseType } from '../types';
 import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../config';
 import type * as core from 'express-serve-static-core';

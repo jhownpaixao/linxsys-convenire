@@ -1,6 +1,7 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
+import type { WhereParams } from '@core';
 import { AppProcessError, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
+import { logger } from '../Logger';
 import { AssessmentModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 export class AssessmentService {
@@ -59,6 +60,16 @@ export class AssessmentService {
       const msg = 'Erro ao buscar a lista da avaliações';
       logger.error({ error }, msg);
       throw new Error(msg);
+    }
+  }
+
+  static async listWith(params: WhereParams<AssessmentModel>) {
+    try {
+      const list = await AssessmentModel.findAll({ where: params });
+      return list;
+    } catch (error) {
+      logger.error({ error }, 'Erro ao buscar a lista de usuários');
+      throw new Error('Erro ao buscar a lista de usuários');
     }
   }
 }

@@ -13,7 +13,8 @@ enum RoutesName {
   queue = '/queues',
   tags = '/tags',
   ticket = '/tickets',
-  core = '/core'
+  core = '/core',
+  environment = '/environments'
 }
 export class ServerConfig {
   static HOST_ADDRESS = process.env.BACKEND_URL || 'http://localhost';

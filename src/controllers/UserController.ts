@@ -2,12 +2,13 @@ import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { UserService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
+import type { User } from '../services/sequelize/Models/User';
 
 export class UserController {
   static store = async (req: Request, res: Response): Promise<void> => {
-    const { name, email, pass, type, block_with_venc, date_venc, params } = req.body;
+    const { name, email, pass, type, block_with_venc, date_venc, passConf, ...rest } = req.body;
 
-    await CheckRequest({ name, email, pass, type, block_with_venc });
+    await CheckRequest({ name, email, pass, type, block_with_venc, date_venc });
 
     const user = await UserService.create({
       name,
@@ -16,18 +17,21 @@ export class UserController {
       type,
       block_with_venc,
       date_venc,
-      params
+      ...rest
     });
 
-    // ?Registrar o evento
-    EventLog.create(req.user.id).register(EventLogTarget.user, EventLogMethod.created, user.id);
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.user,
+      EventLogMethod.created,
+      user.id
+    );
 
     SendHTTPResponse(
       {
         message: 'Usuário criado com sucesso',
         type: 'success',
         status: true,
-        location: `${ServerConfig.ROUTES.contact}/${user.id}`,
+        location: `${ServerConfig.ROUTES.user}/${user.id}`,
         code: HTTPResponseCode.created
       },
       res
@@ -35,7 +39,15 @@ export class UserController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const list = await UserService.list();
+    const { type } = req.query;
+    let list: User[] = [];
+
+    if (type) {
+      list = await UserService.listWith({ type: type as string });
+    } else {
+      list = await UserService.list();
+    }
+
     SendHTTPResponse(
       { message: 'carregados com sucesso', type: 'success', status: true, data: list },
       res
@@ -59,14 +71,18 @@ export class UserController {
     const user = await UserService.update(user_id, params);
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(EventLogTarget.user, EventLogMethod.updated, user.id);
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.user,
+      EventLogMethod.updated,
+      user.id
+    );
 
     SendHTTPResponse(
       {
         message: 'Atualizado com sucesso',
         type: 'success',
         status: true,
-        location: `${ServerConfig.ROUTES.contact}/${user.id}`
+        location: `${ServerConfig.ROUTES.user}/${user.id}`
       },
       res
     );
@@ -78,7 +94,11 @@ export class UserController {
     await UserService.delete(user_id);
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(EventLogTarget.user, EventLogMethod.deleted, user_id);
+    EventLog.create(req.user.uniqkey, req.env).register(
+      EventLogTarget.user,
+      EventLogMethod.deleted,
+      user_id
+    );
 
     SendHTTPResponse({ message: 'Excluído', type: 'success', status: true }, res);
   };

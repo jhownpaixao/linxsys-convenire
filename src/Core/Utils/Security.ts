@@ -4,7 +4,7 @@ import type { UserAuthMiddlewareProps } from '../../middlewares';
 import { AppProcessError } from './Responses';
 import { HTTPResponseCode, SecurityConfig } from '../config';
 import type { Request } from 'express';
-import { logger } from '../../services/logger';
+import { logger } from '../../services/Logger';
 
 export class Security {
   // !Static Methodos
@@ -40,29 +40,32 @@ export class Security {
   }
 
   static requestAccessPermission(user: UserAuthMiddlewareProps, req: Request) {
-    try {
-      const access_policy = RouteAccessProfiles[req.baseUrl];
-      const arrays_permissions = MethodsArr[access_policy[user.type]];
-      const method = req.method;
+    const access_policy = RouteAccessProfiles[req.baseUrl];
+    const arrays_permissions = MethodsArr[access_policy[user.type]];
+    const method = req.method;
 
-      if (!arrays_permissions.includes(method))
-        throw new AppProcessError(
-          'Usuário sem permissão de acesso à este recurso',
-          HTTPResponseCode.informationBlocked
-        );
-    } catch (error) {
-      logger.error(error, 'Erro ao buscar as permissões de acesso');
-      throw Error('Erro ao buscar as permissões de acesso');
-    }
+    if (!arrays_permissions.includes(method))
+      throw new AppProcessError(
+        'Usuário sem permissão de acesso à este recurso',
+        HTTPResponseCode.informationBlocked
+      );
   }
 
   static uniqkey = crypto.randomUUID;
 
   static uniqtoken(length = 20) {
-    return this.randomString(
-      length,
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    );
+    const randLetter = () =>
+      this.randomString(
+        length,
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!#'
+      );
+    const d = new Date();
+
+    let token = d.getDate().toString();
+    token += randLetter();
+    token += d.getMonth().toString();
+    token += d.getSeconds().toString();
+    return token;
   }
 
   // !Private Static Methodos

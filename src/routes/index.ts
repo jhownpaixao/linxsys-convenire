@@ -9,6 +9,8 @@ import AttendantRoute from './AttendantRoutes';
 import CustomerRoutes from './CustomerRoutes';
 import AuthRoutes from './AuthRoutes';
 import AssessmentRoutes from './AssessmentRoutes';
+import EnvironmentRoutes from './EnvironmentRoutes';
+import FilesRoutes from './FilesRoutes';
 
 const routes = Router();
 
@@ -21,5 +23,7 @@ routes.use(ServerConfig.ROUTES.attendant, AuthMiddleware.Token, UserMiddleware.r
 routes.use(ServerConfig.ROUTES.client, AuthMiddleware.Token, UserMiddleware.recover, CustomerRoutes);
 routes.use(ServerConfig.ROUTES.assessment, AuthMiddleware.Token, UserMiddleware.recover, AssessmentRoutes);
 routes.use(ServerConfig.ROUTES.chat, AuthMiddleware.Token, UserMiddleware.recover, ChatbotRoutes);
+routes.use(ServerConfig.ROUTES.environment, AuthMiddleware.Token, UserMiddleware.recover, EnvironmentRoutes);
 
+routes.use('/files', FilesRoutes);
 export default routes;

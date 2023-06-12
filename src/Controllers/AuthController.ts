@@ -46,6 +46,17 @@ export class AuthController {
     //res.redirect(HTTPResponseCode.redirectingForResponse, `/auth/validate/${key}/${encrypted}`);
   };
 
+  public static logout = async (req: Request, res: Response) => {
+    AuthService.deleteLogin(req.user.uniqkey);
+    SendHTTPResponse(
+      {
+        status: true,
+        message: 'Deslogado',
+        type: 'success'
+      },
+      res
+    );
+  };
   public static sign = async (req: Request, res: Response) => {
     const token = await AuthService.signData(req.body);
     return SendHTTPResponse(
@@ -65,5 +76,38 @@ export class AuthController {
     } catch (e) {
       res.send({ error: e });
     }
+  };
+
+  public static validate = async (req: Request, res: Response) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const user = await AuthService.validate(req.user, token);
+
+    SendHTTPResponse(
+      {
+        message: 'Sessão ativa',
+        type: 'success',
+        data: user,
+        status: true
+      },
+      res
+    );
+  };
+
+  public static validatePassowrd = async (req: Request, res: Response) => {
+    const { password } = req.body;
+    const id = req.user.id;
+
+    await CheckRequest({ password });
+
+    await AuthService.validatePassword(id, password);
+
+    SendHTTPResponse(
+      {
+        message: 'Confirmado',
+        type: 'success',
+        status: true
+      },
+      res
+    );
   };
 }

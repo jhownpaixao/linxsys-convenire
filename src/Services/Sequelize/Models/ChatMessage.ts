@@ -7,14 +7,14 @@ import type {
   EnumDataType
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 import { Chat } from './Chat';
 export class ChatMessage extends Model<
   InferAttributes<ChatMessage>,
   InferCreationAttributes<ChatMessage>
 > {
   declare id?: CreationOptional<number>;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare chat_id: ForeignKey<Chat['id']>;
   declare uniqkey: string;
   declare from: number;
@@ -29,14 +29,14 @@ export class ChatMessage extends Model<
   declare reactions: CreationOptional<object>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.belongsTo(Chat, { foreignKey: 'chat_id', as: 'chat' });
   }
 }
 
 ChatMessage.init(
   {
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     chat_id: DataTypes.INTEGER,
     uniqkey: DataTypes.STRING,
     from: DataTypes.INTEGER,

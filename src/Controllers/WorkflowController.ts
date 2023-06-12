@@ -1,22 +1,21 @@
 import type { Request, Response } from 'express';
 import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
-import { WorkflowService, UserService } from '../services/app';
+import { WorkflowService, EnvironmentService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
 
 export class WorkflowController {
   static store = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
     const { name } = req.body;
 
     await CheckRequest({ name });
 
     const workflow = await WorkflowService.create({
       ...req.body,
-      user_id: user_id
+      env_id: req.env
     });
 
     // ?Registrar o evento
-    EventLog.create(req.user.id).register(
+    EventLog.create(req.user.uniqkey, req.env).register(
       EventLogTarget.workflow,
       EventLogMethod.deleted,
       workflow.id
@@ -35,9 +34,7 @@ export class WorkflowController {
   };
 
   static list = async (req: Request, res: Response) => {
-    const user_id = req.user.id;
-
-    const list = await UserService.listWorkflows(user_id);
+    const list = await EnvironmentService.listWorkflows(req.env);
     SendHTTPResponse(
       { message: 'Carregado com sucesso', type: 'success', status: true, data: list },
       res

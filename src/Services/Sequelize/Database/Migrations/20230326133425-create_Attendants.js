@@ -22,18 +22,22 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
+      picture: {
+        unique: true,
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       uniqkey: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      user_id: {
+      env_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Users', key: 'id' },
+        references: { model: 'Environments', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-
       block_with_venc: {
         type: Sequelize.ENUM('Yes', 'No'),
         defaultValue: 'Yes',

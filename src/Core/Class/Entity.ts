@@ -31,7 +31,7 @@ export abstract class Entity {
   //constructor() {}
 
   // !Static Methods
-  protected static model: ModelType<never>;
+  protected static model: ModelType<any>;
 
   /**
    * Encontra a entidade baseado no model atual

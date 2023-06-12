@@ -18,12 +18,12 @@ import type {
   NonAttribute
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 import { ChatMessage } from './ChatMessage';
 
 export class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
   declare id?: CreationOptional<number>;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare owner_id: number;
   declare channel: string;
   declare title: string;
@@ -43,14 +43,14 @@ export class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<C
   declare messages?: NonAttribute<ChatMessage[]>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.hasMany(ChatMessage, { foreignKey: 'chat_id', as: 'messages' });
   }
 }
 
 Chat.init(
   {
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     owner_id: DataTypes.INTEGER,
     channel: DataTypes.STRING,
     title: DataTypes.STRING,

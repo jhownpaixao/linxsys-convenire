@@ -7,18 +7,18 @@ import type {
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
 import { Client } from './Client';
-import { User } from './User';
+import { Environment } from './Environment';
 
 export class Contact extends Model<InferAttributes<Contact>, InferCreationAttributes<Contact>> {
   declare id?: CreationOptional<number>;
   declare value: string;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare client_id: ForeignKey<Client['id']>;
   declare comments: CreationOptional<string>;
   declare params: CreationOptional<object>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
   }
 }
@@ -26,7 +26,7 @@ export class Contact extends Model<InferAttributes<Contact>, InferCreationAttrib
 Contact.init(
   {
     value: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     client_id: DataTypes.INTEGER,
     comments: DataTypes.STRING,
     params: DataTypes.JSON

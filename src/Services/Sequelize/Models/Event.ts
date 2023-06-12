@@ -6,11 +6,11 @@ import type {
   ForeignKey
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 export class Event extends Model<InferAttributes<Event>, InferCreationAttributes<Event>> {
   declare id?: CreationOptional<number>;
-  declare user_id: ForeignKey<User['id']>;
-  declare owner_id: number;
+  declare env_id: ForeignKey<Environment['id']>;
+  declare owner_id: string;
   declare data: string;
   declare description: string;
   declare target: number;
@@ -18,13 +18,13 @@ export class Event extends Model<InferAttributes<Event>, InferCreationAttributes
   declare triggered_at: Date;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
   }
 }
 
 Event.init(
   {
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     owner_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
     target: DataTypes.INTEGER,

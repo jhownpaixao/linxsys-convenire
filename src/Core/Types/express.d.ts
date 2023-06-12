@@ -7,6 +7,7 @@ declare global {
     export interface Request {
       user: UserAuthMiddlewareProps;
       auth: AuthMiddlewareProps;
+      env: number;
     }
   }
 }

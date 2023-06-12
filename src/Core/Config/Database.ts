@@ -1,5 +1,5 @@
 import type { SequelizeOptions } from 'sequelize-typescript';
-import { logger } from '../../services/logger';
+import { logger } from '../../services/Logger';
 import SequelizeConnectionConfig from '../../services/sequelize/Database/cli-config';
 
 /**

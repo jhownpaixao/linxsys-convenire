@@ -1,20 +1,11 @@
 import type { MakeNullishOptional } from 'sequelize/types/utils';
 import { AppProcessError, Security, HTTPResponseCode } from '@core';
-import { logger } from '../logger';
-import { WorkflowModel } from '../sequelize/Models';
-import {
-  AssessmentModel,
-  AttendantModel,
-  ChatModel,
-  ChatbotModel,
-  ConnectionModel,
-  ConnectionProfilesModel,
-  CustomerModel,
-  UserModel
-} from '../sequelize/Models';
+import { logger } from '../Logger';
+import { UserModel } from '../sequelize/Models';
 import bcrypt from 'bcrypt';
 import type { InferAttributes, InferCreationAttributes, Model, WhereOptions } from 'sequelize';
 import { Entity } from '@core/class/Entity';
+import { FileService } from './FileService';
 
 type WhereParams<M extends Model> = WhereOptions<InferAttributes<M, { omit: never }>>;
 
@@ -46,12 +37,17 @@ export class UserService extends Entity {
         name: data.name,
         uniqkey: Security.uniqkey(),
         email: data.email,
+        picture: data.picture,
+        env_id: data.env_id,
         pass: hash,
         type: data.type,
         block_with_venc: data.block_with_venc,
         date_venc: data.date_venc,
         params: data.params
       });
+
+      if (data.picture) FileService.save(data.picture, 'image');
+
       return user;
     } catch (error) {
       logger.error({ data, error }, 'Erro ao cadastrar o usuário');
@@ -81,14 +77,24 @@ export class UserService extends Entity {
     data: MakeNullishOptional<InferCreationAttributes<UserModel>>
   ) {
     const user = await this.get(id);
-    const hash = await bcrypt.hash(data.pass, 10);
-
+    let password = {};
+    if (data.pass) {
+      const hash = await bcrypt.hash(data.pass, 10);
+      password = {
+        pass: hash
+      };
+    }
     try {
+      const picture = user.picture;
       await user.update({
         ...data,
-        pass: hash
+        ...password
       });
       await user.reload();
+      if (data.picture && data.picture != picture) {
+        FileService.save(data.picture, 'image');
+        FileService.delete(picture, 'image');
+      }
       return user;
     } catch (error) {
       logger.error({ data, error }, 'Erro ao atualizar o usuário');
@@ -97,7 +103,9 @@ export class UserService extends Entity {
   }
 
   static async get(id: string | number) {
-    const user = await UserModel.findByPk(id);
+    const user = await UserModel.findByPk(id, {
+      include: [UserModel.associations.environment]
+    });
     if (!user)
       throw new AppProcessError(
         'O usuário não foi localizado',
@@ -108,7 +116,8 @@ export class UserService extends Entity {
 
   static async getWith(params: WhereParams<UserModel>) {
     const register = await UserModel.findOne({
-      where: params
+      where: params,
+      include: [UserModel.associations.environment]
     });
     return register;
   }
@@ -120,7 +129,7 @@ export class UserService extends Entity {
 
   static async list() {
     try {
-      const list = await UserModel.findAll();
+      const list = await UserModel.findAll({ include: [UserModel.associations.environment] });
       return list;
     } catch (error) {
       logger.error({ error }, 'Erro ao buscar a lista de usuários');
@@ -128,100 +137,16 @@ export class UserService extends Entity {
     }
   }
 
-  // ?Advanced Methods
-
-  /**
-   * TODO: Attendants
-   */
-  static listAttendants = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'attendants');
-
-  static getAttendant = (user_id: string | number, params: WhereParams<ChatModel>) =>
-    this.handleGet(UserModel, user_id, 'Attendants', params);
-
-  static hasAttendant = (user_id: string | number, attendant_id: string | number) =>
-    this.handleHas(UserModel, user_id, AttendantModel, attendant_id, 'Attendant');
-
-  /**
-   * TODO: Customers
-   */
-  static listCustomers = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'clients', [CustomerModel, 'contacts']);
-
-  static getCustomer = (user_id: string | number, params: WhereParams<CustomerModel>) =>
-    this.handleGet(UserModel, user_id, 'Clients', params);
-
-  static hasCustomer = (user_id: string | number, client_id: string | number) =>
-    this.handleHas(UserModel, user_id, CustomerModel, client_id, 'Client');
-
-  /**
-   * TODO: Connections
-   */
-  static listConnections = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'connections', [ConnectionModel, 'profile']);
-
-  static getConnection = (user_id: string | number, params: WhereParams<ConnectionModel>) =>
-    this.handleGet(UserModel, user_id, 'Connections', params);
-
-  static hasConnection = (user_id: string | number, conn_id: string | number) =>
-    this.handleHas(UserModel, user_id, ConnectionModel, conn_id, 'Connection');
-
-  /**
-   * TODO: Robots
-   */
-  static listChatbots = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'chatbots', [ChatbotModel, 'workflow']);
-
-  static getChatbot = (user_id: string | number, params: WhereParams<ChatbotModel>) =>
-    this.handleGet(UserModel, user_id, 'Chatbots', params);
-
-  static hasChatbot = (user_id: string | number, chatbot_id: string | number) =>
-    this.handleHas(UserModel, user_id, ChatbotModel, chatbot_id, 'Chatbot');
-
-  /**
-   * TODO: Connections Profiles
-   */
-  static listProfiles = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'profiles', [ConnectionProfilesModel, 'chatbot']);
-
-  static getProfile = (user_id: string | number, params: WhereParams<ConnectionProfilesModel>) =>
-    this.handleGet(UserModel, user_id, 'Profiles', params);
-
-  static hasProfile = (user_id: string | number, profile_id: string | number) =>
-    this.handleHas(UserModel, user_id, ConnectionProfilesModel, profile_id, 'Profile');
-
-  /**
-   * TODO: Robot Workflows
-   */
-  static listWorkflows = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'workflows');
-
-  static getWorkflow = (user_id: string | number, params: WhereParams<WorkflowModel>) =>
-    this.handleGet(UserModel, user_id, 'Workflows', params);
-
-  static hasWorkflow = (user_id: string | number, flow_id: string | number) =>
-    this.handleHas(UserModel, user_id, WorkflowModel, flow_id, 'Workflow');
-
-  /**
-   * TODO: Assessments
-   */
-  static listAssessments = (user_id: string | number) =>
-    this.handleList(UserModel, user_id, 'assessments');
-
-  static getAssessment = (user_id: string | number, params: WhereParams<AssessmentModel>) =>
-    this.handleGet(UserModel, user_id, 'Assessments', params);
-
-  static hasAssessment = (user_id: string | number, flow_id: string | number) =>
-    this.handleHas(UserModel, user_id, AssessmentModel, flow_id, 'Assessment');
-
-  /**
-   * TODO: Chat
-   */
-  static listChats = (user_id: string | number) => this.handleList(UserModel, user_id, 'chats');
-
-  static getChat = (user_id: string | number, params: WhereParams<ChatModel>) =>
-    this.handleGet(UserModel, user_id, 'Chats', params);
-
-  static hasChat = (user_id: string | number, chat_id: string | number) =>
-    this.handleHas(UserModel, user_id, ChatModel, chat_id, 'Chat');
+  static async listWith(params: WhereParams<UserModel>) {
+    try {
+      const list = await UserModel.findAll({
+        where: params,
+        include: [UserModel.associations.environment]
+      });
+      return list;
+    } catch (error) {
+      logger.error({ error }, 'Erro ao buscar a lista de usuários');
+      throw new Error('Erro ao buscar a lista de usuários');
+    }
+  }
 }

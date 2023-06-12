@@ -4,7 +4,7 @@ import type { UserAuthMiddlewareProps } from '../../middlewares';
 import { AppProcessError } from '@core/utils';
 import { HTTPResponseCode, SecurityConfig } from '@core/config';
 import type { Request } from 'express';
-import { logger } from '../../services/logger';
+import { logger } from '../Logger';
 
 /**
  * Servico de segurança e controle de acesso à recursos e níveis

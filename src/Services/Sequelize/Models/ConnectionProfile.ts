@@ -11,7 +11,7 @@ import type {
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
 import { Chatbot } from './Chatbot';
-import { User } from './User';
+import { Environment } from './Environment';
 export class ConnectionProfiles extends Model<
   InferAttributes<ConnectionProfiles>,
   InferCreationAttributes<ConnectionProfiles>
@@ -20,7 +20,7 @@ export class ConnectionProfiles extends Model<
   declare name: string;
   declare queues: CreationOptional<object>;
   declare chatbot_id: ForeignKey<Chatbot['id']>;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare default_messages: CreationOptional<object>;
   declare comments: CreationOptional<string>;
   declare params: CreationOptional<object>;
@@ -31,7 +31,7 @@ export class ConnectionProfiles extends Model<
   declare chatbot?: NonAttribute<Chatbot>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.belongsTo(Chatbot, { foreignKey: 'chatbot_id', as: 'chatbot' });
   }
 }
@@ -41,7 +41,7 @@ ConnectionProfiles.init(
     name: DataTypes.STRING,
     queues: DataTypes.JSON,
     chatbot_id: DataTypes.INTEGER,
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     default_messages: DataTypes.JSON,
     params: DataTypes.JSON,
     comments: DataTypes.STRING

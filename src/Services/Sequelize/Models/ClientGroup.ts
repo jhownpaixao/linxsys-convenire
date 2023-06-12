@@ -8,7 +8,7 @@ import type {
   BelongsToSetAssociationMixin
 } from 'sequelize';
 import { Model, DataTypes } from 'sequelize';
-import { User } from './User';
+import { Environment } from './Environment';
 export class ClientGroup extends Model<
   InferAttributes<ClientGroup>,
   InferCreationAttributes<ClientGroup>
@@ -16,15 +16,15 @@ export class ClientGroup extends Model<
   declare id?: CreationOptional<number>;
   declare name: string;
   declare queues: CreationOptional<object>;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare comments: CreationOptional<string>;
   declare params: CreationOptional<object>;
 
-  declare getUser: BelongsToGetAssociationMixin<User>; // Note the null assertions!
-  declare setUser: BelongsToSetAssociationMixin<User, number>;
+  declare getEnvironment: BelongsToGetAssociationMixin<Environment>; // Note the null assertions!
+  declare setEnvironment: BelongsToSetAssociationMixin<Environment, number>;
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
   }
 }
 
@@ -32,7 +32,7 @@ ClientGroup.init(
   {
     name: DataTypes.STRING,
     queues: DataTypes.JSON,
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     comments: DataTypes.STRING,
     params: DataTypes.JSON
   },

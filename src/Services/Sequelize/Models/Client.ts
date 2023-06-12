@@ -18,14 +18,14 @@ import type {
 } from 'sequelize';
 import { DataTypes, Model } from 'sequelize';
 
-import { User } from './User';
+import { Environment } from './Environment';
 import { ClientGroup } from './ClientGroup';
 import { Contact } from './Contact';
 
 export class Client extends Model<InferAttributes<Client>, InferCreationAttributes<Client>> {
   declare id?: CreationOptional<number>;
   declare nome: string;
-  declare user_id: ForeignKey<User['id']>;
+  declare env_id: ForeignKey<Environment['id']>;
   declare nascimento: CreationOptional<string>;
   declare email: CreationOptional<string>;
   declare cpf: CreationOptional<string>;
@@ -52,7 +52,7 @@ export class Client extends Model<InferAttributes<Client>, InferCreationAttribut
   declare contacts?: NonAttribute<Contact[]>; // Note this is optional since it's only populated when explicitly requested in code
 
   static associate() {
-    this.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(Environment, { foreignKey: 'env_id', as: 'environment' });
     this.hasOne(ClientGroup, { foreignKey: 'id', as: 'group' });
     this.hasMany(Contact, { foreignKey: 'client_id', as: 'contacts' });
   }
@@ -61,7 +61,7 @@ export class Client extends Model<InferAttributes<Client>, InferCreationAttribut
 Client.init(
   {
     nome: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
+    env_id: DataTypes.INTEGER,
     nascimento: DataTypes.STRING,
     email: DataTypes.STRING,
     cpf: DataTypes.STRING,
