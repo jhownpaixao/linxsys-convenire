@@ -17,9 +17,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: true
+      type: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      params: {
+        type: Sequelize.JSON,
+        allowNull: false
       },
       comments: {
         type: Sequelize.STRING,

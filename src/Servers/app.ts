@@ -7,7 +7,6 @@ import 'dotenv/config';
 import {
   CORSPolicyOptions,
   ExpressResponseOptions,
-  Security,
   SetAllowedMethods,
   handleAuthorizationFailure,
   handleProcessFailure,
@@ -16,6 +15,7 @@ import {
 import { logger } from '../services/Logger';
 import path from 'path';
 import { FileService } from '../services/app/FileService';
+import AsteriskManager from '../services/AsteriskService/AsteriskManager';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });
@@ -39,5 +39,17 @@ app.use(handleProcessFailure);
 
 // #Start Functions
 FileService.init();
+/* const asm = new AsteriskManager({
+  host: '200.150.205.1',
+  port: 5038,
+  username: 'api',
+  password: 'voip123'
+});
 
+(async () => {
+  const SIP = await asm.SIPpeers('atendente');
+
+  console.log(SIP);
+
+})(); */
 export default app;

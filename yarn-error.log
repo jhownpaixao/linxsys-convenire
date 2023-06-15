@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js fix
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @types/asterisk-manager
 
 PATH: 
   C:\Users\Jhonnata\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Jhonnata\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\dotnet;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\Program Files\PuTTY;C:\Program Files (x86)\Yarn\bin;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\wamp64\bin\php\php8.0.26;C:\Users\Jhonnata\AppData\Local\Microsoft\WindowsApps;C:\Users\Jhonnata\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Jhonnata\AppData\Roaming\npm;C:\Users\Jhonnata\AppData\Local\Yarn\bin;C:\Users\Jhonnata\AppData\Roaming\Composer\vendor\bin;C:\Program Files (x86)\Mikero\DePboTools\bin;C:\Users\Jhonnata\AppData\Local\GitHubDesktop\bin;C:\wamp64\bin\php\php8.0.26;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
@@ -14,12 +14,17 @@ Platform:
   win32 x64
 
 Trace: 
-  SyntaxError: L:\projetos\Web\GitHub\linxsys-convenire\package.json: Unexpected token } in JSON at position 1259
-      at JSON.parse (<anonymous>)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:1629:59
-      at Generator.next (<anonymous>)
-      at step (C:\Program Files (x86)\Yarn\lib\cli.js:310:30)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:321:13
+  Error: https://registry.yarnpkg.com/@types%2fasterisk-manager: Not found
+      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66145:18)
+      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140890:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141862:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141784:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1358:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
 npm manifest: 
   {
@@ -40,11 +45,15 @@ npm manifest:
           "start:jwks": "node build/servers/jwks.js",
           "start": "npm-run-all -p start:*",
           "fix": "yarn fix:eslint && yarn fix:prettier",
-          "fix:eslint": "eslint --fix \"**/*.*\"",
-          "fix:prettier": "prettier --write \"**/*.*\"",
+          "fix:eslint": "eslint --fix \"**/*.ts\"",
+          "fix:prettier": "prettier --write \"**/*.ts\"",
           "lint": "yarn lint:eslint && yarn lint:prettier",
-          "lint:eslint": "eslint \"**/*.*\"",
-          "lint:prettier": "prettier --check \"**/*.*\"",
+          "lint:eslint": "eslint \"**/*.ts\"",
+          "lint:prettier": "prettier --check \"**/*.ts\"",
+          "migrate": "sequelize db:migrate",
+          "migrate:reset": "sequelize db:migrate:undo:all",
+          "migrate:undo": "sequelize db:migrate:undo",
+          "seed": "sequelize db:seed:all"
       },
       "dependencies": {
           "@babel/cli": "^7.21.5",
@@ -53,6 +62,8 @@ npm manifest:
           "@babel/preset-env": "^7.21.5",
           "@babel/preset-typescript": "^7.21.5",
           "@types/cookie-parser": "^1.4.3",
+          "@types/multer": "^1.4.7",
+          "asterisk-manager": "^0.2.0",
           "axios": "^1.3.5",
           "babel-plugin-module-resolver": "^5.0.0",
           "bcrypt": "^5.1.0",
@@ -73,6 +84,7 @@ npm manifest:
           "jwks-rsa": "^3.0.1",
           "moment": "^2.29.4",
           "ms": "^2.1.3",
+          "multer": "^1.4.5-lts.1",
           "mysql": "^2.18.1",
           "mysql2": "^3.2.0",
           "node-jose": "^2.2.0",
@@ -1426,6 +1438,13 @@ Lockfile:
     resolved "https://registry.npmjs.org/@types/ms/-/ms-0.7.31.tgz"
     integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
   
+  "@types/multer@^1.4.7":
+    version "1.4.7"
+    resolved "https://registry.yarnpkg.com/@types/multer/-/multer-1.4.7.tgz#89cf03547c28c7bbcc726f029e2a76a7232cc79e"
+    integrity sha512-/SNsDidUFCvqqcWDwxv2feww/yqhNeTRL5CVoL3jU4Goc4kKEL10T7Eye65ZqPNi4HRx8sAEX59pV1aEH7drNA==
+    dependencies:
+      "@types/express" "*"
+  
   "@types/mysql@^2.15.21":
     version "2.15.21"
     resolved "https://registry.npmjs.org/@types/mysql/-/mysql-2.15.21.tgz"
@@ -1723,6 +1742,11 @@ Lockfile:
       normalize-path "^3.0.0"
       picomatch "^2.0.4"
   
+  append-field@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/append-field/-/append-field-1.0.0.tgz#1e3440e915f0b1203d23748e78edd7b9b5b43e56"
+    integrity sha512-klpgFSWLW1ZEs8svjfb7g4qWY0YS5imI82dTg+QahUvJ8YqAY0P10Uk8tTyh9ZGuYEZEMaeJYCF5BFuX552hsw==
+  
   "aproba@^1.0.3 || ^2.0.0":
     version "2.0.0"
     resolved "https://registry.npmjs.org/aproba/-/aproba-2.0.0.tgz"
@@ -1815,6 +1839,11 @@ Lockfile:
       inherits "^2.0.1"
       minimalistic-assert "^1.0.0"
       safer-buffer "^2.1.0"
+  
+  asterisk-manager@^0.2.0:
+    version "0.2.0"
+    resolved "https://registry.yarnpkg.com/asterisk-manager/-/asterisk-manager-0.2.0.tgz#9fbbd790fad3ecbb23f68d1222317cf52a41235c"
+    integrity sha512-drPPaG18ZZx1+E8rSzWxzh5fmJw0poSWgsu4HHT/UWlvFmqCwtfBZILpdsDDGhD43ughWYxC0cmR7KirHDPaww==
   
   asynckit@^0.4.0:
     version "0.4.0"
@@ -2021,6 +2050,13 @@ Lockfile:
     dependencies:
       semver "^7.0.0"
   
+  busboy@^1.0.0:
+    version "1.6.0"
+    resolved "https://registry.yarnpkg.com/busboy/-/busboy-1.6.0.tgz#966ea36a9502e43cdb9146962523b92f531f6893"
+    integrity sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==
+    dependencies:
+      streamsearch "^1.1.0"
+  
   bytes@3.1.2:
     version "3.1.2"
     resolved "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz"
@@ -2170,6 +2206,16 @@ Lockfile:
     version "0.0.1"
     resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
     integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
+  
+  concat-stream@^1.5.2:
+    version "1.6.2"
+    resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
+    integrity sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw==
+    dependencies:
+      buffer-from "^1.0.0"
+      inherits "^2.0.3"
+      readable-stream "^2.2.2"
+      typedarray "^0.0.6"
   
   config-chain@^1.1.13:
     version "1.1.13"
@@ -3120,7 +3166,7 @@ Lockfile:
   
   fs@^0.0.1-security:
     version "0.0.1-security"
-    resolved "https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz"
+    resolved "https://registry.yarnpkg.com/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
     integrity sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==
   
   fsevents@~2.3.2:
@@ -4062,6 +4108,13 @@ Lockfile:
       minipass "^3.0.0"
       yallist "^4.0.0"
   
+  mkdirp@^0.5.4:
+    version "0.5.6"
+    resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.6.tgz#7def03d2432dcae4ba1d611445c48396062255f6"
+    integrity sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==
+    dependencies:
+      minimist "^1.2.6"
+  
   mkdirp@^1.0.3, mkdirp@^1.0.4:
     version "1.0.4"
     resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
@@ -4093,6 +4146,19 @@ Lockfile:
     version "2.1.3"
     resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
     integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
+  
+  multer@^1.4.5-lts.1:
+    version "1.4.5-lts.1"
+    resolved "https://registry.yarnpkg.com/multer/-/multer-1.4.5-lts.1.tgz#803e24ad1984f58edffbc79f56e305aec5cfd1ac"
+    integrity sha512-ywPWvcDMeH+z9gQq5qYHCCy+ethsk4goepZ45GLD63fOu0YcNecQxi64nDs3qluZB+murG3/D4dJ7+dGctcCQQ==
+    dependencies:
+      append-field "^1.0.0"
+      busboy "^1.0.0"
+      concat-stream "^1.5.2"
+      mkdirp "^0.5.4"
+      object-assign "^4.1.1"
+      type-is "^1.6.4"
+      xtend "^4.0.0"
   
   mysql2@^3.2.0:
     version "3.2.0"
@@ -4249,7 +4315,7 @@ Lockfile:
   
   npm-run-all@^4.1.5:
     version "4.1.5"
-    resolved "https://registry.npmjs.org/npm-run-all/-/npm-run-all-4.1.5.tgz"
+    resolved "https://registry.yarnpkg.com/npm-run-all/-/npm-run-all-4.1.5.tgz#04476202a15ee0e2e214080861bff12a51d98fba"
     integrity sha512-Oo82gJDAVcaMdi3nuoKFavkIHBRVqQ1qvMb+9LHk/cF4P6B2m8aP04hGf7oL6wZ9BuGwX1onlLhpuoofSyoQDQ==
     dependencies:
       ansi-styles "^3.2.1"
@@ -4804,6 +4870,19 @@ Lockfile:
       string_decoder "~1.1.1"
       util-deprecate "~1.0.1"
   
+  readable-stream@^2.2.2:
+    version "2.3.8"
+    resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.8.tgz#91125e8042bba1b9887f49345f6277027ce8be9b"
+    integrity sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==
+    dependencies:
+      core-util-is "~1.0.0"
+      inherits "~2.0.3"
+      isarray "~1.0.0"
+      process-nextick-args "~2.0.0"
+      safe-buffer "~5.1.1"
+      string_decoder "~1.1.1"
+      util-deprecate "~1.0.1"
+  
   readable-stream@^3.1.1, readable-stream@^3.6.0:
     version "3.6.2"
     resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz"
@@ -5271,6 +5350,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.1.tgz"
     integrity sha512-AiisoFqQ0vbGcZgQPY1cdP2I76glaVA/RauYR4G4thNFgkTqr90yXTo4LYX60Jl+sIlPNHHdGSwo01AvbKUSVQ==
   
+  streamsearch@^1.1.0:
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-1.1.0.tgz#404dd1e2247ca94af554e841a8ef0eaa238da764"
+    integrity sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==
+  
   "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
     version "4.2.3"
     resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
@@ -5537,7 +5621,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/type-fest/-/type-fest-0.20.2.tgz"
     integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
   
-  type-is@~1.6.18:
+  type-is@^1.6.4, type-is@~1.6.18:
     version "1.6.18"
     resolved "https://registry.npmjs.org/type-is/-/type-is-1.6.18.tgz"
     integrity sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==
@@ -5563,6 +5647,11 @@ Lockfile:
       call-bind "^1.0.2"
       for-each "^0.3.3"
       is-typed-array "^1.1.9"
+  
+  typedarray@^0.0.6:
+    version "0.0.6"
+    resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+    integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
   
   typescript@^5.0.4:
     version "5.0.4"

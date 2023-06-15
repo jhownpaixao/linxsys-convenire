@@ -33,8 +33,9 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "no-param-reassign": 0,
     "import/order": 0,
     "no-console": 0,

@@ -11,7 +11,7 @@ export class UserMiddleware {
 
     req.user = user;
     req.env =
-      req.headers.enviroment ?? req.body.env ?? req.params.env ?? req.query.env ?? user.env_id;
+      req.headers.environment || req.body.env || req.params.env || req.query.env || user.env_id;
     return next();
   };
 

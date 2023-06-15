@@ -3,11 +3,12 @@ import { AppProcessError, HTTPResponseCode } from '@core';
 import { logger } from '../Logger';
 import { ResourceModel } from '../sequelize/Models';
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
+import { ResourceTypes } from '@core/config/Resources';
 
 export class ResourceService {
   static async create(data: MakeNullishOptional<InferCreationAttributes<ResourceModel>>) {
     const register = await ResourceModel.findOne({
-      where: { name: data.name, env_id: data.env_id }
+      where: { type: data.type, env_id: data.env_id }
     });
     if (register)
       throw new AppProcessError(

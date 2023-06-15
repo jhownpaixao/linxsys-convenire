@@ -62,6 +62,7 @@ export const RouteAccessProfiles: Record<string, any> = {
   [ServerConfig.ROUTES.chat]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.user]: AccessProfile_SuperAdmin,
   [ServerConfig.ROUTES.core]: AccessProfile_SuperAdmin,
+  [ServerConfig.ROUTES.asm]: AccessProfile_Administrator,
   [ServerConfig.ROUTES.environment]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.auth]: {
     SuperAdmin: AccessPermissions.all,

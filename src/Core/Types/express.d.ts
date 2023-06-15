@@ -1,3 +1,4 @@
+import { NextFunction } from 'express';
 import type {
   AuthMiddlewareProps,
   UserAuthMiddlewareProps
@@ -9,5 +10,6 @@ declare global {
       auth: AuthMiddlewareProps;
       env: number;
     }
+    export type MiddlewareFunction = (req: Request, res: Response, next?: NextFunction) => void;
   }
 }

@@ -11,7 +11,8 @@ import { Environment } from './Environment';
 export class Resource extends Model<InferAttributes<Resource>, InferCreationAttributes<Resource>> {
   declare id?: CreationOptional<number>;
   declare env_id: ForeignKey<Environment['id']>;
-  declare name: string;
+  declare type: number;
+  declare params: any;
   declare comments: CreationOptional<string>;
 
   static associate() {
@@ -21,8 +22,9 @@ export class Resource extends Model<InferAttributes<Resource>, InferCreationAttr
 
 Resource.init(
   {
-    name: DataTypes.STRING,
     env_id: DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
+    params: DataTypes.STRING,
     comments: DataTypes.STRING
   },
   { sequelize: SequelizeConnection }

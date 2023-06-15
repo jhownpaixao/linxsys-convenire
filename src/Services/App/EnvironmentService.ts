@@ -201,7 +201,6 @@ export class EnvironmentService extends Entity {
         'warning'
       );
 
-    console.log(user.type, parseInt(user.env_id), env.id);
     if (user.type != 'SuperAdmin' && parseInt(user.env_id) !== env.id)
       throw new AppProcessError(
         'Sem autorização de acesso à este ambiente',

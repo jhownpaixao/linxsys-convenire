@@ -14,7 +14,8 @@ enum RoutesName {
   tags = '/tags',
   ticket = '/tickets',
   core = '/core',
-  environment = '/environments'
+  environment = '/environments',
+  asm = '/asm'
 }
 export class ServerConfig {
   static HOST_ADDRESS = process.env.BACKEND_URL || 'http://localhost';

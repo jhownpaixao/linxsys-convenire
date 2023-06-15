@@ -11,6 +11,7 @@ import AuthRoutes from './AuthRoutes';
 import AssessmentRoutes from './AssessmentRoutes';
 import EnvironmentRoutes from './EnvironmentRoutes';
 import FilesRoutes from './FilesRoutes';
+import ASMRoutes from './ASMRoutes';
 
 const routes = Router();
 
@@ -24,6 +25,7 @@ routes.use(ServerConfig.ROUTES.client, AuthMiddleware.Token, UserMiddleware.reco
 routes.use(ServerConfig.ROUTES.assessment, AuthMiddleware.Token, UserMiddleware.recover, AssessmentRoutes);
 routes.use(ServerConfig.ROUTES.chat, AuthMiddleware.Token, UserMiddleware.recover, ChatbotRoutes);
 routes.use(ServerConfig.ROUTES.environment, AuthMiddleware.Token, UserMiddleware.recover, EnvironmentRoutes);
+routes.use(ServerConfig.ROUTES.asm, AuthMiddleware.Token, UserMiddleware.recover, ASMRoutes);
 
 routes.use('/files', FilesRoutes);
 export default routes;
