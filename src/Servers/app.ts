@@ -16,6 +16,7 @@ import { logger } from '../services/Logger';
 import path from 'path';
 import { FileService } from '../services/app/FileService';
 import AsteriskManager from '../services/AsteriskService/AsteriskManager';
+import { AsteriskService } from '../services/AsteriskService/AsteriskService';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });
@@ -44,12 +45,13 @@ FileService.init();
   port: 5038,
   username: 'api',
   password: 'voip123'
-});
+}); */
 
-(async () => {
-  const SIP = await asm.SIPpeers('atendente');
-
-  console.log(SIP);
-
+/* (async () => {
+  const service = await AsteriskService.init('5');
+  await service.connect();
+  console.log(await service.asm.command('core show channels concise'));
+  await service.showActiveCalls();
 })(); */
+
 export default app;

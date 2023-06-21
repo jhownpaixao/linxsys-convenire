@@ -4,6 +4,7 @@ import { defaultCallback, removeSpaces, stringHasLength } from './Utils';
 import { logger } from '../Logger';
 import { Peer, PeerState } from './@types/peer';
 import { IAsmConnectionProps } from './@types/connection';
+import { IXApiICall } from './@types/call';
 
 export type ActionRequest = {
   action: string;
@@ -51,7 +52,7 @@ class AsteriskManager {
     this.username = options.username;
     this.password = options.password;
     this.events = events ?? false;
-    this.init();
+    // this.connect();
   }
 
   // #Event Functions
@@ -68,17 +69,16 @@ class AsteriskManager {
   init() {
     this.on('rawevent', this.event);
     this.on('connect', this.resetBackoff);
-    this.on('error', function (err) {
-      logger.error(err, 'Ocorreu um erro com o AGI');
-      if (err.code == 'ETIMEDOUT') console.log('Nao foi possivel realizar a conexao');
+    this.on('error', function (err: Error) {
+      logger.error(err, 'Ocorreu um erro no AMI');
     });
 
-    this.connect();
-    this.keepConnected();
+    // this.connect();
+    // this.keepConnected();
   }
 
   // #Asterisk Functions
-  connect(cb?: (...args: any[]) => void) {
+  syncConnect(cb?: (...args: any[]) => void) {
     const callback = defaultCallback(cb);
 
     this.connection =
@@ -87,17 +87,69 @@ class AsteriskManager {
     if (this.connection) return callback(null);
 
     this.authenticated = false;
-    this.connection = Net.createConnection(this.port, this.host);
+    this.connection = Net.createConnection(this.port, this.host, this.login.bind(this));
     this.connection.setKeepAlive(true);
     this.connection.setNoDelay(true);
     this.connection.setEncoding('utf-8');
 
-    this.connection.once('connect', this.login.bind(this));
     this.connection.on('connect', this.emit.bind(this, 'connect'));
     this.connection.on('close', this.emit.bind(this, 'close'));
     this.connection.on('end', this.emit.bind(this, 'end'));
     this.connection.on('data', this.reader.bind(this));
     this.connection.on('error', this.error.bind(this));
+  }
+
+  connect(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.connection =
+        this.connection && this.connection.readyState != 'closed' ? this.connection : undefined;
+
+      if (this.connection) resolve(true);
+
+      this.authenticated = false;
+      this.createConnection(this.port, this.host).then(async (conn) => {
+        if (!conn) return resolve(false);
+        this.init();
+        this.connection = conn;
+        this.connection.setKeepAlive(true);
+        this.connection.setNoDelay(true);
+        this.connection.setEncoding('utf-8');
+
+        this.connection.on('connect', this.emit.bind(this, 'connect'));
+        this.connection.on('close', this.emit.bind(this, 'close'));
+        this.connection.on('end', this.emit.bind(this, 'end'));
+        this.connection.on('data', this.reader.bind(this));
+        this.connection.on('error', this.error.bind(this));
+
+        const login = await this.login(this.username, this.password, this.events);
+
+        if (login) {
+          this.authenticated = true;
+          return resolve(true);
+        }
+
+        this.disconnect();
+        resolve(false);
+      });
+    });
+  }
+
+  createConnection(port: number, host: string): Promise<Net.Socket | false> {
+    return new Promise((resolve) => {
+      const connection = Net.createConnection(port, host, () => {
+        resolve(connection);
+      });
+      connection.setKeepAlive(true);
+      connection.setNoDelay(true);
+      connection.setEncoding('utf-8');
+
+      connection.once('close', () => {
+        resolve(false);
+      });
+      connection.once('error', () => {
+        resolve(false);
+      });
+    });
   }
 
   disconnect(cb?: (...args: any[]) => void) {
@@ -139,13 +191,11 @@ class AsteriskManager {
   }
 
   resetBackoff() {
-    /* console.log('Asterisk conectado', this.port, this.host); */
     this.backoff = 10000;
   }
 
-  login(cb?: (...args: any[]) => void) {
+  syncLogin(cb?: (...args: any[]) => void) {
     const callback = defaultCallback(cb);
-
     this.request(
       {
         action: 'login',
@@ -168,6 +218,16 @@ class AsteriskManager {
     );
 
     return;
+  }
+
+  async login(user: string, password: string, events: boolean) {
+    const req = await this.action('login', {
+      username: user,
+      secret: password,
+      event: events ? 'on' : 'off'
+    });
+
+    return req['response'] == 'Success';
   }
 
   reader(data: Buffer) {
@@ -281,12 +341,13 @@ class AsteriskManager {
 
     try {
       if (!this.connection) {
-        throw new Error('There is no connection yet');
+        throw new Error('Não há conectividade com o asterisk');
       }
 
       this.connection.write(this.makeRequest(action, id), 'utf-8');
     } catch (e) {
       console.log('ERROR: ', e);
+      logger.error(e, 'Erro ao enviar a requisição para o asterisk');
 
       this.held = this.held || [];
       action.actionid = id;
@@ -301,6 +362,26 @@ class AsteriskManager {
     this.once(id, callback);
 
     return (this.lastid = id);
+  }
+
+  asyncRequest(action: ActionRequest): Promise<any> {
+    return new Promise((resolve) => {
+      let id: string = action.actionid || String(new Date().getTime());
+
+      while (this.listeners(id).length) id += String(Math.floor(Math.random() * 9));
+
+      if (action.actionid) delete action.actionid;
+
+      if (!this.authenticated && action.action !== 'login') resolve(false);
+
+      if (!this.connection) resolve(new Error('Não há conectividade com o asterisk'));
+
+      this.connection.write(this.makeRequest(action, id), 'utf-8');
+
+      this.once(id, (err: Error, res: any) => {
+        resolve(res);
+      });
+    });
   }
 
   makeRequest(req: ActionRequest, id: string) {
@@ -404,6 +485,16 @@ class AsteriskManager {
     emits.forEach(process.nextTick.bind(process));
   }
 
+  // #Utils
+  ToBoolean(val: 'yes' | 'no') {
+    const convert = {
+      yes: true,
+      no: false
+    };
+
+    return convert[val];
+  }
+
   // #Interface Functions
 
   async Queues() {
@@ -424,17 +515,8 @@ class AsteriskManager {
     });
   }
 
-  toBoolean(val: 'yes' | 'no') {
-    const convert = {
-      yes: true,
-      no: false
-    };
-
-    return convert[val];
-  }
-
-  async SIPpeers(type: 'tronco' | 'atendente'): Promise<Peer[]> {
-    return new Promise((resolve) => {
+  async SIPPeers(type: 'tronco' | 'atendente'): Promise<Peer[] | Error> {
+    return new Promise((resolve, reject) => {
       const ramais: Peer[] = [];
 
       const listener = async (evt: any) => {
@@ -443,18 +525,18 @@ class AsteriskManager {
             channeltype: evt.channeltype,
             objectname: evt.objectname,
             chanobjecttype: evt.chanobjecttype,
-            ipaddress: evt.ipaddress == '-none-' ? false : parseInt(evt.ipaddress),
+            ipaddress: evt.ipaddress == '-none-' ? false : evt.ipaddress,
             ipport: parseInt(evt.ipport),
-            dynamic: this.toBoolean(evt.dynamic),
-            autoforcerport: this.toBoolean(evt.autoforcerport),
-            forcerport: this.toBoolean(evt.forcerport),
-            autocomedia: this.toBoolean(evt.autocomedia),
-            comedia: this.toBoolean(evt.comedia),
-            videosupport: this.toBoolean(evt.videosupport),
-            textsupport: this.toBoolean(evt.textsupport),
-            acl: this.toBoolean(evt.acl),
+            dynamic: this.ToBoolean(evt.dynamic),
+            autoforcerport: this.ToBoolean(evt.autoforcerport),
+            forcerport: this.ToBoolean(evt.forcerport),
+            autocomedia: this.ToBoolean(evt.autocomedia),
+            comedia: this.ToBoolean(evt.comedia),
+            videosupport: this.ToBoolean(evt.videosupport),
+            textsupport: this.ToBoolean(evt.textsupport),
+            acl: this.ToBoolean(evt.acl),
             status: evt.status,
-            realtimedevice: this.toBoolean(evt.realtimedevice),
+            realtimedevice: this.ToBoolean(evt.realtimedevice),
             description: evt.description,
             accountcode: evt.accountcode
           });
@@ -465,29 +547,58 @@ class AsteriskManager {
       };
 
       this.on('managerevent', listener);
+
+      this.once('error', function (err: Error) {
+        this.off('managerevent', listener);
+        reject(err);
+      });
+
       this.action('SIPpeers');
     });
   }
 
-  async ActiveCalls() {
-    return new Promise((resolve) => {
-      const calls: any[] = [];
-
+  async ActiveCalls(): Promise<IXApiICall[]> {
+    return new Promise((resolve, reject) => {
+      const calls: IXApiICall[] = [];
+      const processed: string[] = [];
       const listener = (evt: any) => {
-        if (evt.event == 'CoreShowChannel') calls.push(evt);
+        if (evt.event == 'CoreShowChannel') {
+          if (
+            (evt.channelstatedesc == 'Ring' && evt.application != 'Dial') ||
+            (evt.channelstatedesc == 'Up' &&
+              (evt.application != 'Dial' ||
+                evt.application != 'AppQueue' ||
+                evt.application != 'ChanSpy' ||
+                evt.application != 'BackGround')) ||
+            (evt.channelstatedesc == 'Ringing' && evt.application != 'AppQueue')
+          )
+            return;
+
+          calls.push({
+            channel: evt.channel,
+            destiny: parseInt(evt.connectedlinenum),
+            duration: evt.duration,
+            oringin: parseInt(evt.calleridnum),
+            status: {
+              description: evt.channelstatedesc,
+              id: parseInt(evt.channelstate)
+            }
+          });
+          processed.push(evt.connectedlinenum);
+        }
         if (evt.event == 'CoreShowChannelsComplete') {
           this.off('managerevent', listener);
+
           resolve(calls);
         }
       };
 
       this.on('managerevent', listener);
-      const action = this.action('CoreShowChannels');
-
-      if (!action) {
-        console.log('Nao foi possivel executar o comando');
+      this.once('error', function (err: Error) {
         this.off('managerevent', listener);
-      }
+        reject(err);
+      });
+      this.action('CoreShowChannels');
     });
   }
 
@@ -516,7 +627,7 @@ class AsteriskManager {
     });
   }
 
-  async ExtensionState(exten: string, context: string, actionid?: string) {
+  async ExtensionState(exten: string, context: string, actionid?: string): Promise<PeerState> {
     const params: Record<string, string> = {
       Exten: exten,
       Context: context
@@ -525,6 +636,10 @@ class AsteriskManager {
     if (actionid) {
       params['ActionID'] = actionid;
     }
+
+    this.on('error', function (err: Error) {
+      return err;
+    });
 
     return await this.action('ExtensionState', params);
   }

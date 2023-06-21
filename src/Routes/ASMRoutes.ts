@@ -7,7 +7,12 @@ const ASMRoutes = express.Router();
 
 ASMRoutes
     .route('/extensions')
-    .get(ASMController.extensionList)
+    .get(ASMController.listExtensions)
+    .all(ThrowHTTPMethodNotAllowed);
+
+ASMRoutes
+    .route('/calls')
+    .get(ASMController.listActiveCalls)
     .all(ThrowHTTPMethodNotAllowed);
 
 export default ASMRoutes;

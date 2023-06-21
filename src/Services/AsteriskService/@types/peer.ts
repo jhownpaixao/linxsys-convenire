@@ -1,5 +1,6 @@
 export interface PeerState {
   exten: string;
+  name?: string;
   context: string;
   hint: string;
   status: number;
@@ -25,4 +26,9 @@ export interface Peer {
   realtimedevice: boolean;
   description: string;
   accountcode: string;
+}
+
+export interface XApiExtension {
+  ramal: string;
+  apelido: string;
 }

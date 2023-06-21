@@ -1,18 +1,21 @@
-import { IUser } from '@core/types/User';
 import AsteriskManager from './AsteriskManager';
-import { IAsmConnectionProps } from './@types/connection';
-import { EnvironmentModel } from '../sequelize/Models';
+import { IAsmConnectionProps, IXApiConnectionProps } from './@types/connection';
 import { AppProcessError } from '@core/utils';
 import { HTTPResponseCode } from '@core/config';
 import { ResourceService } from '../app/ResourceService';
 import { ResourceTypes } from '@core/config/Resources';
 import { logger } from '../Logger';
+import { XApi } from './XApi';
+import { IXApiICall } from './@types/call';
 
+type TConnectionProps = IAsmConnectionProps & IXApiConnectionProps;
 export class AsteriskService {
   asm: AsteriskManager;
+  xapi: XApi;
+  options: TConnectionProps;
 
-  constructor(options: IAsmConnectionProps) {
-    this.connect(options);
+  constructor(options: TConnectionProps) {
+    this.options = options;
   }
 
   static async init(env_id: string | number) {
@@ -37,21 +40,62 @@ export class AsteriskService {
     }
   }
 
-  connect = (options: IAsmConnectionProps) => {
-    this.asm = new AsteriskManager(options, true);
+  connect = async () => {
+    this.asm = new AsteriskManager(this.options, true);
+    const conn = await this.asm.connect();
+
+    if (!conn)
+      throw new AppProcessError(
+        'Não foi possível se conectar ao asterisk',
+        HTTPResponseCode.iternalErro
+      );
+
+    this.xapi = new XApi(this.options.host, this.options.token);
   };
+
   disconnect = () => {
     this.asm.disconnect();
   };
 
   showExtensions = async (type: 'tronco' | 'atendente') => {
-    const extensions = await this.asm.SIPpeers(type);
+    await this.connect();
+    const extensions = await this.asm.SIPPeers(type);
 
+    if (extensions instanceof Error)
+      throw new AppProcessError(
+        'Não foi possível obter os dados SIPpeers',
+        HTTPResponseCode.iternalErro
+      );
+
+    const xpaiExtensionsData = await this.xapi.listExtensions();
     for (const e of extensions) {
-      e.state = await this.asm.ExtensionState(e.objectname, 'BLF');
+      const state = await this.asm.ExtensionState(e.objectname, 'BLF');
+      if (state instanceof Error)
+        throw new AppProcessError(
+          'Não foi possível obter os estados dos SIPpeers',
+          HTTPResponseCode.iternalErro
+        );
+      const data = xpaiExtensionsData.find((ext) => ext.ramal === e.objectname);
+      if (data) state.name = data.apelido;
+      e.state = state;
     }
     this.disconnect();
 
     return extensions;
+  };
+
+  showActiveCalls = async () => {
+    await this.connect();
+    const channels = await this.asm.ActiveCalls();
+
+    if (channels instanceof Error)
+      throw new AppProcessError(
+        'Não foi possível obter os dados dos canais',
+        HTTPResponseCode.iternalErro
+      );
+
+    this.disconnect();
+
+    return channels;
   };
 }
