@@ -11,3 +11,4 @@ export * from './AssessmentService';
 export * from './ChatMessageService';
 export * from './ChatService';
 export * from './EnvironmentService';
+export * from './CampaingService';

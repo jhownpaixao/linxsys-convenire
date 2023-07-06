@@ -1,13 +1,13 @@
-import { AppProcessError, HTTPResponseCode } from '@core';
+import { AppProcessError, HTTPResponseCode, WhereParams } from '@core';
 import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
 import type { MakeNullishOptional } from 'sequelize/types/utils';
 import { logger } from '../Logger';
-import { ResourceModel } from '../sequelize/Models';
+import { CampaingModel } from '../sequelize/Models';
 
-export class ResourceService {
-  static async create(data: MakeNullishOptional<InferCreationAttributes<ResourceModel>>) {
-    const register = await ResourceModel.findOne({
-      where: { type: data.type, env_id: data.env_id }
+export class CampaingService {
+  static async create(data: MakeNullishOptional<InferCreationAttributes<CampaingModel>>) {
+    const register = await CampaingModel.findOne({
+      where: { type: data.type, env_id: data.env_id, owner_id: data }
     });
     if (register)
       throw new AppProcessError(
@@ -17,7 +17,7 @@ export class ResourceService {
       );
 
     try {
-      const register = await ResourceModel.create(data);
+      const register = await CampaingModel.create(data);
       return register;
     } catch (error) {
       const msg = 'Erro ao cadastrar o recurso';
@@ -31,7 +31,7 @@ export class ResourceService {
     await register.destroy();
   }
 
-  static async update(data: MakeNullishOptional<InferCreationAttributes<ResourceModel>>) {
+  static async update(data: MakeNullishOptional<InferCreationAttributes<CampaingModel>>) {
     const register = await this.get(data.id as number);
 
     try {
@@ -46,7 +46,7 @@ export class ResourceService {
   }
 
   static async get(id: string | number) {
-    const register = await ResourceModel.findByPk(id);
+    const register = await CampaingModel.findByPk(id);
     if (!register)
       throw new AppProcessError(
         'O recurso não foi localizado',
@@ -55,8 +55,8 @@ export class ResourceService {
     return register;
   }
 
-  static async getWith(params: WhereOptions<InferAttributes<ResourceModel, { omit: never }>>) {
-    const register = await ResourceModel.findOne({
+  static async getWith(params: WhereOptions<InferAttributes<CampaingModel, { omit: never }>>) {
+    const register = await CampaingModel.findOne({
       where: params
     });
     return register;
@@ -64,12 +64,24 @@ export class ResourceService {
 
   static async list() {
     try {
-      const list = await ResourceModel.findAll();
+      const list = await CampaingModel.findAll();
       return list;
     } catch (error) {
       const msg = 'Erro ao buscar a lista de recursos';
       logger.error({ error }, msg);
       throw new Error(msg);
+    }
+  }
+
+  static async listWith(params: WhereParams<CampaingModel>) {
+    try {
+      const list = await CampaingModel.findAll({
+        where: params
+      });
+      return list;
+    } catch (error) {
+      logger.error({ error }, 'Erro ao buscar a lista de campanhas');
+      throw new Error('Erro ao buscar a lista de campanhas');
     }
   }
 }

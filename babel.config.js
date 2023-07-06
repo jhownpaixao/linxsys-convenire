@@ -8,7 +8,14 @@ module.exports = {
         }
       }
     ],
-    ['@babel/preset-typescript', { allowDeclareFields: true }]
+    ['@babel/preset-typescript', { allowDeclareFields: true }] /* ,
+    [
+      'minify',
+      {
+        evaluate: false,
+        mangle: true
+      }
+    ] */
   ],
   plugins: [
     [

@@ -1,21 +1,22 @@
-import { User } from './User';
+import { Assessment } from './Assessment';
 import { Attendant } from './Attendant';
-import { Chatbot } from './Chatbot';
-import { Workflow } from './Workflow';
-import { Client } from './Client';
-import { ClientGroup } from './ClientGroup';
-import { Contact } from './Contact';
-import { Connection } from './Connection';
-import { ConnectionProfiles } from './ConnectionProfile';
-import { Tag } from './Tag';
+import { Campaing } from './Campaing';
 import { Chat } from './Chat';
 import { ChatMessage } from './ChatMessage';
-import { Queue } from './Queue';
-import { Ticket } from './Ticket';
-import { Assessment } from './Assessment';
-import { Event } from './Event';
-import { Resource } from './Resource';
+import { Chatbot } from './Chatbot';
+import { Client } from './Client';
+import { ClientGroup } from './ClientGroup';
+import { Connection } from './Connection';
+import { ConnectionProfiles } from './ConnectionProfile';
+import { Contact } from './Contact';
 import { Environment } from './Environment';
+import { Event } from './Event';
+import { Queue } from './Queue';
+import { Resource } from './Resource';
+import { Tag } from './Tag';
+import { Ticket } from './Ticket';
+import { User } from './User';
+import { Workflow } from './Workflow';
 
 const Models = {
   Attendant,
@@ -35,29 +36,31 @@ const Models = {
   Assessment,
   Event,
   Resource,
-  Environment
+  Environment,
+  Campaing
 };
 
 Object.values(Models).map((model) => model.associate());
 
 export {
+  Assessment as AssessmentModel,
   Attendant as AttendantModel,
-  User as UserModel,
-  Client as CustomerModel,
+  ChatMessage as ChatMessageModel,
+  Chat as ChatModel,
+  Chatbot as ChatbotModel,
   ClientGroup as ClientGroupModel,
-  Contact as ContactModel,
   Connection as ConnectionModel,
   ConnectionProfiles as ConnectionProfilesModel,
-  Chatbot as ChatbotModel,
-  Workflow as WorkflowModel,
-  Tag as TagModel,
-  Chat as ChatModel,
-  ChatMessage as ChatMessageModel,
-  Queue as QueueModel,
-  Ticket as TicketModel,
-  Assessment as AssessmentModel,
-  Event as EventModel,
-  Resource as ResourceModel,
+  Contact as ContactModel,
+  Client as CustomerModel,
   Environment as EnvironmentModel,
-  Models
+  Event as EventModel,
+  Models,
+  Queue as QueueModel,
+  Resource as ResourceModel,
+  Tag as TagModel,
+  Ticket as TicketModel,
+  User as UserModel,
+  Workflow as WorkflowModel,
+  Campaing as CampaingModel
 };

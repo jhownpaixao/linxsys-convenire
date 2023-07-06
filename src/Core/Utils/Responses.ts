@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { logger } from '../../services/Logger';
-import type { HTTPResponse, ResponseType } from '../types';
+import type { THTTPResponse, ResponseType } from '../types';
 import { HTTPResponseCode, CORSPolicyOptions, AllowedMethods } from '../config';
 import type * as core from 'express-serve-static-core';
 
@@ -20,7 +20,7 @@ const ResponseFormulation = process.env.RESPONSE_FORMULATION_TYPE || 'standart';
  * @param {?NextFunction} [next] Utilize o next para continuar a requisição, caso contrário a requisição será encerrada
  */
 export function SendHTTPResponse(
-  objResponse: HTTPResponse,
+  objResponse: THTTPResponse,
   res: Response,
   next?: NextFunction
 ): void {
@@ -207,6 +207,7 @@ export const handleProcessFailure = async (
   err: Error,
   req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _: NextFunction
 ) => {
   if (err instanceof AppProcessError) {

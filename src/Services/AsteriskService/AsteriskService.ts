@@ -1,12 +1,11 @@
-import AsteriskManager from './AsteriskManager';
-import { IAsmConnectionProps, IXApiConnectionProps } from './@types/connection';
-import { AppProcessError } from '@core/utils';
 import { HTTPResponseCode } from '@core/config';
-import { ResourceService } from '../app/ResourceService';
 import { ResourceTypes } from '@core/config/Resources';
+import { AppProcessError } from '@core/utils';
 import { logger } from '../Logger';
+import { ResourceService } from '../app/ResourceService';
+import { IAsmConnectionProps, IXApiConnectionProps } from './@types/connection';
+import AsteriskManager from './AsteriskManager';
 import { XApi } from './XApi';
-import { IXApiICall } from './@types/call';
 
 type TConnectionProps = IAsmConnectionProps & IXApiConnectionProps;
 export class AsteriskService {
@@ -20,7 +19,7 @@ export class AsteriskService {
 
   static async init(env_id: string | number) {
     const resource = await ResourceService.getWith({
-      type: ResourceTypes.Asterisk,
+      type: ResourceTypes.PABX,
       env_id
     });
     if (!resource)

@@ -23,5 +23,9 @@ subRoutes.route('/')
     .delete(EnvironmentController.exclude)
     .all(ThrowHTTPMethodNotAllowed);
 
+subRoutes.route('/resources')
+    .get(EnvironmentController.resources)
+    .all(ThrowHTTPMethodNotAllowed);
+
 export default EnvironmentRoutes;
     

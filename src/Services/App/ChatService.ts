@@ -108,6 +108,7 @@ export class ChatService {
   }
 
   //!Implementação necessária na remoção da mensagem é exlcuir da DB e remover a associação
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async deleteMessage(chat_id: string | number, message_id: string | number) {
     /* TODO */
   }

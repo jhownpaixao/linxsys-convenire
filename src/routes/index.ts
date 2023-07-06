@@ -1,17 +1,18 @@
 import { ServerConfig } from '@core';
 import { Router } from 'express';
-import { UserMiddleware, AuthMiddleware } from '../middlewares';
-import UserRoutes from './UserRoutes';
-import ConnectionRoutes from './ConnectionRoutes';
-import ChatbotRoutes from './ChatbotRoutes';
-import WorkflowRoutes from './WorkflowRoutes';
-import AttendantRoute from './AttendantRoutes';
-import CustomerRoutes from './CustomerRoutes';
-import AuthRoutes from './AuthRoutes';
+import { AuthMiddleware, UserMiddleware } from '../middlewares';
+import ASMRoutes from './ASMRoutes';
 import AssessmentRoutes from './AssessmentRoutes';
+import AttendantRoute from './AttendantRoutes';
+import AuthRoutes from './AuthRoutes';
+import CampaingRoutes from './CampaingRoutes';
+import ChatbotRoutes from './ChatbotRoutes';
+import ConnectionRoutes from './ConnectionRoutes';
+import CustomerRoutes from './CustomerRoutes';
 import EnvironmentRoutes from './EnvironmentRoutes';
 import FilesRoutes from './FilesRoutes';
-import ASMRoutes from './ASMRoutes';
+import UserRoutes from './UserRoutes';
+import WorkflowRoutes from './WorkflowRoutes';
 
 const routes = Router();
 
@@ -26,6 +27,7 @@ routes.use(ServerConfig.ROUTES.assessment, AuthMiddleware.Token, UserMiddleware.
 routes.use(ServerConfig.ROUTES.chat, AuthMiddleware.Token, UserMiddleware.recover, ChatbotRoutes);
 routes.use(ServerConfig.ROUTES.environment, AuthMiddleware.Token, UserMiddleware.recover, EnvironmentRoutes);
 routes.use(ServerConfig.ROUTES.asm, AuthMiddleware.Token, UserMiddleware.recover, ASMRoutes);
+routes.use(ServerConfig.ROUTES.campaing, AuthMiddleware.Token, UserMiddleware.recover, CampaingRoutes);
 
 routes.use('/files', FilesRoutes);
 export default routes;

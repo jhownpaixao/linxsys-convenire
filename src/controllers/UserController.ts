@@ -6,7 +6,7 @@ import type { User } from '../services/sequelize/Models/User';
 
 export class UserController {
   static store = async (req: Request, res: Response): Promise<void> => {
-    const { name, email, pass, type, block_with_venc, date_venc, passConf, ...rest } = req.body;
+    const { name, email, pass, type, block_with_venc, date_venc, ...rest } = req.body;
 
     await CheckRequest({ name, email, pass, type, block_with_venc, date_venc });
 

@@ -1,9 +1,3 @@
-import 'express-async-errors';
-import express from 'express';
-import cors from 'cors';
-import PinoHttp from 'pino-http';
-import routes from '../routes';
-import 'dotenv/config';
 import {
   CORSPolicyOptions,
   ExpressResponseOptions,
@@ -12,11 +6,15 @@ import {
   handleProcessFailure,
   handleRouteNotFound
 } from '@core';
-import { logger } from '../services/Logger';
+import cors from 'cors';
+import 'dotenv/config';
+import express from 'express';
+import 'express-async-errors';
 import path from 'path';
-import { FileService } from '../services/app/FileService';
-import AsteriskManager from '../services/AsteriskService/AsteriskManager';
-import { AsteriskService } from '../services/AsteriskService/AsteriskService';
+import PinoHttp from 'pino-http';
+import routes from './routes';
+import { logger } from './services/Logger';
+import { FileService } from './services/app/FileService';
 
 const app = express();
 const pinoHttp = PinoHttp({ logger: logger });

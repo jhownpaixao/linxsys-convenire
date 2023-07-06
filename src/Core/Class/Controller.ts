@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { InferCreationAttributes, InferAttributes, Model, CreationOptional } from 'sequelize';
-import { ModelStatic } from 'sequelize';
-import type { ModelType } from '../types';
+import type { CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import type { MakeNullishOptional } from 'sequelize/types/utils';
-import { UserModel } from '../../services/sequelize/Models';
+import type { ModelType } from '../types';
 
 /**
  * Inferface de garantia das propriedades

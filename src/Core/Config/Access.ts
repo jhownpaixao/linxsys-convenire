@@ -58,6 +58,7 @@ export const RouteAccessProfiles: Record<string, any> = {
   [ServerConfig.ROUTES.client]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.contact]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.workflow]: AccessProfile_Administrator,
+  [ServerConfig.ROUTES.campaing]: AccessProfile_Administrator,
   [ServerConfig.ROUTES.assessment]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.chat]: AccessProfile_Attendant,
   [ServerConfig.ROUTES.user]: AccessProfile_SuperAdmin,

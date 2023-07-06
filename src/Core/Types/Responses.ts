@@ -10,7 +10,7 @@ export declare type ResponseType = 'error' | 'success' | 'warning';
  * @date 26/03/2023 - 21:45:23
  *
  */
-export declare type HTTPResponse<D = unknown> = {
+export declare type THTTPResponse<D = unknown> = {
   status: boolean;
   message: string;
   type: ResponseType;
@@ -20,7 +20,7 @@ export declare type HTTPResponse<D = unknown> = {
   data?: D;
 };
 
-export declare interface HTTPResponseError<D = unknown> {
+export declare interface IHTTPResponseError<D = unknown> {
   message: string;
   code: number;
   data?: D;

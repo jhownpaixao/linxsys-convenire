@@ -1,7 +1,14 @@
+import {
+  CheckRequest,
+  THTTPResponse,
+  HTTPResponseCode,
+  SendHTTPResponse,
+  ServerConfig
+} from '@core';
 import type { Request, Response } from 'express';
-import { SendHTTPResponse, CheckRequest, HTTPResponseCode, ServerConfig } from '@core';
 import { EnvironmentService } from '../services/app';
 import { EventLog, EventLogMethod, EventLogTarget } from '../services/app/Event';
+import HTTPResponse from '@core/utils/HTTPResponse';
 
 export class EnvironmentController {
   static store = async (req: Request, res: Response): Promise<void> => {
@@ -17,25 +24,29 @@ export class EnvironmentController {
       env.id
     );
 
-    SendHTTPResponse(
-      {
-        message: 'Ambiente criado com sucesso',
-        type: 'success',
-        status: true,
-        location: `${ServerConfig.ROUTES.environment}/${env.id}`,
-        code: HTTPResponseCode.created
-      },
-      res
-    );
+    const response: THTTPResponse = {
+      message: 'Ambiente criado com sucesso',
+      type: 'success',
+      status: true,
+      location: `${ServerConfig.ROUTES.environment}/${env.id}`,
+      code: HTTPResponseCode.created
+    };
+
+    SendHTTPResponse(response, res);
   };
 
   static list = async (req: Request, res: Response) => {
     const list = await EnvironmentService.list();
 
-    SendHTTPResponse(
-      { message: 'carregados com sucesso', type: 'success', status: true, data: list },
-      res
-    );
+    // Prepare and send response
+    const response: THTTPResponse = {
+      message: 'carregados com sucesso',
+      type: 'success',
+      status: true,
+      data: list
+    };
+
+    SendHTTPResponse(response, res);
   };
 
   static get = async (req: Request, res: Response) => {
@@ -99,5 +110,19 @@ export class EnvironmentController {
       },
       res
     );
+  };
+
+  static resources = async (req: Request, res: Response) => {
+    const { env_id } = req.params;
+    const resourcesList = await EnvironmentService.listResources(env_id);
+
+    new HTTPResponse(res)
+      .setParams({
+        message: 'Carregado com sucesso',
+        type: 'success',
+        status: true,
+        data: resourcesList
+      })
+      .send();
   };
 }

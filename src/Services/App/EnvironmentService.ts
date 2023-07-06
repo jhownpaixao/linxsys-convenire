@@ -1,22 +1,25 @@
+import { AppProcessError, HTTPResponseCode, Security } from '@core';
+import { Entity } from '@core/class/Entity';
+import type { InferAttributes, InferCreationAttributes, Model, WhereOptions } from 'sequelize';
 import type { MakeNullishOptional } from 'sequelize/types/utils';
-import { AppProcessError, Security, HTTPResponseCode } from '@core';
+import type { UserAuthMiddlewareProps } from '../../middlewares';
 import { logger } from '../Logger';
-import { UserModel, WorkflowModel } from '../sequelize/Models';
 import {
   AssessmentModel,
   AttendantModel,
+  CampaingModel,
   ChatModel,
   ChatbotModel,
   ConnectionModel,
   ConnectionProfilesModel,
   CustomerModel,
-  EnvironmentModel
+  EnvironmentModel,
+  ResourceModel,
+  UserModel,
+  WorkflowModel
 } from '../sequelize/Models';
-import type { InferAttributes, InferCreationAttributes, Model, WhereOptions } from 'sequelize';
-import { Entity } from '@core/class/Entity';
-import { UserService } from './UserService';
 import { FileService } from './FileService';
-import type { UserAuthMiddlewareProps } from '../../middlewares';
+import { UserService } from './UserService';
 
 type WhereParams<M extends Model> = WhereOptions<InferAttributes<M, { omit: never }>>;
 
@@ -317,4 +320,28 @@ export class EnvironmentService extends Entity {
 
   static hasUser = (env_id: string | number, chat_id: string | number) =>
     this.handleHas(EnvironmentModel, env_id, UserModel, chat_id, 'User');
+
+  /**
+   * TODO: Campaings
+   */
+  static listCampaings = (env_id: string | number) =>
+    this.handleList(EnvironmentModel, env_id, 'campaings');
+
+  static getCampaing = (env_id: string | number, params: WhereParams<CampaingModel>) =>
+    this.handleGet(EnvironmentModel, env_id, 'Campaings', params);
+
+  static hasCampaing = (env_id: string | number, chat_id: string | number) =>
+    this.handleHas(EnvironmentModel, env_id, CampaingModel, chat_id, 'Campaing');
+
+  /**
+   * TODO: Resources
+   */
+  static listResources = (env_id: string | number) =>
+    this.handleList(EnvironmentModel, env_id, 'resources');
+
+  static getResource = (env_id: string | number, params: WhereParams<ResourceModel>) =>
+    this.handleGet(EnvironmentModel, env_id, 'Resources', params);
+
+  static hasResource = (env_id: string | number, chat_id: string | number) =>
+    this.handleHas(EnvironmentModel, env_id, ResourceModel, chat_id, 'Resource');
 }

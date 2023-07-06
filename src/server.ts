@@ -1,4 +1,4 @@
-import app from './servers/app';
+import app from './app';
 import { logger } from './services/Logger';
 import { ServerConfig } from '@core';
 

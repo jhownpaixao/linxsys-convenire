@@ -442,7 +442,8 @@ class AsteriskManager {
     });
   }
 
-  command(command: string, actionid?: string | number | null) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  command(command: string, _actionid?: string | number | null) {
     const params = {
       Command: command
     };

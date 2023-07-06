@@ -69,11 +69,11 @@ export class SecurityService {
   }
 
   // ?Getters
-  static getAccessRoute() {}
+  /*   static getAccessRoute() {}
   static getAccessLevel() {}
   static getAccessResource() {}
   static getAccessPermissions() {}
-
+ */
   // !Private Subroutines
   private static randomString(length: number, chars: string) {
     const charsLength = chars.length;

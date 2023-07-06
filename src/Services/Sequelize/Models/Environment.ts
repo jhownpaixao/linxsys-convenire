@@ -1,34 +1,35 @@
-import { SequelizeConnection } from '../Database';
 import type {
+  CreationOptional,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
-  HasManySetAssociationsMixin,
-  HasManyAddAssociationsMixin,
   HasManyHasAssociationsMixin,
   HasManyRemoveAssociationMixin,
   HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
   InferAttributes,
   InferCreationAttributes,
-  CreationOptional,
   NonAttribute
 } from 'sequelize';
 import { DataTypes, Model } from 'sequelize';
-import { Attendant } from './Attendant';
-import { Client } from './Client';
-import { ConnectionProfiles } from './ConnectionProfile';
-import { Connection } from './Connection';
-import { Contact } from './Contact';
-import { Chatbot } from './Chatbot';
-import { Workflow } from './Workflow';
-import { Tag } from './Tag';
-import { Chat } from './Chat';
-import { Queue } from './Queue';
+import { SequelizeConnection } from '../Database';
 import { Assessment } from './Assessment';
+import { Attendant } from './Attendant';
+import { Chat } from './Chat';
+import { Chatbot } from './Chatbot';
+import { Client } from './Client';
+import { Connection } from './Connection';
+import { ConnectionProfiles } from './ConnectionProfile';
+import { Contact } from './Contact';
+import { Queue } from './Queue';
 import { Resource } from './Resource';
+import { Tag } from './Tag';
 import { User } from './User';
+import { Workflow } from './Workflow';
+import { Campaing } from './Campaing';
 
 export class Environment extends Model<
   InferAttributes<Environment>,
@@ -178,7 +179,7 @@ export class Environment extends Model<
   declare createAssessment: HasManyCreateAssociationMixin<Assessment, 'env_id'>;
   declare assessments?: NonAttribute<Assessment[]>;
 
-  declare getResources: HasManyGetAssociationsMixin<Assessment>; // Note the null assertions!
+  declare getResources: HasManyGetAssociationsMixin<Resource>; // Note the null assertions!
   declare addResource: HasManyAddAssociationMixin<Resource, number>;
   declare addResources: HasManyAddAssociationsMixin<Resource, number>;
   declare setResources: HasManySetAssociationsMixin<Resource, number>;
@@ -190,7 +191,7 @@ export class Environment extends Model<
   declare createResource: HasManyCreateAssociationMixin<Resource, 'env_id'>;
   declare resources?: NonAttribute<Resource[]>;
 
-  declare getUsers: HasManyGetAssociationsMixin<Assessment>; // Note the null assertions!
+  declare getUsers: HasManyGetAssociationsMixin<User>; // Note the null assertions!
   declare addUser: HasManyAddAssociationMixin<User, number>;
   declare addUsers: HasManyAddAssociationsMixin<User, number>;
   declare setUsers: HasManySetAssociationsMixin<User, number>;
@@ -201,6 +202,18 @@ export class Environment extends Model<
   declare countUsers: HasManyCountAssociationsMixin;
   declare createUser: HasManyCreateAssociationMixin<User, 'env_id'>;
   declare users?: NonAttribute<User[]>;
+
+  declare getCampaings: HasManyGetAssociationsMixin<Campaing>; // Note the null assertions!
+  declare addCampaing: HasManyAddAssociationMixin<Campaing, number>;
+  declare addCampaings: HasManyAddAssociationsMixin<Campaing, number>;
+  declare setCampaings: HasManySetAssociationsMixin<Campaing, number>;
+  declare removeCampaing: HasManyRemoveAssociationMixin<Campaing, number>;
+  declare removeCampaings: HasManyRemoveAssociationsMixin<Campaing, number>;
+  declare hasCampaing: HasManyHasAssociationMixin<Campaing, number>;
+  declare hasCampaings: HasManyHasAssociationsMixin<Campaing, number>;
+  declare countCampaings: HasManyCountAssociationsMixin;
+  declare createCampaing: HasManyCreateAssociationMixin<Campaing, 'env_id'>;
+  declare campaings?: NonAttribute<Campaing[]>;
 
   static associate() {
     this.hasMany(Attendant, { foreignKey: 'env_id', as: 'attendants' });
@@ -216,6 +229,7 @@ export class Environment extends Model<
     this.hasMany(Assessment, { foreignKey: 'env_id', as: 'assessments' });
     this.hasMany(Resource, { foreignKey: 'env_id', as: 'resources' });
     this.hasMany(User, { foreignKey: 'env_id', as: 'users' });
+    this.hasMany(Campaing, { foreignKey: 'env_id', as: 'campaings' });
   }
 }
 

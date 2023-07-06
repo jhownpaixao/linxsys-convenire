@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type * as types from './types';
 
 export default class Chat implements types.IChat {

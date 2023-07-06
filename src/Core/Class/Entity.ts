@@ -120,9 +120,10 @@ export abstract class Entity {
         include: [sub_association[0].associations[sub_association[1]]]
       });
 
-    const list = await model.findByPk(id, {
-      include: [associations]
-    });
+    const list =
+      (await model.findByPk(id, {
+        include: [associations]
+      })) ?? {};
     const f: AssociationFunctions = {};
     const r = Object.assign(list, f);
     return r[association];

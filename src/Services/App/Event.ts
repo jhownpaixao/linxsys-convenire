@@ -1,9 +1,9 @@
-import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
-import { EventModel } from '../sequelize/Models';
-import { logger } from '../Logger/Logger';
-import type { MakeNullishOptional } from 'sequelize/types/utils';
-import { AppProcessError } from '@core/utils';
 import { HTTPResponseCode } from '@core/config';
+import { AppProcessError } from '@core/utils';
+import type { InferAttributes, InferCreationAttributes, WhereOptions } from 'sequelize';
+import type { MakeNullishOptional } from 'sequelize/types/utils';
+import { logger } from '../Logger/Logger';
+import { EventModel } from '../sequelize/Models';
 
 interface IEventLog {
   description?: string;
@@ -30,6 +30,7 @@ export enum EventLogTarget {
   chatbot,
   message,
   customer,
+  campaing,
   connection,
   connection_profile,
   contact,
